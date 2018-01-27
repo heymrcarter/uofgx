@@ -3,7 +3,7 @@
     <v-menu>
       <v-toolbar-title slot="activator">
         <span>{{currentPageName}}</span>
-        <v-icon dark>arrow_drop_down</v-icon>
+        <v-icon dark v-if="renderDropDownIcon">arrow_drop_down</v-icon>
       </v-toolbar-title>
       <v-list dark>
         <v-list-tile @click="$router.push('/')">
@@ -27,10 +27,24 @@ export default {
   name: 'app-header',
   computed: {
     currentPageName() {
-      return this.$route.name
+      switch (this.$route.name) {
+        case 'Home':
+          return 'Unity of Guardians'
+        case 'OAuth':
+          return 'Processing login...'
+        case 'MemberList':
+          return 'Unity of Guardians'
+        case 'InactivePlayers':
+          return 'Inactive players'
+        default:
+          return 'Not found!'
+      }
     },
     renderRefreshIcon() {
       return this.$route.name === 'Inactive Players'
+    },
+    renderDropDownIcon() {
+      return this.$route.name !== 'OAuth'
     }
   }
 }

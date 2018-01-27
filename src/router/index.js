@@ -4,35 +4,48 @@ import ClanMemberList from '@/components/ClanMemberList'
 import InactivePlayers from '@/components/InactivePlayers'
 import Login from '@/components/Login'
 import OAuthHandler from '@/components/OAuthHandler'
+import { configureRouter } from './config'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Unity of Guardians',
-      displayName: 'Unity of Guardians',
-      component: Login
+      name: 'Home',
+      component: Login,
+      meta: {
+        requiresAuth: false
+      }
     },
     {
       path: '/oauth/authorize',
-      name: 'Processing login...',
-      displayName: 'Processing login...',
-      component: OAuthHandler
+      name: 'OAuth',
+      component: OAuthHandler,
+      meta: {
+        requiresAuth: false
+      }
     },
     {
       path: '/member-list',
-      name: 'Unity of Guardians',
-      displayName: 'Member list',
-      component: ClanMemberList
+      name: 'MemberList',
+      component: ClanMemberList,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/inactive-players',
-      name: 'Inactive Players',
-      displayName: 'Inactive players',
-      component: InactivePlayers
+      name: 'InactivePlayers',
+      component: InactivePlayers,
+      meta: {
+        requiresAuth: true
+      }
     }
   ],
   mode: 'history'
 })
+
+configureRouter(router)
+
+export default router

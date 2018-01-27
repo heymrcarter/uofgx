@@ -15,7 +15,7 @@ export default {
     state.session = session
   },
   GRANT_ACCESS(state, membershipId) {
-    if (state.session.membershipId === membershipId) {
+    if (state.session.membership_id === membershipId) {
       state.session.hasAccess = true
     }
   }
