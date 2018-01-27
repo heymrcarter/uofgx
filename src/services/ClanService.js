@@ -36,11 +36,18 @@ export function getMembers() {
 
 export function getMemberCharacters(membershipId) {
   return new Promise((resolve, reject) => {
+    const config = {
+      baseURL: 'https://uofgx-server.herokuapp.com',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
     axios
-      .get(`/Destiny2/1/Profile/${membershipId}?components=200`, addConfig())
+      .get(`/member/${membershipId}/characters`, config)
       .then(response => {
         console.log(response)
-        resolve(mapCharacters(response.data.Response.characters.data))
+        resolve(mapCharacters(response.data))
       })
       .catch(error => reject(error))
   })

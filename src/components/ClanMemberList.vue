@@ -22,11 +22,29 @@
     </v-list>
 
     <v-layout row justify-center v-if="activeMember !== undefined">
-      <v-dialog v-model="shouldRenderMemberDetailDialog" persistent max-width="500">
+      <v-dialog v-model="shouldRenderMemberDetailDialog" persistent max-width="550px">
         <v-card>
           <v-card-title class="headline">{{activeMember.gamertag}}</v-card-title>
           <v-card-text>
-            <v-container fluid v-bind="{ [`grid-list-sm`]: true }">
+            <ul class="characters">
+              <li
+                v-for="(character, i) in activeMember.characters"
+                :key="i"
+                class="character">
+                <div class="character-emblem"><img :src="`https://bungie.net/${character.emblem}`"></div>
+                <div class="character-details">
+                  <span class="class">{{character.class}}</span>
+                  <div class="last-played">
+                    <span class="last-played-date">Last played {{formatDate(character.lastPlayed)}}</span>
+                    <span class="last-played-duration">{{character.minutesPlayedThisSession}} minutes</span>
+                  </div>
+                  
+                  <span class="light">{{character.light}}</span>
+                  <span class="level">{{character.level}}</span>
+                </div>
+              </li>
+            </ul>
+            <!-- <v-container fluid v-bind="{ [`grid-list-sm`]: true }">
               <v-layout row wrap>
                 <v-flex xs4 v-for="(character, i) in activeMember.characters" :key="i">
                   <v-card flat tile>
@@ -40,13 +58,12 @@
                     </v-card>
                   </v-flex>
                 </v-layout>
-              </v-container>
+              </v-container> -->
             </v-card-text>
-            <!-- <v-card-actions>
+            <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" flat @click.native="dialog = false">Disagree</v-btn>
-              <v-btn color="green darken-1" flat @click.native="dialog = false">Agree</v-btn>
-            </v-card-actions> -->
+              <v-btn flat @click.native="shouldRenderMemberDetailDialog = false">Dismiss</v-btn>
+            </v-card-actions>
           </v-card>
         </v-dialog>
       </v-layout>
@@ -92,6 +109,9 @@ export default {
     formatJoinDate(joinDate) {
       return moment.utc(joinDate).format('MM/DD/YYYY')
     },
+    formatDate(date) {
+      return moment.utc(date).format('MM/DD/YYYY')
+    },
     getChipColor(memberType) {
       switch (memberType) {
         case 0:
@@ -111,6 +131,11 @@ export default {
     showMemberDetail(member) {
       this.shouldRenderMemberDetailDialog = true
       this.getCharactersForMember({ xboxUserName: member.xboxUserName, xboxMembershipId: member.xboxMembershipId })
+    },
+    characterEmblemBackground(url) {
+      return {
+        backgroundImage: `url(https://bungie.net/${url});`
+      }
     }
   },
   mounted() {
@@ -124,5 +149,74 @@ export default {
 </script>
 
 <style scoped>
+.characters {
+  list-style: none;
+  margin: 0 auto;
+  width: 476px;
+}
 
+.characters .character {
+  display: block;
+  width: 474px;
+  height: 96px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.characters .character .character-emblem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9000;
+}
+
+.characters .character .character-emblem img {
+  z-index: 9000;
+}
+
+.characters .character .character-details {
+  z-index: 9999;
+  color: white;
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 474px;
+  height: 96px;
+  text-shadow: #000 1px 1px 5px;
+}
+
+.characters .character .character-details .class {
+  position: absolute;
+  top: 7px;
+  left: 100px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.characters .character .character-details .last-played {
+  position: absolute;
+  top: 40px;
+  left: 100px;
+  font-size: 16px;
+}
+
+.characters .character .character-details .last-played span {
+  display: block;
+}
+
+.characters .character .character-details .light {
+  position: absolute;
+  top: 7px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.characters .character .character-details .level {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  font-size: 20px;
+}
 </style>
