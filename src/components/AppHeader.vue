@@ -6,7 +6,7 @@
         <v-icon dark v-if="renderDropDownIcon">arrow_drop_down</v-icon>
       </v-toolbar-title>
       <v-list dark>
-        <v-list-tile @click="$router.push('/')">
+        <v-list-tile @click="$router.push('/member-list')">
           <v-list-tile-title>Member List</v-list-tile-title>
         </v-list-tile>
 

@@ -46,7 +46,6 @@ export function getMemberCharacters(membershipId) {
     axios
       .get(`/member/${membershipId}/characters`, config)
       .then(response => {
-        console.log(response)
         resolve(mapCharacters(response.data))
       })
       .catch(error => reject(error))

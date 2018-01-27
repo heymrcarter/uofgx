@@ -19,8 +19,11 @@ export default {
     })
   },
   getCharactersForMember({ commit }, { xboxMembershipId, xboxUserName }) {
-    clanService.getMemberCharacters(xboxMembershipId).then(characters => {
-      commit('SET_ACTIVE_MEMBER', { gamertag: xboxUserName, characters })
+    return new Promise((resolve, reject) => {
+      clanService.getMemberCharacters(xboxMembershipId).then(characters => {
+        commit('SET_ACTIVE_MEMBER', { gamertag: xboxUserName, characters })
+        resolve()
+      })
     })
   },
   resetActiveMember({ commit }) {

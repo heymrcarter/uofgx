@@ -24,51 +24,39 @@
     <v-layout row justify-center v-if="activeMember !== undefined">
       <v-dialog v-model="shouldRenderMemberDetailDialog" persistent max-width="550px">
         <v-card>
-          <v-card-title class="headline">{{activeMember.gamertag}}</v-card-title>
-          <v-card-text>
-            <ul class="characters">
-              <li
-                v-for="(character, i) in activeMember.characters"
-                :key="i"
-                class="character">
-                <div class="character-emblem"><img :src="`https://bungie.net/${character.emblem}`"></div>
-                <div class="character-details">
-                  <span class="class">{{character.class}}</span>
-                  <div class="last-played">
-                    <span class="last-played-date">Last played {{formatDate(character.lastPlayed)}}</span>
-                    <span class="last-played-duration">{{character.minutesPlayedThisSession}} minutes</span>
+          <div v-if="!isLoadingCharacters">
+            <v-card-title class="headline">{{activeMember.gamertag}}</v-card-title>
+            <v-card-text>
+              <ul class="characters">
+                <li
+                  v-for="(character, i) in activeMember.characters"
+                  :key="i"
+                  class="character">
+                  <div class="character-emblem"><img :src="`https://bungie.net/${character.emblem}`"></div>
+                  <div class="character-details">
+                    <span class="class">{{character.class}}</span>
+                    <div class="last-played">
+                      <span class="last-played-date">Last played {{formatDate(character.lastPlayed)}}</span>
+                      <span class="last-played-duration">{{character.minutesPlayedThisSession}} minutes</span>
+                    </div>
+                    <span class="light">{{character.light}}</span>
+                    <span class="level">{{character.level}}</span>
                   </div>
-                  
-                  <span class="light">{{character.light}}</span>
-                  <span class="level">{{character.level}}</span>
-                </div>
-              </li>
-            </ul>
-            <!-- <v-container fluid v-bind="{ [`grid-list-sm`]: true }">
-              <v-layout row wrap>
-                <v-flex xs4 v-for="(character, i) in activeMember.characters" :key="i">
-                  <v-card flat tile>
-                    <v-card-media :src="`https://bungie.net${character.emblem}`"></v-card-media>
-                      <div class="character-details">
-                        <span class="class">{{character.class}}</span>
-                        <span class="lastPlayed">Last played {{formatDate(character.lastPlayed)}} for {{character.minutesPlayedThisSession}}</span>
-                        <span class="light">{{character.light}}</span>
-                        <span class="level">{{character.level}}</span>
-                      </div>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-              </v-container> -->
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn flat @click.native="shouldRenderMemberDetailDialog = false">Dismiss</v-btn>
-            </v-card-actions>
+                </li>
+              </ul>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn flat @click.native="shouldRenderMemberDetailDialog = false">Dismiss</v-btn>
+              </v-card-actions>
+            </div>
           </v-card>
+
+          <loading-indicator :is-loading="isLoadingCharacters" context="global"></loading-indicator>
         </v-dialog>
       </v-layout>
 
-      <loading-indicator :is-loading="isLoading"></loading-indicator>
+      <loading-indicator :is-loading="isLoading" context="global"></loading-indicator>
   </v-container>
 </template>
 
@@ -83,7 +71,7 @@ export default {
     LoadingIndicator
   },
   data() {
-    return { shouldRenderMemberDetailDialog: false, isLoading: false }
+    return { shouldRenderMemberDetailDialog: false, isLoading: false, isLoadingCharacters: false }
   },
   computed: {
     ...mapGetters(['clanMembers', 'activeMember'])
@@ -130,7 +118,10 @@ export default {
     },
     showMemberDetail(member) {
       this.shouldRenderMemberDetailDialog = true
-      this.getCharactersForMember({ xboxUserName: member.xboxUserName, xboxMembershipId: member.xboxMembershipId })
+      this.isLoadingCharacters = true
+      this.getCharactersForMember({ xboxUserName: member.xboxUserName, xboxMembershipId: member.xboxMembershipId }).then(() => {
+        this.isLoadingCharacters = false
+      })
     },
     characterEmblemBackground(url) {
       return {
