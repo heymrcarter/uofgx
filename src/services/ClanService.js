@@ -15,11 +15,18 @@ function addConfig(headers = {}) {
 }
 
 export function getMembers() {
+  const config = {
+    baseURL: 'https://uofgx-server.herokuapp.com',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }
+
   return new Promise((resolve, reject) => {
     axios
-      .get(`/GroupV2/${process.env.CLAN_ID}/Members/`, addConfig())
+      .get(`/clan/${process.env.CLAN_ID}/members`, config)
       .then(response => {
-        resolve(mapResponseToView(response.data.Response.results))
+        resolve(mapResponseToView(response.data))
       })
       .catch(error => {
         reject(error)
@@ -64,7 +71,6 @@ export function isMemberAdmin(membershipId, bearerToken) {
     const config = {
       baseURL: 'https://uofgx-server.herokuapp.com',
       headers: {
-        'X-API-Key': process.env.API_KEY,
         'Content-Type': 'application/json'
       }
     }

@@ -3,8 +3,11 @@ import * as accessService from '../services/AccessService'
 
 export default {
   getClanMembers({ commit }) {
-    clanService.getMembers().then(members => {
-      commit('SET_CLAN_MEMBERS', members)
+    return new Promise((resolve, reject) => {
+      clanService.getMembers().then(members => {
+        commit('SET_CLAN_MEMBERS', members)
+        resolve()
+      })
     })
   },
   getInactiveMembers({ commit, state }) {

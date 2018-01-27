@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid v-if="clanMembers && clanMembers.length > 0">
     <v-list dark three-line>
       <template v-for="(member, i) in clanMembers">
         <v-list-tile avatar :key="member.xboxMembershipId" @click="showMemberDetail(member)">
@@ -50,17 +50,23 @@
           </v-card>
         </v-dialog>
       </v-layout>
+
+      <loading-indicator :is-loading="isLoading"></loading-indicator>
   </v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
+import LoadingIndicator from './LoadingIndicator'
 
 export default {
   name: 'clan-member-list',
+  components: {
+    LoadingIndicator
+  },
   data() {
-    return { shouldRenderMemberDetailDialog: false }
+    return { shouldRenderMemberDetailDialog: false, isLoading: false }
   },
   computed: {
     ...mapGetters(['clanMembers', 'activeMember'])
@@ -109,7 +115,9 @@ export default {
   },
   mounted() {
     if (!this.clanMembers) {
-      this.getClanMembers()
+      this.getClanMembers().then(() => {
+        this.isLoading = false
+      })
     }
   }
 }
