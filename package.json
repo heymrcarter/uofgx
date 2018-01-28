@@ -11,7 +11,7 @@
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js",
-    "postbuild": "cp ./Staticfile ./dist/Staticfile",
+    "postbuild": "cp ./Staticfile ./dist/Staticfile && cp ./manifest.yml ./dist/manifest.yml",
     "deploy": "npm run build && cf push -p dist"
   },
   "dependencies": {
