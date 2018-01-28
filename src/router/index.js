@@ -42,7 +42,8 @@ const router = new Router({
         requiresAuth: true
       }
     }
-  ]
+  ],
+  mode: 'history'
 })
 
 configureRouter(router)
