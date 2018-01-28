@@ -10,7 +10,7 @@
           <v-list-tile-title>Member List</v-list-tile-title>
         </v-list-tile>
 
-        <v-list-tile @click="$router.push('/inactive-players')">
+        <v-list-tile @click="$router.push('/inactive-players')" v-if="shouldRenderInactiveMembers">
           <v-list-tile-title>Inactive Members</v-list-tile-title>
         </v-list-tile>
       </v-list>
@@ -25,6 +25,11 @@
 <script>
 export default {
   name: 'app-header',
+  data() {
+    return {
+      shouldRenderInactiveMembers: false
+    }
+  },
   computed: {
     currentPageName() {
       switch (this.$route.name) {

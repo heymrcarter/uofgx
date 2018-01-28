@@ -3,13 +3,23 @@
     <v-layout row justify-center>
       <v-flex sm6>
         <v-card>
-          <v-card-title primary-title>
-            <h1 class="headline mb-3">Unity of Guardians clan administration</h1>
-            <div>To view the roster and run reports you need to sign in with your Bungie account</div>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn :href="bungieNetAuthorizeEndpoint">Sign in with your Bungie.net account</v-btn>
-          </v-card-actions>
+          <v-card-media
+            class="white--text"
+            height="400px"
+            src="https://bungie.net/img/Themes/Group_Titan1/struct_images/group_top_banner.jpg"
+          >
+            <v-container fill-height fluid>
+              <v-layout fill-height>
+                <v-flex xs12 align-end flexbox>
+                  <div class="welcome">
+                    <h1 class="headline mb-3">Unity of Guardians clan administration</h1>
+                    <div class="mb-3 instructions">To view the roster and run reports you need to sign in with your Bungie.net account</div>
+                    <div><v-btn :href="bungieNetAuthorizeEndpoint">Sign in with your Bungie.net account</v-btn></div>
+                  </div>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-media>
         </v-card>
       </v-flex>
     </v-layout>
@@ -30,5 +40,22 @@ export default {
 <style scoped>
 .headline {
   display: block;
+  font-size: 30px !important;
+}
+
+.welcome {
+  text-shadow: #000 1px 1px 5px;
+  background-color: rgba(0, 0, 0, 0.38);
+  position: absolute;
+  bottom: 15px;
+  padding: 15px;
+}
+
+.welcome .btn {
+  margin-left: 0;
+}
+
+.instructions {
+  font-size: 18px;
 }
 </style>
