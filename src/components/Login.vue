@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-layout row justify-center>
-      <v-flex sm6>
+      <v-flex xs12>
         <v-card>
           <v-card-media
             class="white--text"
@@ -10,7 +10,7 @@
           >
             <v-container fill-height fluid>
               <v-layout fill-height>
-                <v-flex xs12 align-end flexbox>
+                <v-flex xs12 align-end flexbox class="welcome-box">
                   <div class="welcome">
                     <h1 class="headline mb-3">Unity of Guardians clan administration</h1>
                     <div class="mb-3 instructions">To view the roster and run reports you need to sign in with your Bungie.net account</div>
@@ -49,6 +49,7 @@ export default {
   position: absolute;
   bottom: 15px;
   padding: 15px;
+  width: auto;
 }
 
 .welcome .btn {
@@ -57,5 +58,29 @@ export default {
 
 .instructions {
   font-size: 18px;
+}
+
+@media only screen and (max-width: 736px) {
+  .container {
+    padding: 0;
+  }
+
+  .welcome {
+    bottom: 0;
+    width: 100%;
+  }
+
+  .headline {
+    font-size: 24px !important;
+  }
+
+  .instructions {
+    font-size: 16px;
+  }
+
+  .btn {
+    height: 44px;
+    font-size: 16px;
+  }
 }
 </style>
