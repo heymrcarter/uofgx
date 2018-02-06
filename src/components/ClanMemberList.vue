@@ -1,25 +1,37 @@
 <template>
   <v-container fluid v-if="clanMembers && clanMembers.length > 0">
-    <v-list dark three-line>
-      <template v-for="(member, i) in clanMembers">
-        <v-list-tile avatar :key="member.xboxMembershipId" @click="showMemberDetail(member)">
-          <v-list-tile-avatar v-if="member.bungieNetAvatar">
-            <img :src="member.bungieNetAvatar">
-          </v-list-tile-avatar>
-
+    <v-card>
+      <v-form>
+        <div>
+          <v-text-field solo dark placeholder="Filter" v-model="filter" clearable></v-text-field>
+        </div>
+      </v-form>
+      <v-list dark three-line>
+        <v-list-tile v-if="presentedList.length === 0">
           <v-list-tile-content>
-            <v-list-tile-title>{{member.xboxUserName}}</v-list-tile-title>
-            <v-list-tile-sub-title>BNet: {{member.bungieNetUserName}}</v-list-tile-sub-title>
-            <v-list-tile-sub-title>Joined {{formatJoinDate(member.joinDate)}}</v-list-tile-sub-title>
+            No members
           </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-chip :text-color="member.memberType > 3 ? 'black' : 'white'" :color="getChipColor(member.memberType)">{{getMemberType(member.memberType)}}</v-chip>
-          </v-list-tile-action>
         </v-list-tile>
-        <v-divider inset :key="i"></v-divider>
-      </template>
-    </v-list>
+        <template v-for="(member, i) in presentedList" v-if="presentedList.length > 0">
+          <v-list-tile avatar :key="member.xboxMembershipId" @click="showMemberDetail(member)">
+            <v-list-tile-avatar v-if="member.bungieNetAvatar">
+              <img :src="member.bungieNetAvatar">
+            </v-list-tile-avatar>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{member.xboxUserName}}</v-list-tile-title>
+              <v-list-tile-sub-title>BNet: {{member.bungieNetUserName}}</v-list-tile-sub-title>
+              <v-list-tile-sub-title>Joined {{formatJoinDate(member.joinDate)}}</v-list-tile-sub-title>
+            </v-list-tile-content>
+
+            <v-list-tile-action>
+              <v-chip :text-color="member.memberType > 3 ? 'black' : 'white'" :color="getChipColor(member.memberType)">{{getMemberType(member.memberType)}}</v-chip>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-divider inset :key="i" v-if="i !== presentedList.length"></v-divider>
+        </template>
+      </v-list>
+    </v-card>
 
     <v-layout row justify-center v-if="activeMember !== undefined">
       <v-dialog v-model="shouldRenderMemberDetailDialog" persistent max-width="550px">
@@ -71,10 +83,13 @@ export default {
     LoadingIndicator
   },
   data() {
-    return { shouldRenderMemberDetailDialog: false, isLoading: false, isLoadingCharacters: false }
+    return { shouldRenderMemberDetailDialog: false, isLoading: false, isLoadingCharacters: false, filter: null }
   },
   computed: {
-    ...mapGetters(['clanMembers', 'activeMember'])
+    ...mapGetters(['clanMembers', 'activeMember']),
+    presentedList() {
+      return this.filter !== null ? this.clanMembers.filter(m => m.bungieNetUserName.toLowerCase().includes(this.filter) || m.xboxUserName.toLowerCase().includes(this.filter)) : this.clanMembers
+    }
   },
   methods: {
     ...mapActions(['getClanMembers', 'getCharactersForMember', 'resetActiveCharacter']),
