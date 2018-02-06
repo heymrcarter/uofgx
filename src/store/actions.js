@@ -10,10 +10,10 @@ export default {
       })
     })
   },
-  getInactiveMembers({ commit, state }) {
+  getActivityReport({ commit }) {
     return new Promise(resolve => {
-      clanService.getInactiveMembers(state.clanMembers).then(inactiveMembers => {
-        commit('SET_INACTIVE_MEMBERS', inactiveMembers)
+      clanService.getActivityReport(process.env.CLAN_ID).then(report => {
+        commit('SET_ACTIVITY_REPORT', report)
         resolve()
       })
     })

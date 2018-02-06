@@ -1,22 +1,21 @@
 import axios from 'axios'
 import { mapResponseToView } from '../mappers/clan-members-mapper'
-import { createActivityReport, sortByActivity } from '../mappers/activity-report-mapper'
 import { mapCharacters } from '../mappers/character-mapper'
 
-function addConfig(headers = {}) {
-  return {
-    baseURL: 'https://www.bungie.net/platform',
-    headers: Object.assign({}, headers, {
-      'X-API-Key': process.env.API_KEY
-    }),
-    withCredentials: true,
-    timeout: 1000 * 30
-  }
-}
+// function addConfig(headers = {}) {
+//   return {
+//     baseURL: 'https://www.bungie.net/platform',
+//     headers: Object.assign({}, headers, {
+//       'X-API-Key': process.env.API_KEY
+//     }),
+//     withCredentials: true,
+//     timeout: 1000 * 30
+//   }
+// }
 
 export function getMembers() {
   const config = {
-    baseURL: 'https://uofgx-server.herokuapp.com',
+    baseURL: 'https://uofgx-server.cfapps.io',
     headers: {
       'Content-Type': 'application/json'
     }
@@ -37,7 +36,7 @@ export function getMembers() {
 export function getMemberCharacters(membershipId) {
   return new Promise((resolve, reject) => {
     const config = {
-      baseURL: 'https://uofgx-server.herokuapp.com',
+      baseURL: 'https://uofgx-server.cfapps.io',
       headers: {
         'Content-Type': 'application/json'
       }
@@ -52,30 +51,28 @@ export function getMemberCharacters(membershipId) {
   })
 }
 
-export function getInactiveMembers(allMembers = []) {
+export function getActivityReport(clanId) {
   return new Promise((resolve, reject) => {
-    const inactiveMembers = []
-    allMembers.forEach(({ xboxMembershipType, xboxMembershipId }) => {
-      axios
-        .get(`/Destiny2/${xboxMembershipType}/Profile/${xboxMembershipId}?components=100`, addConfig())
-        .then(response => {
-          const activityReportForMember = createActivityReport(response.data.Response.profile.data)
+    const config = {
+      baseURL: 'https://uofgx-server.cfapps.io',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
 
-          if (activityReportForMember.isInactive) {
-            inactiveMembers.push(activityReportForMember)
-          }
-        })
-        .catch(error => reject(error))
-    })
-
-    resolve(sortByActivity(inactiveMembers))
+    axios
+      .get(`/clan/${clanId}/activity-report`, config)
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(error => reject(error))
   })
 }
 
 export function isMemberAdmin(membershipId, bearerToken) {
   return new Promise((resolve, reject) => {
     const config = {
-      baseURL: 'https://uofgx-server.herokuapp.com',
+      baseURL: 'https://uofgx-server.cfapps.io',
       headers: {
         'Content-Type': 'application/json'
       }

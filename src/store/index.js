@@ -8,13 +8,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     clanMembers: undefined,
-    inactiveMembers: undefined,
+    activityReport: undefined,
     activeMember: undefined,
     session: undefined
   },
   getters: {
     clanMembers: state => state.clanMembers,
-    inactiveMembers: state => state.inactiveMembers,
+    activityReport: state => state.activityReport,
     activeMember: state => state.activeMember,
     session: state => state.session
   },

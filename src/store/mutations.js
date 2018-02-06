@@ -2,8 +2,8 @@ export default {
   SET_CLAN_MEMBERS(state, members) {
     state.clanMembers = members
   },
-  SET_INACTIVE_MEMBERS(state, inactiveMembers) {
-    state.inactiveMembers = inactiveMembers
+  SET_ACTIVITY_REPORT(state, report) {
+    state.activityReport = report
   },
   SET_ACTIVE_MEMBER(state, member) {
     state.activeMember = member

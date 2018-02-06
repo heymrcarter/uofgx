@@ -27,7 +27,7 @@ export default {
   name: 'app-header',
   data() {
     return {
-      shouldRenderInactiveMembers: false
+      shouldRenderInactiveMembers: true
     }
   },
   computed: {

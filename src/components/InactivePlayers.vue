@@ -9,24 +9,54 @@
           </v-card-title>
 
           <v-card-actions>
-            <v-btn flat dark @click="generateReport">Run report</v-btn>
+            <v-btn flat dark @click="generateReport" v-if="activityReport === undefined">Run report</v-btn>
             <v-btn flat dark @click="showWarning = false">Got it</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
 
-    <v-layout row wrap v-if="inactiveMembers !== undefined" class="inactive-member-table">
+    <v-layout row wrap v-if="activityReport !== undefined" class="inactive-member-table">
       <v-flex>
-        <v-data-table :headers="columnHeaders" :items="inactiveMembers" class="elevation-1">
-          <template slot="items" slot-scope="props">
-            <td>{{props.item.gamertag}}</td>
-            <td>{{formatDate(props.item.lastPlayed)}}</td>
-            <td>{{props.item.daysSinceLastSession}}</td>
-            <td>{{props.item.characterIds.length}}</td>
-            <td>{{props.item.expansions.pop()}}</td>
-          </template>
-        </v-data-table>
+        <v-card>
+          <v-list three-line subheader>
+            <v-subheader>A month or more</v-subheader>
+            <template v-for="(profile, i) in greaterThan30Days">
+              <div :key="i">
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ profile.gamertag }}</v-list-tile-title>
+                    <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-divider v-if="i !== greaterThan30Days.length - 1"></v-divider>
+              </div>
+            </template>
+          </v-list>
+        </v-card>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap v-if="activityReport !== undefined" class="inactive-member-table">
+      <v-flex>
+        <v-card>
+          <v-list three-line subheader>
+            <v-subheader>A week or more</v-subheader>
+            <template v-for="(profile, i) in weekOrMore">
+              <div :key="i">
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title>{{ profile.gamertag }}</v-list-tile-title>
+                    <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-divider v-if="i !== weekOrMore.length - 1"></v-divider>
+              </div>
+            </template>
+          </v-list>
+        </v-card>
       </v-flex>
     </v-layout>
 
@@ -38,53 +68,43 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
 export default {
   name: 'inactive-players',
   data() {
     return {
       showWarning: true,
-      columnHeaders: [
-        {
-          text: 'Gamertag',
-          align: 'left',
-          value: 'gamertag'
-        },
-        {
-          text: 'Last played',
-          value: 'lastPlayed'
-        },
-        {
-          text: 'Days in last session',
-          value: 'daysSinceLastSession'
-        },
-        {
-          text: 'number of characters',
-          value: 'numberOfCharacters'
-        },
-        {
-          text: 'Latest expansion',
-          value: 'latestExpansion'
-        }
-      ],
       isRunningReport: false
     }
   },
   computed: {
-    ...mapGetters(['inactiveMembers'])
+    ...mapGetters(['activityReport']),
+    greaterThan30Days() {
+      return this.activityReport.filter(p => p.daysSinceLastPlayed >= 30)
+    },
+    weekOrMore() {
+      return this.activityReport.filter(p => p.daysSinceLastPlayed >= 7 && p.daysSinceLastPlayed < 30)
+    }
   },
   methods: {
-    ...mapActions(['getInactiveMembers']),
+    ...mapActions(['getActivityReport']),
     formatDate(date) {
-      return moment.utc(date).format('MM/DD/YYYY')
+      // console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
+      return moment
+        .utc(date)
+        .tz('America/New_York')
+        .format('MM/DD/YYYY')
+    },
+    latestExpansion(expansions) {
+      return expansions[expansions.length - 1]
     },
     generateReport() {
       const self = this
       this.isRunningReport = true
 
-      this.getInactiveMembers().then(() => {
-        self.inRunningReport = false
+      this.getActivityReport().then(() => {
+        self.isRunningReport = false
       })
     }
   }
