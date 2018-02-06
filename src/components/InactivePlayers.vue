@@ -20,7 +20,7 @@
       <v-flex>
         <v-card>
           <v-list three-line subheader>
-            <v-subheader>A month or more</v-subheader>
+            <v-subheader>A month or more ({{ greaterThan30Days.length }})</v-subheader>
             <template v-for="(profile, i) in greaterThan30Days">
               <div :key="i">
                 <v-list-tile>
@@ -42,7 +42,7 @@
       <v-flex>
         <v-card>
           <v-list three-line subheader>
-            <v-subheader>A week or more</v-subheader>
+            <v-subheader>A week or more ({{ weekOrMore.length }})</v-subheader>
             <template v-for="(profile, i) in weekOrMore">
               <div :key="i">
                 <v-list-tile>
