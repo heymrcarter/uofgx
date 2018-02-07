@@ -21,7 +21,7 @@
             <v-list-tile-content>
               <v-list-tile-title>{{member.xboxUserName}}</v-list-tile-title>
               <v-list-tile-sub-title>BNet: {{member.bungieNetUserName}}</v-list-tile-sub-title>
-              <v-list-tile-sub-title>Joined {{formatJoinDate(member.joinDate)}}</v-list-tile-sub-title>
+              <v-list-tile-sub-title>Joined {{formatDate(member.joinDate)}}</v-list-tile-sub-title>
             </v-list-tile-content>
 
             <v-list-tile-action>
@@ -74,7 +74,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import LoadingIndicator from './LoadingIndicator'
 
 export default {
@@ -104,16 +104,16 @@ export default {
         case 3:
           return 'Admin'
         case 4:
-          return 'Actiong Founder'
+          return 'Acting Founder'
         case 5:
           return 'Founder'
       }
     },
-    formatJoinDate(joinDate) {
-      return moment.utc(joinDate).format('MM/DD/YYYY')
-    },
     formatDate(date) {
-      return moment.utc(date).format('MM/DD/YYYY')
+      return moment
+        .utc(date)
+        .tz('America/New_York')
+        .format('MM/DD/YYYY')
     },
     getChipColor(memberType) {
       switch (memberType) {
