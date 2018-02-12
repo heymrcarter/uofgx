@@ -1,5 +1,6 @@
 import * as clanService from '../services/ClanService'
 import * as accessService from '../services/AccessService'
+import * as exemptionService from '../services/ExemptionsService'
 
 export default {
   getClanMembers({ commit }) {
@@ -51,6 +52,31 @@ export default {
           }
 
           resolve(isAdmin)
+        })
+        .catch(error => reject(error))
+    })
+  },
+  getExemptions({ commit }) {
+    return new Promise((resolve, reject) => {
+      exemptionService
+        .getExemptionsForClan(process.env.CLAN_ID)
+        .then(exemptions => {
+          commit('SET_EXEMPTIONS', exemptions)
+          resolve()
+        })
+        .catch(error => reject(error))
+    })
+  },
+  grantExemption({ commit, state }, exemption) {
+    return new Promise((resolve, reject) => {
+      exemption.adminMembershipId = state.session.membership_id
+      exemption.adminMembershipType = 'bungienet'
+
+      exemptionService
+        .grantExemptionForMember(process.env.CLAN_ID, exemption)
+        .then(savedExemption => {
+          commit('SAVE_EXEMPTION', savedExemption)
+          resolve()
         })
         .catch(error => reject(error))
     })

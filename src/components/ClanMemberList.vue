@@ -25,7 +25,25 @@
             </v-list-tile-content>
 
             <v-list-tile-action>
-              <v-chip :text-color="member.memberType > 3 ? 'black' : 'white'" :color="getChipColor(member.memberType)">{{getMemberType(member.memberType)}}</v-chip>
+              <v-layout row justify-end>
+                <v-badge v-if="exemptions[member.xboxMembershipId] && isCurrentlyExempt(member.xboxMembershipId)" right color="black" overlap class="exemption-badge">
+                  <v-icon large>explicit</v-icon>
+                  <span slot="badge" v-if="exemptions[member.xboxMembershipId].numberExemptions > 1">{{ exemptions[member.xboxMembershipId].numberExemptions }}</span>
+                </v-badge>
+
+                <v-chip
+                  class="member-chip"
+                  :text-color="member.memberType > 3 ? 'black' : 'white'"
+                  :color="getChipColor(member.memberType)">{{getMemberType(member.memberType)}}</v-chip>
+
+                <v-tooltip bottom color="black">
+                  <v-btn flat slot="activator" @click="makeExempt(member.xboxMembershipId)" :disabled="isCurrentlyExempt(member.xboxMembershipId)">
+                    <v-icon>hotel</v-icon>
+                  </v-btn>
+
+                  <span>Grant exemption</span>
+                </v-tooltip>
+              </v-layout>
             </v-list-tile-action>
           </v-list-tile>
           <v-divider inset :key="i" v-if="i !== presentedList.length"></v-divider>
@@ -44,7 +62,7 @@
                   v-for="(character, i) in activeMember.characters"
                   :key="i"
                   class="character">
-                  <div class="character-emblem"><img :src="`https://bungie.net/${character.emblem}`"></div>
+                  <div class="character-emblem" :style="characterEmblemBackgroundColor(character.emblemColor)"><img :src="`https://bungie.net/${character.emblem}`"></div>
                   <div class="character-details">
                     <span class="class">{{character.class}}</span>
                     <div class="last-played">
@@ -75,8 +93,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment-timezone'
+import sort from 'fast-sort'
 import LoadingIndicator from './LoadingIndicator'
-
 export default {
   name: 'clan-member-list',
   components: {
@@ -86,13 +104,13 @@ export default {
     return { shouldRenderMemberDetailDialog: false, isLoading: false, isLoadingCharacters: false, filter: null }
   },
   computed: {
-    ...mapGetters(['clanMembers', 'activeMember']),
+    ...mapGetters(['clanMembers', 'activeMember', 'exemptions']),
     presentedList() {
       return this.filter !== null ? this.clanMembers.filter(m => m.bungieNetUserName.toLowerCase().includes(this.filter) || m.xboxUserName.toLowerCase().includes(this.filter)) : this.clanMembers
     }
   },
   methods: {
-    ...mapActions(['getClanMembers', 'getCharactersForMember', 'resetActiveCharacter']),
+    ...mapActions(['getClanMembers', 'getCharactersForMember', 'resetActiveCharacter', 'grantExemption', 'getExemptions']),
     getMemberType(memberType) {
       switch (memberType) {
         case 0:
@@ -138,10 +156,35 @@ export default {
         this.isLoadingCharacters = false
       })
     },
+    characterEmblemBackgroundColor(rgba) {
+      console.log(rgba)
+      return rgba !== undefined ? { backgroundColor: `rgba(${rgba.red}, ${rgba.green}, ${rgba.blue}, 1);` } : { backgroundColor: '' }
+    },
     characterEmblemBackground(url) {
       return {
         backgroundImage: `url(https://bungie.net/${url});`
       }
+    },
+    makeExempt(membershipId) {
+      const exemption = {
+        membershipId,
+        startDate: moment.utc(),
+        endDate: moment.utc().add(1, 'month'),
+        adminMembershipId: ''
+      }
+
+      this.grantExemption(exemption)
+    },
+    isCurrentlyExempt(membershipId) {
+      if (!this.exemptions[membershipId]) {
+        return false
+      }
+
+      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[membershipId].history))).asc(h => h.startDate)
+      const endDate = memberHistory[memberHistory.length - 1].endDate
+      const today = moment.utc().format()
+
+      return today <= endDate
     }
   },
   mounted() {
@@ -149,6 +192,10 @@ export default {
       this.getClanMembers().then(() => {
         this.isLoading = false
       })
+    }
+
+    if (!this.exemptions) {
+      this.getExemptions()
     }
   }
 }
@@ -174,6 +221,8 @@ export default {
   top: 0;
   left: 0;
   z-index: 9000;
+  width: 474px;
+  height: 96px;
 }
 
 .characters .character .character-emblem img {
@@ -224,5 +273,18 @@ export default {
   top: 40px;
   right: 20px;
   font-size: 20px;
+}
+
+.member-chip {
+  width: 76px;
+  justify-content: center;
+}
+
+.member-chip .chip__content {
+  width: 100%;
+}
+
+.exemption-badge {
+  margin-right: 20px;
 }
 </style>

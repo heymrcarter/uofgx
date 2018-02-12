@@ -10,13 +10,15 @@ export default new Vuex.Store({
     clanMembers: undefined,
     activityReport: undefined,
     activeMember: undefined,
-    session: undefined
+    session: undefined,
+    exemptions: undefined
   },
   getters: {
     clanMembers: state => state.clanMembers,
     activityReport: state => state.activityReport,
     activeMember: state => state.activeMember,
-    session: state => state.session
+    session: state => state.session,
+    exemptions: state => state.exemptions
   },
   actions,
   mutations

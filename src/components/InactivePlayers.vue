@@ -29,6 +29,13 @@
                     <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
                     <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
                   </v-list-tile-content>
+
+                  <v-list-tile-action>
+                    <v-badge color="black" right overlap v-if="isCurrentlyExempt(profile.membershipId)">
+                      <span slot="badge" v-if="exemptions[profile.membershipId].numberExemptions > 1">{{exemptions[profile.membershipId].numberExemptions}}</span>
+                      <v-icon large>explicit</v-icon>
+                    </v-badge>
+                  </v-list-tile-action>
                 </v-list-tile>
                 <v-divider v-if="i !== greaterThan30Days.length - 1"></v-divider>
               </div>
@@ -51,6 +58,13 @@
                     <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
                     <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
                   </v-list-tile-content>
+
+                  <v-list-tile-action>
+                    <v-badge color="black" right overlap v-if="isCurrentlyExempt(profile.membershipId)">
+                      <span slot="badge" v-if="exemptions[profile.membershipId].numberExemptions > 1">{{exemptions[profile.membershipId].numberExemptions}}</span>
+                      <v-icon large>explicit</v-icon>
+                    </v-badge>
+                  </v-list-tile-action>
                 </v-list-tile>
                 <v-divider v-if="i !== weekOrMore.length - 1"></v-divider>
               </div>
@@ -69,6 +83,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment-timezone'
+import sort from 'fast-sort'
 
 export default {
   name: 'inactive-players',
@@ -79,7 +94,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['activityReport']),
+    ...mapGetters(['activityReport', 'exemptions']),
     greaterThan30Days() {
       return this.activityReport.filter(p => p.daysSinceLastPlayed >= 30)
     },
@@ -106,6 +121,17 @@ export default {
       this.getActivityReport().then(() => {
         self.isRunningReport = false
       })
+    },
+    isCurrentlyExempt(membershipId) {
+      if (!this.exemptions[membershipId]) {
+        return false
+      }
+
+      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[membershipId].history))).asc(h => h.startDate)
+      const endDate = memberHistory[memberHistory.length - 1].endDate
+      const today = moment.utc().format()
+
+      return today <= endDate
     }
   }
 }

@@ -7,5 +7,6 @@ module.exports = {
   AUTH_ENDPOINT: '"https://www.bungie.net/en/OAuth/Authorize"',
   CLIENT_ID: '"#{OAUTH_CLIENT_ID}#"',
   OAUTH_SECRET: '"#{OAUTH_SECRET}#"',
-  CLIENT_SECRET: '"#{OAUTH_CLIENT_SECRET}#"'
+  CLIENT_SECRET: '"#{OAUTH_CLIENT_SECRET}#"',
+  EXEMPTIONS_ENDPOINT: '"https://7llyidadgb.execute-api.us-east-1.amazonaws.com/prod/exemptions"'
 }

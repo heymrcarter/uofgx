@@ -18,5 +18,20 @@ export default {
     if (state.session.membership_id === membershipId) {
       state.session.hasAccess = true
     }
+  },
+  SET_EXEMPTIONS(state, exemptions) {
+    state.exemptions = exemptions
+  },
+  SAVE_EXEMPTION(state, exemption) {
+    if (!state.exemptions[exemption.membershipId]) {
+      state.exemptions[exemption.membershipId] = {
+        membershipId: exemption.membershipId,
+        history: [],
+        numberExemptions: 0
+      }
+    }
+
+    state.exemptions[exemption.membershipId].history.push(exemption)
+    state.exemptions[exemption.membershipId].numberExemptions++
   }
 }
