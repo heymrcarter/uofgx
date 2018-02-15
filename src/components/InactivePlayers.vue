@@ -23,20 +23,11 @@
             <v-subheader>A month or more ({{ greaterThan30Days.length }})</v-subheader>
             <template v-for="(profile, i) in greaterThan30Days">
               <div :key="i">
-                <v-list-tile>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{ profile.gamertag }}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
-                    <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
-                  </v-list-tile-content>
-
-                  <v-list-tile-action>
-                    <v-badge color="black" right overlap v-if="isCurrentlyExempt(profile.membershipId)">
-                      <span slot="badge" v-if="exemptions[profile.membershipId].numberExemptions > 1">{{exemptions[profile.membershipId].numberExemptions}}</span>
-                      <v-icon large>explicit</v-icon>
-                    </v-badge>
-                  </v-list-tile-action>
-                </v-list-tile>
+                <inactivity-report-row
+                  :profile="profile"
+                  :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
+                  :numberExemptions="getNumberOfExemptions(profile.membershipId)"
+                  @click="showMemberDetail(profile)"></inactivity-report-row>
                 <v-divider v-if="i !== greaterThan30Days.length - 1"></v-divider>
               </div>
             </template>
@@ -52,20 +43,11 @@
             <v-subheader>A week or more ({{ weekOrMore.length }})</v-subheader>
             <template v-for="(profile, i) in weekOrMore">
               <div :key="i">
-                <v-list-tile>
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{ profile.gamertag }}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
-                    <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
-                  </v-list-tile-content>
-
-                  <v-list-tile-action>
-                    <v-badge color="black" right overlap v-if="isCurrentlyExempt(profile.membershipId)">
-                      <span slot="badge" v-if="exemptions[profile.membershipId].numberExemptions > 1">{{exemptions[profile.membershipId].numberExemptions}}</span>
-                      <v-icon large>explicit</v-icon>
-                    </v-badge>
-                  </v-list-tile-action>
-                </v-list-tile>
+                <inactivity-report-row
+                  :profile="profile"
+                  :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
+                  :numberExemptions="getNumberOfExemptions(profile.membershipId)"
+                  @click="showMemberDetail(profile)"></inactivity-report-row>
                 <v-divider v-if="i !== weekOrMore.length - 1"></v-divider>
               </div>
             </template>
@@ -82,15 +64,20 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment-timezone'
 import sort from 'fast-sort'
+import moment from 'moment-timezone'
+import InactivityReportRow from './inactive-players/InactivityReportRow'
 
 export default {
   name: 'inactive-players',
+  components: {
+    InactivityReportRow
+  },
   data() {
     return {
       showWarning: true,
-      isRunningReport: false
+      isRunningReport: false,
+      isLoadingCharacters: false
     }
   },
   computed: {
@@ -103,16 +90,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getActivityReport']),
-    formatDate(date) {
-      // console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
-      return moment
-        .utc(date)
-        .tz('America/New_York')
-        .format('MM/DD/YYYY')
-    },
-    latestExpansion(expansions) {
-      return expansions[expansions.length - 1]
+    ...mapActions(['getActivityReport', 'getCharactersForMember']),
+    showMemberDetail(profile) {
+      console.log(profile)
+      this.isLoadingCharacters = true
+      this.getCharactersForMember({ xboxUserName: profile.gamertag, xboxMembershipId: profile.membershipId }).then(() => {
+        this.isLoadingCharacters = false
+        this.$router.push({ name: 'Profile', params: { membershipId: profile.membershipId } })
+      })
     },
     generateReport() {
       const self = this
@@ -132,6 +117,13 @@ export default {
       const today = moment.utc().format()
 
       return today <= endDate
+    },
+    getNumberOfExemptions(membershipId) {
+      if (!this.exemptions[membershipId]) {
+        return 0
+      }
+
+      return this.exemptions[membershipId].numberOfExemptions
     }
   }
 }

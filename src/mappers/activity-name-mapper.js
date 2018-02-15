@@ -43,7 +43,7 @@ export function activityModeToName(mode) {
     case 24:
       return 'Reserved24'
     case 25:
-      return 'Reserved25'
+      return 'Mayhem (The Dawning)'
     case 26:
       return 'Reserved26'
     case 27:
