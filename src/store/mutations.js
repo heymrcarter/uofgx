@@ -7,6 +7,7 @@ export default {
   },
   SET_ACTIVE_MEMBER(state, member) {
     state.activeMember = member
+    state.activeMemberCharacterActivity = undefined
   },
   RESET_ACTIVE_MEMBER(state) {
     state.activeMember = undefined
@@ -33,5 +34,11 @@ export default {
 
     state.exemptions[exemption.membershipId].history.push(exemption)
     state.exemptions[exemption.membershipId].numberExemptions++
+  },
+  SET_ACTIVE_MEMBER_CHARACTER_ACTIVITY(state, activity) {
+    state.activeMemberCharacterActivity = activity
+  },
+  SET_ACTIVITY_DETAILS(state, details) {
+    state.activityDetails[details.activityDetails.instanceId] = details
   }
 }

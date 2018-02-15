@@ -4,6 +4,7 @@ import ClanMemberList from '@/components/ClanMemberList'
 import InactivePlayers from '@/components/InactivePlayers'
 import Login from '@/components/Login'
 import OAuthHandler from '@/components/OAuthHandler'
+import MemberProfile from '@/components/MemberProfile'
 import { configureRouter } from './config'
 
 Vue.use(Router)
@@ -38,6 +39,14 @@ const router = new Router({
       path: '/inactive-players',
       name: 'InactivePlayers',
       component: InactivePlayers,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/profile/:membershipId',
+      name: 'Profile',
+      component: MemberProfile,
       meta: {
         requiresAuth: true
       }

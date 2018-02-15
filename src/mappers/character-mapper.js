@@ -7,7 +7,8 @@ export function mapCharacters(charactersResponse) {
       minutesPlayedThisSession: characterObject.minutesPlayedThisSession,
       light: characterObject.light,
       emblem: characterObject.emblemBackgroundPath,
-      level: characterObject.levelProgression.level
+      level: characterObject.levelProgression.level,
+      characterId: characterObject.characterId
     }
 
     switch (characterObject.classType) {

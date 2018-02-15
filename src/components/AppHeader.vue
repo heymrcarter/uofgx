@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'app-header',
   data() {
@@ -31,6 +32,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['activeMember']),
     currentPageName() {
       switch (this.$route.name) {
         case 'Home':
@@ -41,6 +43,8 @@ export default {
           return 'Unity of Guardians'
         case 'InactivePlayers':
           return 'Inactive players'
+        case 'Profile':
+          return this.activeMember.gamertag
         default:
           return 'Not found!'
       }
@@ -56,5 +60,7 @@ export default {
 </script>
 
 <style scoped>
-
+.toolbar--fixed {
+  z-index: 10000;
+}
 </style>

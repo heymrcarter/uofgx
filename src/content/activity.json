@@ -1,0 +1,78 @@
+{
+  "tableHeaders": [
+    {
+      "text": "Date",
+      "value": "date",
+      "align": "left",
+      "sortable": true
+    },
+    {
+      "text": "Activity",
+      "value": "activity",
+      "align": "left",
+      "sortable": true
+    },
+    {
+      "text": "Completed",
+      "value": "completed",
+      "align": "left",
+      "sortable": true
+    },
+    {
+      "text": "Time Played",
+      "value": "timePlayed",
+      "align": "left",
+      "sortable": true
+    },
+    {
+      "text": "Kills",
+      "value": "kills",
+      "align": "left",
+      "sortable": true
+    },
+    {
+      "text": "Deaths",
+      "value": "deaths",
+      "align": "left",
+      "sortable": true
+    }
+  ],
+  "detailTableHeaders": [
+    {
+      "text": "",
+      "value": "icon",
+      "align": "left",
+      "sortable": false
+    },
+    {
+      "text": "Player",
+      "value": "player",
+      "align": "left",
+      "sortable": false
+    },
+    {
+      "text": "Class",
+      "value": "class",
+      "align": "left",
+      "sortable": false
+    },
+    {
+      "text": "Power",
+      "value": "power",
+      "align": "left",
+      "sortable": false
+    },
+    {
+      "text": "Kills",
+      "value": "kills",
+      "align": "left",
+      "sortable": false
+    },
+    {
+      "text": "Deaths",
+      "value": "deaths",
+      "align": "left",
+      "sortable": false
+    }
+  ]
+}
