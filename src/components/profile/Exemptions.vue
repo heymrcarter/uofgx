@@ -23,14 +23,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import moment from 'moment-timezone'
 export default {
   name: 'exemptions',
   computed: {
-    ...mapGetters(['exemptions', 'clanMembers']),
+    ...mapGetters(['clanMembers']),
+    ...mapState(['exemptions']),
     exemptionHistory() {
-      return this.exemptions[this.$route.params.membershipId] ? this.exemptions[this.$route.params.membershipId].history : []
+      const currentMemberExemption = this.exemptions[this.$route.params.membershipId]
+      return currentMemberExemption ? currentMemberExemption.history : []
     }
   },
   methods: {

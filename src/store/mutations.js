@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
   SET_CLAN_MEMBERS(state, members) {
     state.clanMembers = members
@@ -25,11 +27,11 @@ export default {
   },
   SAVE_EXEMPTION(state, exemption) {
     if (!state.exemptions[exemption.membershipId]) {
-      state.exemptions[exemption.membershipId] = {
+      Vue.set(state.exemptions, exemption.membershipId, {
         membershipId: exemption.membershipId,
         history: [],
         numberExemptions: 0
-      }
+      })
     }
 
     state.exemptions[exemption.membershipId].history.push(exemption)

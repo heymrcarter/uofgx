@@ -11,7 +11,7 @@
     </v-list-tile-content>
 
     <v-list-tile-action>
-      <v-layout row justify-end>
+      <v-layout row justify-end align-center>
         <v-badge v-if="exemptions[member.xboxMembershipId] && isCurrentlyExempt(member.xboxMembershipId)" right color="black" overlap class="exemption-badge">
           <v-icon large>explicit</v-icon>
           <span slot="badge" v-if="exemptions && exemptions[member.xboxMembershipId].numberExemptions > 1">{{ exemptions[member.xboxMembershipId].numberExemptions }}</span>
@@ -22,9 +22,9 @@
           :text-color="member.memberType > 3 ? 'black' : 'white'"
           :color="getChipColor(member.memberType)">{{getMemberType(member.memberType)}}</v-chip>
 
-        <v-tooltip bottom color="black">
-          <v-btn flat slot="activator" @click="makeExempt(member.xboxMembershipId)" :disabled="isCurrentlyExempt(member.xboxMembershipId)">
-            <v-icon>snooze</v-icon>
+        <v-tooltip bottom color="black" class="ml-4">
+          <v-btn icon flat slot="activator" @click="makeExempt(member.xboxMembershipId)" :disabled="isCurrentlyExempt(member.xboxMembershipId)">
+            <v-icon medium>snooze</v-icon>
           </v-btn>
 
           <span>Grant exemption</span>

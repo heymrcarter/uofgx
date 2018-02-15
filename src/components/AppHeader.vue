@@ -16,16 +16,18 @@
       </v-list>
     </v-menu>
     <v-spacer></v-spacer>
-    <v-btn icon v-if="renderRefreshIcon">
-      <v-icon>refresh</v-icon>
-    </v-btn>
+    <profile-actions v-if="shouldRenderProfilActions"></profile-actions>
   </v-toolbar>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import ProfileActions from './members/ProfileActions'
 export default {
   name: 'app-header',
+  components: {
+    ProfileActions
+  },
   data() {
     return {
       shouldRenderInactiveMembers: true
@@ -49,8 +51,8 @@ export default {
           return 'Not found!'
       }
     },
-    renderRefreshIcon() {
-      return this.$route.name === 'Inactive Players'
+    shouldRenderProfilActions() {
+      return this.$route.name === 'Profile'
     },
     renderDropDownIcon() {
       return this.$route.name !== 'OAuth'
