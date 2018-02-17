@@ -104,5 +104,21 @@ export default {
         })
         .catch(error => reject(error))
     })
+  },
+  getRecentActivityBreakdown({ commit }, { membershipId, characterId }) {
+    return new Promise((resolve, reject) => {
+      memberService
+        .getRecentActivityBreakdownForMemberCharacter(membershipId, characterId)
+        .then(recentActivityBreakdown => resolve(recentActivityBreakdown))
+        .catch(error => reject(error))
+    })
+  },
+  getRecentActivityByDate({ commit }, { membershipId, characterId }) {
+    return new Promise((resolve, reject) => {
+      memberService
+        .getRecentActivityByDateForMemberCharacter(membershipId, characterId)
+        .then(recentActivityByDate => resolve(recentActivityByDate))
+        .catch(error => reject(error))
+    })
   }
 }

@@ -17,26 +17,12 @@
     </v-layout>
 
     <v-layout row wrap>
-      <v-flex xs12 md6>
-        <v-card v-if="activeMemberCharacterActivity !== undefined">
-          <v-card-title>
-            <p class="title">Activity breakdown</p>
-          </v-card-title>
-          <v-card-text>
-            <pie-chart :data="activityBreakdownData" :colors="pieChartColors" :library="activityBreakdownOptions"></pie-chart>
-          </v-card-text>
-        </v-card>
+      <v-flex xs12 md6 fill-height>
+        <activity-breakdown-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-breakdown-chart>
       </v-flex>
 
       <v-flex xs12 md6>
-        <v-card v-if="activeMemberCharacterActivity !== undefined">
-          <v-card-title>
-            <p class="title">Activity by date</p>
-          </v-card-title>
-          <v-card-text>
-            <line-chart :data="activityByDateData" :library="activityByDateOptions" :colors="lineChartColor"></line-chart>
-          </v-card-text>
-        </v-card>
+        <activity-by-date-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-by-date-chart>
       </v-flex>
     </v-layout>
 
@@ -117,50 +103,22 @@ import sort from 'fast-sort'
 import moment from 'moment-timezone'
 import { activityModeToName } from '@/mappers/activity-name-mapper'
 import LoadingIndicator from '@/components/LoadingIndicator'
-import colors from 'vuetify/es5/util/colors'
+import ActivityBreakdownChart from './ActivityBreakdownChart'
+import ActivityByDateChart from './ActivityByDateChart'
 
 export default {
   name: 'activity-history',
   components: {
-    LoadingIndicator
+    LoadingIndicator,
+    ActivityBreakdownChart,
+    ActivityByDateChart
   },
   data() {
     return {
       selectedCharacter: undefined,
       isLoadingCharacterActivity: false,
       isLoasdingActivityDetails: false,
-      detailTableRows: undefined,
-      pieChartColors: [colors.red.darken4, colors.blue.base, colors.indigo.base, colors.green.base, colors.yellow.base, colors.amber.base, colors.deepOrange.base, colors.pink.base],
-      lineChartColor: [colors.yellow.base],
-      activityBreakdownOptions: {
-        legend: {
-          position: 'bottom',
-          labels: {
-            fontColor: 'white',
-            fontSize: 14
-          }
-        },
-        animation: {
-          duration: 1000,
-          easing: 'easeOutQuart'
-        }
-      },
-      activityByDateOptions: {
-        animation: {
-          duration: 1000,
-          easing: 'easeOutQuart'
-        },
-        scales: {
-          xAxes: [
-            {
-              ticks: {
-                fontColor: 'white',
-                fontSize: 14
-              }
-            }
-          ]
-        }
-      }
+      detailTableRows: undefined
     }
   },
   watch: {
