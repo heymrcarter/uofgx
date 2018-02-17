@@ -10,11 +10,7 @@
       </v-flex>
     </v-layout>
 
-    <v-layout row wrap>
-      <v-flex xs12>
-        <activity-history></activity-history>
-      </v-flex>
-    </v-layout>
+    <activity-history></activity-history>
   </v-container>
 </template>
 

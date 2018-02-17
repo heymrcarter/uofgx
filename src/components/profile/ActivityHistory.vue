@@ -1,71 +1,110 @@
-<template>
-  <section>
-    <v-card class="activity-card">
-      <v-card-title>
-        <v-flex xs12 md9>
-          <p class="headline">Activity <span v-if="selectedCharacter !== undefined">for {{selectedCharacterClass}} ({{ selectedCharacterLight }})</span></p>
-        </v-flex>
+  <template>
+  <section class="mt-2">
+    <v-layout row wrap>
+      <v-flex xs12>
+        <v-card class="activity-card">
+          <v-card-title>
+            <v-flex xs12 md9>
+              <p class="headline">Character activity <span v-if="selectedCharacter !== undefined">for {{selectedCharacterClass}} ({{ selectedCharacterLight }})</span></p>
+            </v-flex>
 
-        <v-flex xs12 md3>
-          <v-select color="yellow" label="Select character" :items="characterDropdownOptions" v-model="selectedCharacter"></v-select>
-        </v-flex>
-      </v-card-title>
+            <v-flex xs12 md3>
+              <v-select color="yellow" label="Select character" :items="characterDropdownOptions" v-model="selectedCharacter"></v-select>
+            </v-flex>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+    </v-layout>
 
-      <v-card-text>
-        <v-data-table
-          v-if="activeMemberCharacterActivity !== undefined"
-          hide-actions
-          color="yellow"
-          class="elevation-1"
-          item-key="date"
-          disable-initial-sort
-          :headers="activityTableHeaders"
-          :items="activityRows"
-          :loading="isLoadingCharacterActivity ? 'yellow': false">
+    <v-layout row wrap>
+      <v-flex xs12 md6>
+        <v-card v-if="activeMemberCharacterActivity !== undefined">
+          <v-card-title>
+            <p class="title">Activity breakdown</p>
+          </v-card-title>
+          <v-card-text>
+            <pie-chart :data="activityBreakdownData" :colors="pieChartColors" :library="activityBreakdownOptions"></pie-chart>
+          </v-card-text>
+        </v-card>
+      </v-flex>
 
-          <template slot="items" slot-scope="props">
-            <tr @click="expandActivity(props)">
-              <td>{{ formatDate(props.item.date) }}</td>
-              <td>{{ props.item.activity }}</td>
-              <td>{{ props.item.completed }}</td>
-              <td>{{ props.item.timePlayed }}</td>
-              <td>{{ props.item.kills }}</td>
-              <td>{{ props.item.deaths }}</td>
-            </tr>
-          </template>
+      <v-flex xs12 md6>
+        <v-card v-if="activeMemberCharacterActivity !== undefined">
+          <v-card-title>
+            <p class="title">Activity by date</p>
+          </v-card-title>
+          <v-card-text>
+            <line-chart :data="activityByDateData" :library="activityByDateOptions" :colors="lineChartColor"></line-chart>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
 
-          <template slot="expand" slot-scope="props">
-            <v-card flat>
-              <v-card-title class="subheading">
-                Activity details
-                <v-progress-circular class="ml-2" :size="20" indeterminate color="yellow" v-if="isLoadingActivityDetails"></v-progress-circular>
-              </v-card-title>
+    <v-layout row wrap>
+      <v-flex xs12>
+        <v-card class="activity-card">
+          <v-card-title>
+            <p class="title">Recent activity <span v-if="selectedCharacter !== undefined">for {{selectedCharacterClass}} ({{ selectedCharacterLight }})</span></p>
+          </v-card-title>
 
-              <v-card-text>
-                <v-data-table
-                  hide-actions
-                  color="yellow"
-                  :headers="activityDetailTableHeaders"
-                  :items="detailTableRows">
+          <v-card-text>
+            <v-data-table
+              v-if="activeMemberCharacterActivity !== undefined"
+              hide-actions
+              color="yellow"
+              class="elevation-1"
+              item-key="date"
+              disable-initial-sort
+              :headers="activityTableHeaders"
+              :items="activityRows"
+              :loading="isLoadingCharacterActivity ? 'yellow': false">
 
-                  <template slot="items" slot-scope="props">
-                    <tr>
-                      <td><v-icon>{{ props.item.icon }}</v-icon></td>
-                      <td>{{ props.item.player }}</td>
-                      <td>{{ props.item.class }}</td>
-                      <td>{{ props.item.power }}</td>
-                      <td>{{ props.item.kills }}</td>
-                      <td>{{ props.item.deaths }}</td>
-                    </tr>
-                  </template>
+              <template slot="items" slot-scope="props">
+                <tr @click="expandActivity(props)">
+                  <td>{{ formatDate(props.item.date) }}</td>
+                  <td>{{ props.item.activity }}</td>
+                  <td>{{ props.item.completed }}</td>
+                  <td>{{ props.item.timePlayed }}</td>
+                  <td>{{ props.item.kills }}</td>
+                  <td>{{ props.item.deaths }}</td>
+                </tr>
+              </template>
 
-                </v-data-table>
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-data-table>
-      </v-card-text>
-    </v-card>
+              <template slot="expand" slot-scope="props">
+                <v-card flat>
+                  <v-card-title class="subheading">
+                    Activity details
+                    <v-progress-circular class="ml-2" :size="20" indeterminate color="yellow" v-if="isLoadingActivityDetails"></v-progress-circular>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-data-table
+                      hide-actions
+                      color="yellow"
+                      :headers="activityDetailTableHeaders"
+                      :items="detailTableRows">
+
+                      <template slot="items" slot-scope="props">
+                        <tr>
+                          <td><v-icon>{{ props.item.icon }}</v-icon></td>
+                          <td>{{ props.item.player }}</td>
+                          <td>{{ props.item.class }}</td>
+                          <td>{{ props.item.power }}</td>
+                          <td>{{ props.item.kills }}</td>
+                          <td>{{ props.item.deaths }}</td>
+                        </tr>
+                      </template>
+
+                    </v-data-table>
+                  </v-card-text>
+                </v-card>
+              </template>
+            </v-data-table>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
+    </v-layout>
 
     <loading-indicator :is-loading="isLoadingCharacterActivity" context="global"></loading-indicator>
   </section>
@@ -78,6 +117,8 @@ import sort from 'fast-sort'
 import moment from 'moment-timezone'
 import { activityModeToName } from '@/mappers/activity-name-mapper'
 import LoadingIndicator from '@/components/LoadingIndicator'
+import colors from 'vuetify/es5/util/colors'
+
 export default {
   name: 'activity-history',
   components: {
@@ -88,7 +129,38 @@ export default {
       selectedCharacter: undefined,
       isLoadingCharacterActivity: false,
       isLoasdingActivityDetails: false,
-      detailTableRows: undefined
+      detailTableRows: undefined,
+      pieChartColors: [colors.red.darken4, colors.blue.base, colors.indigo.base, colors.green.base, colors.yellow.base, colors.amber.base, colors.deepOrange.base, colors.pink.base],
+      lineChartColor: [colors.yellow.base],
+      activityBreakdownOptions: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            fontColor: 'white',
+            fontSize: 14
+          }
+        },
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        }
+      },
+      activityByDateOptions: {
+        animation: {
+          duration: 1000,
+          easing: 'easeOutQuart'
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                fontColor: 'white',
+                fontSize: 14
+              }
+            }
+          ]
+        }
+      }
     }
   },
   watch: {
@@ -132,6 +204,50 @@ export default {
         })
       ).desc(a => a.date)
     },
+    activityBreakdownData() {
+      const activities = {}
+      this.activeMemberCharacterActivity.forEach(activity => {
+        const activityName = activityModeToName(activity.activityDetails.mode)
+        if (!activities[activityName]) {
+          activities[activityName] = 0
+        }
+
+        activities[activityName]++
+      })
+
+      return Object.entries(activities).map(activity => activity)
+    },
+    activityByDateData() {
+      let activityDates = []
+      this.activeMemberCharacterActivity.forEach(activity => {
+        const activityMoment = moment(activity.period)
+        if (activityDates.find(d => d.month() === activityMoment.month() && d.date() === activityMoment.date() && d.year() === activityMoment.year()) === undefined) {
+          activityDates.push(activityMoment)
+        }
+      })
+
+      activityDates = activityDates.sort((a, b) => a - b)
+
+      const startDate = activityDates[0]
+      const endDate = activityDates[activityDates.length - 1]
+
+      const days = endDate.diff(startDate, 'd', false)
+
+      const dates = {}
+      dates[startDate.format('MM/DD/YYYY')] = 0
+      for (let i = 1; i <= days + 1; i++) {
+        dates[startDate.add(1, 'd').format('MM/DD/YYYY')] = 0
+      }
+
+      this.activeMemberCharacterActivity.forEach(activity => {
+        const activityDate = this.formatDate(activity.period)
+        if (dates[activityDate] !== undefined) {
+          dates[activityDate]++
+        }
+      })
+
+      return dates
+    },
     currentMembershipId() {
       return this.$route.params.membershipId
     },
@@ -165,14 +281,20 @@ export default {
         this.isLoadingActivityDetails = false
       })
     },
-    formatDate(date) {
+    formatDate(date, format = 'MM/DD/YYYY') {
       return moment
         .utc(date)
         .tz('America/New_York')
-        .format('MM/DD/YYYY')
+        .format(format)
     },
     isClanMember(gamertag) {
       return this.clanMembers.find(m => m.xboxUserName === gamertag) !== undefined
+    },
+    pickBackgroundColor(colorsArray) {
+      const index = Math.floor(Math.random() * colorsArray.length)
+      const pickedColor = colorsArray[index]
+      colorsArray.splice(index, 1)
+      return { colorsArray, color: pickedColor }
     }
   }
 }

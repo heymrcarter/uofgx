@@ -5,7 +5,12 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import store from './store'
+import Chartkick from 'chartkick'
+import VueChartkick from 'vue-chartkick'
+import Chart from 'chart.js' // eslint-disable-line
 import '../node_modules/vuetify/dist/vuetify.min.css'
+
+Vue.use(VueChartkick, { Chartkick })
 
 Vue.config.productionTip = false
 
