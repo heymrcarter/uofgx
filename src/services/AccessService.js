@@ -1,15 +1,5 @@
-import axios from 'axios'
+import { post } from '@/utils/network-util'
 import qs from 'qs'
-
-function getConfig() {
-  return {
-    baseURL: 'https://www.bungie.net/platform',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    withCredentials: true
-  }
-}
 
 export function getAccessToken(authorizationToken) {
   return new Promise((resolve, reject) => {
@@ -20,8 +10,7 @@ export function getAccessToken(authorizationToken) {
       client_secret: process.env.CLIENT_SECRET
     }
 
-    axios
-      .post('/app/oauth/token/', qs.stringify(requestBody), getConfig())
+    post('https://www.bungie.net/platform/app/oauth/token/', qs.stringify(requestBody), { 'Content-Type': 'application/x-www-form-urlencoded' })
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

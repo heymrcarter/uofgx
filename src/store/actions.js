@@ -23,7 +23,7 @@ export default {
   },
   getCharactersForMember({ commit }, { xboxMembershipId, xboxUserName }) {
     return new Promise((resolve, reject) => {
-      clanService.getMemberCharacters(xboxMembershipId).then(characters => {
+      memberService.getMemberCharacters(xboxMembershipId).then(characters => {
         commit('SET_ACTIVE_MEMBER', { gamertag: xboxUserName, characters })
         resolve()
       })
@@ -46,7 +46,7 @@ export default {
   },
   checkAccessForMember({ commit }, session) {
     return new Promise((resolve, reject) => {
-      clanService
+      memberService
         .isMemberAdmin(session.membership_id, session.access_token)
         .then(isAdmin => {
           if (isAdmin) {
