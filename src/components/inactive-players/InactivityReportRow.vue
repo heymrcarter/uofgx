@@ -16,19 +16,14 @@
 </template>
 
 <script>
-import moment from 'moment-timezone'
+import dateFormatter from '@/mixins/date-formatter'
 export default {
   name: 'inactivity-report-row',
+  mixins: [dateFormatter],
   props: ['profile', 'isCurrentlyExempt', 'numberExemptions'],
   methods: {
     click(e) {
       this.$emit('click', e)
-    },
-    formatDate(date) {
-      return moment
-        .utc(date)
-        .tz('America/New_York')
-        .format('MM/DD/YYYY')
     },
     latestExpansion(expansions) {
       return expansions[expansions.length - 1]

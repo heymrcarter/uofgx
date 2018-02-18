@@ -100,14 +100,15 @@
 import { mapGetters, mapActions } from 'vuex'
 import activityContent from '@/content/activity'
 import sort from 'fast-sort'
-import moment from 'moment-timezone'
 import { activityModeToName } from '@/mappers/activity-name-mapper'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import ActivityBreakdownChart from './ActivityBreakdownChart'
 import ActivityByDateChart from './ActivityByDateChart'
+import dateFormatter from '@/mixins/date-formatter'
 
 export default {
   name: 'activity-history',
+  mixins: [dateFormatter],
   components: {
     LoadingIndicator,
     ActivityBreakdownChart,
@@ -162,50 +163,6 @@ export default {
         })
       ).desc(a => a.date)
     },
-    activityBreakdownData() {
-      const activities = {}
-      this.activeMemberCharacterActivity.forEach(activity => {
-        const activityName = activityModeToName(activity.activityDetails.mode)
-        if (!activities[activityName]) {
-          activities[activityName] = 0
-        }
-
-        activities[activityName]++
-      })
-
-      return Object.entries(activities).map(activity => activity)
-    },
-    activityByDateData() {
-      let activityDates = []
-      this.activeMemberCharacterActivity.forEach(activity => {
-        const activityMoment = moment(activity.period)
-        if (activityDates.find(d => d.month() === activityMoment.month() && d.date() === activityMoment.date() && d.year() === activityMoment.year()) === undefined) {
-          activityDates.push(activityMoment)
-        }
-      })
-
-      activityDates = activityDates.sort((a, b) => a - b)
-
-      const startDate = activityDates[0]
-      const endDate = activityDates[activityDates.length - 1]
-
-      const days = endDate.diff(startDate, 'd', false)
-
-      const dates = {}
-      dates[startDate.format('MM/DD/YYYY')] = 0
-      for (let i = 1; i <= days + 1; i++) {
-        dates[startDate.add(1, 'd').format('MM/DD/YYYY')] = 0
-      }
-
-      this.activeMemberCharacterActivity.forEach(activity => {
-        const activityDate = this.formatDate(activity.period)
-        if (dates[activityDate] !== undefined) {
-          dates[activityDate]++
-        }
-      })
-
-      return dates
-    },
     currentMembershipId() {
       return this.$route.params.membershipId
     },
@@ -239,20 +196,8 @@ export default {
         this.isLoadingActivityDetails = false
       })
     },
-    formatDate(date, format = 'MM/DD/YYYY') {
-      return moment
-        .utc(date)
-        .tz('America/New_York')
-        .format(format)
-    },
     isClanMember(gamertag) {
       return this.clanMembers.find(m => m.xboxUserName === gamertag) !== undefined
-    },
-    pickBackgroundColor(colorsArray) {
-      const index = Math.floor(Math.random() * colorsArray.length)
-      const pickedColor = colorsArray[index]
-      colorsArray.splice(index, 1)
-      return { colorsArray, color: pickedColor }
     }
   }
 }

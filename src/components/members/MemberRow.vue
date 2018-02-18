@@ -36,11 +36,13 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import dateFormatter from '@/mixins/date-formatter'
 import moment from 'moment-timezone'
 import sort from 'fast-sort'
 
 export default {
   name: 'member-row',
+  mixins: [dateFormatter],
   props: ['member'],
   computed: {
     ...mapGetters(['exemptions'])
@@ -49,12 +51,6 @@ export default {
     ...mapActions(['grantExemption']),
     click(e) {
       this.$emit('click', e)
-    },
-    formatDate(date) {
-      return moment
-        .utc(date)
-        .tz('America/New_York')
-        .format('MM/DD/YYYY')
     },
     isCurrentlyExempt(membershipId) {
       if (!this.exemptions[membershipId]) {

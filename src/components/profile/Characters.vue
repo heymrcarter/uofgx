@@ -25,19 +25,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from 'moment-timezone'
+import dateFormatter from '@/mixins/date-formatter'
 export default {
   name: 'characters',
+  mixins: [dateFormatter],
   computed: {
     ...mapGetters(['activeMember'])
-  },
-  methods: {
-    formatDate(date) {
-      return moment
-        .utc(date)
-        .tz('America/New_York')
-        .format('MM/DD/YYYY')
-    }
   }
 }
 </script>
