@@ -12,7 +12,7 @@
 
     <v-list-tile-action>
       <v-layout row justify-end align-center>
-        <v-badge v-if="exemptions[member.xboxMembershipId] && isCurrentlyExempt(member.xboxMembershipId)" right color="black" overlap class="exemption-badge">
+        <v-badge v-if="exemptions && exemptions[member.xboxMembershipId] && isCurrentlyExempt(member.xboxMembershipId)" right color="black" overlap class="exemption-badge">
           <v-icon large>explicit</v-icon>
           <span slot="badge" v-if="exemptions && exemptions[member.xboxMembershipId].numberExemptions > 1">{{ exemptions[member.xboxMembershipId].numberExemptions }}</span>
         </v-badge>
