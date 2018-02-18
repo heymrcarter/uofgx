@@ -83,14 +83,11 @@ export default {
         .catch(error => reject(error))
     })
   },
-  getCharacterActivity({ commit }, characterActivityPayload) {
+  getCharacterActivity({ commit }, { membershipId, characterId }) {
     return new Promise((resolve, reject) => {
       memberService
-        .getActivityForMemberCharacter(characterActivityPayload.membershipId, characterActivityPayload.characterId)
-        .then(activity => {
-          commit('SET_ACTIVE_MEMBER_CHARACTER_ACTIVITY', activity)
-          resolve()
-        })
+        .getActivityForMemberCharacter(membershipId, characterId)
+        .then(activity => resolve(activity))
         .catch(error => reject(error))
     })
   },
