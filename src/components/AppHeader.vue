@@ -46,7 +46,7 @@ export default {
         case 'InactivePlayers':
           return 'Inactive players'
         case 'Profile':
-          return this.activeMember.gamertag
+          return this.activeMember && this.activeMember.gamertag ? this.activeMember.gamertag : 'Loading...'
         default:
           return 'Not found!'
       }

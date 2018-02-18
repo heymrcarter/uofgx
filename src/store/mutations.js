@@ -8,6 +8,7 @@ export default {
     state.activityReport = report
   },
   SET_ACTIVE_MEMBER(state, member) {
+    member.gamertag = state.clanMembers.find(m => m.xboxMembershipId === member.membershipId).xboxUserName
     state.activeMember = member
     state.activeMemberCharacterActivity = undefined
   },
