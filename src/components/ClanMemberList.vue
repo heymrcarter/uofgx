@@ -49,11 +49,7 @@ export default {
   methods: {
     ...mapActions(['getClanMembers', 'getCharactersForMember', 'getExemptions']),
     showMemberDetail(member) {
-      this.isLoadingCharacters = true
-      this.getCharactersForMember({ xboxUserName: member.xboxUserName, xboxMembershipId: member.xboxMembershipId }).then(() => {
-        this.isLoadingCharacters = false
-        this.$router.push({ name: 'Profile', params: { membershipId: member.xboxMembershipId } })
-      })
+      this.$router.push({ name: 'Profile', params: { membershipId: member.xboxMembershipId } })
     }
   },
   mounted() {

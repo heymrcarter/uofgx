@@ -92,12 +92,7 @@ export default {
   methods: {
     ...mapActions(['getActivityReport', 'getCharactersForMember']),
     showMemberDetail(profile) {
-      console.log(profile)
-      this.isLoadingCharacters = true
-      this.getCharactersForMember({ xboxUserName: profile.gamertag, xboxMembershipId: profile.membershipId }).then(() => {
-        this.isLoadingCharacters = false
-        this.$router.push({ name: 'Profile', params: { membershipId: profile.membershipId } })
-      })
+      this.$router.push({ name: 'Profile', params: { membershipId: profile.membershipId } })
     },
     generateReport() {
       const self = this

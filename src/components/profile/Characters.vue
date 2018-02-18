@@ -2,9 +2,9 @@
   <v-card class="characters-card">
     <v-card-title class="headline">Characters</v-card-title>
     <v-card-text>
-      <ul class="characters">
+      <ul class="characters" v-if="!isLoading && characters.length > 0">
         <li
-          v-for="(character, i) in activeMember.characters"
+          v-for="(character, i) in characters"
           :key="i"
           class="character">
           <div class="character-emblem"><img :src="`https://bungie.net/${character.emblem}`"></div>
@@ -19,26 +19,72 @@
           </div>
         </li>
       </ul>
+      <div class="loader" v-else-if="isLoading">
+        <p class="sr-only">Loading</p>
+        <v-progress-circular color="yellow" :size="100" indeterminate></v-progress-circular>
+      </div>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import dateFormatter from '@/mixins/date-formatter'
 export default {
   name: 'characters',
   mixins: [dateFormatter],
-  computed: {
-    ...mapGetters(['activeMember'])
+  data() {
+    return {
+      isLoading: false,
+      characters: []
+    }
+  },
+  props: {
+    membershipId: {
+      required: true,
+      type: String
+    }
+  },
+  methods: {
+    ...mapActions(['getCharactersForMember'])
+  },
+  mounted() {
+    this.isLoading = true
+    this.getCharactersForMember(this.membershipId)
+      .then(characters => {
+        this.characters = characters
+        this.isLoading = false
+      })
+      .catch(error => {
+        console.error(error)
+        this.isLoading = false
+      })
   }
 }
 </script>
 
 <style scoped>
+.sr-only {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
 .characters {
   list-style: none;
-  /* width: 476px; */
 }
 
 .characters .character {

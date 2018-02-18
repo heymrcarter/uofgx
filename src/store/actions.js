@@ -21,11 +21,11 @@ export default {
       })
     })
   },
-  getCharactersForMember({ commit }, { xboxMembershipId, xboxUserName }) {
+  getCharactersForMember({ commit }, xboxMembershipId) {
     return new Promise((resolve, reject) => {
       memberService.getMemberCharacters(xboxMembershipId).then(characters => {
-        commit('SET_ACTIVE_MEMBER', { gamertag: xboxUserName, characters })
-        resolve()
+        commit('SET_ACTIVE_MEMBER', { characters, membershipId: xboxMembershipId })
+        resolve(characters)
       })
     })
   },
