@@ -21,10 +21,18 @@ export default {
       })
     })
   },
-  getCharactersForMember({ commit }, xboxMembershipId) {
+  getCharactersForMember({ commit, state }, membershipId) {
     return new Promise((resolve, reject) => {
-      memberService.getMemberCharacters(xboxMembershipId).then(characters => {
-        commit('SET_ACTIVE_MEMBER', { characters, membershipId: xboxMembershipId })
+      if (state.charactersCache[membershipId]) {
+        const characters = state.charactersCache[membershipId]
+        commit('SET_ACTIVE_MEMBER', { characters, membershipId })
+        resolve(characters)
+        return
+      }
+
+      memberService.getMemberCharacters(membershipId).then(characters => {
+        commit('CACHE_MEMBER_CHARACTERS', { characters, membershipId })
+        commit('SET_ACTIVE_MEMBER', { characters, membershipId })
         resolve(characters)
       })
     })

@@ -43,5 +43,8 @@ export default {
   },
   SET_ACTIVITY_DETAILS(state, details) {
     state.activityDetails[details.activityDetails.instanceId] = details
+  },
+  CACHE_MEMBER_CHARACTERS(state, { characters, membershipId }) {
+    state.charactersCache[membershipId] = characters
   }
 }

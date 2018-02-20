@@ -13,7 +13,8 @@ export default new Vuex.Store({
     session: undefined,
     exemptions: undefined,
     activeMemberCharacterActivity: undefined,
-    activityDetails: {}
+    activityDetails: {},
+    charactersCache: {}
   },
   getters: {
     clanMembers: state => state.clanMembers,
