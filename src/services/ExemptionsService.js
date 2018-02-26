@@ -1,8 +1,8 @@
-import { get, post } from '@/utils/network-util'
+import { get, post, put } from '@/utils/network-util'
 
 export function getExemptionsForClan(clanId) {
   return new Promise((resolve, reject) => {
-    get(`${process.env.EXEMPTIONS_ENDPOINT}/${clanId}`)
+    get(`/exemptions/${clanId}`)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })
@@ -10,7 +10,15 @@ export function getExemptionsForClan(clanId) {
 
 export function grantExemptionForMember(clanId, exemption) {
   return new Promise((resolve, reject) => {
-    post(`${process.env.EXEMPTIONS_ENDPOINT}/${clanId}`, exemption)
+    post(`/exemptions/${clanId}`, exemption)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
+
+export function editExemption(clanId, exemption) {
+  return new Promise((resolve, reject) => {
+    put(`/exemptions/${clanId}/${exemption.membershipId}`, exemption)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

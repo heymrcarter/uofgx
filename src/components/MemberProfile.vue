@@ -5,8 +5,12 @@
         <characters :membershipId="currentMembershipId"></characters>
       </v-flex>
 
-      <v-flex xs12 md7 fill-height>
+      <v-flex xs12 md5 fill-height>
         <exemptions></exemptions>
+      </v-flex>
+
+      <v-flex xs12 md2 fill-height>
+        <profile-actions></profile-actions>
       </v-flex>
     </v-layout>
 
@@ -41,6 +45,7 @@ import CharacterSelector from './profile/CharacterSelector'
 import ActivityBreakdownChart from './profile/ActivityBreakdownChart'
 import ActivityByDateChart from './profile/ActivityByDateChart'
 import RecentActivityTable from './profile/RecentActivityTable'
+import ProfileActions from './profile/ProfileActions'
 
 export default {
   name: 'member-profile',
@@ -50,7 +55,8 @@ export default {
     CharacterSelector,
     ActivityBreakdownChart,
     ActivityByDateChart,
-    RecentActivityTable
+    RecentActivityTable,
+    ProfileActions
   },
   data() {
     return {

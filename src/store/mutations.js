@@ -46,5 +46,9 @@ export default {
   },
   CACHE_MEMBER_CHARACTERS(state, { characters, membershipId }) {
     state.charactersCache[membershipId] = characters
+  },
+  LIFT_EXEMPTION(state, exemption) {
+    const index = state.exemptions[exemption.membershipId].history.findIndex(e => e.id === exemption.id)
+    state.exemptions[exemption.membershipId].history.splice(index, 1, exemption)
   }
 }

@@ -15,19 +15,13 @@
         </v-list-tile>
       </v-list>
     </v-menu>
-    <v-spacer></v-spacer>
-    <profile-actions v-if="shouldRenderProfilActions"></profile-actions>
   </v-toolbar>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import ProfileActions from './members/ProfileActions'
 export default {
   name: 'app-header',
-  components: {
-    ProfileActions
-  },
   data() {
     return {
       shouldRenderInactiveMembers: true

@@ -125,5 +125,16 @@ export default {
         .then(recentActivityByDate => resolve(recentActivityByDate))
         .catch(error => reject(error))
     })
+  },
+  editExemption({ commit }, exemption) {
+    return new Promise((resolve, reject) => {
+      exemptionService
+        .editExemption(process.env.CLAN_ID, exemption)
+        .then(updatedExemption => {
+          commit('LIFT_EXEMPTION', updatedExemption)
+          resolve()
+        })
+        .catch(error => reject(error))
+    })
   }
 }
