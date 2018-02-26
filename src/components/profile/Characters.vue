@@ -2,23 +2,27 @@
   <v-card class="characters-card">
     <v-card-title class="headline">Characters</v-card-title>
     <v-card-text>
-      <ul class="characters" v-if="!isLoading && characters.length > 0">
-        <li
-          v-for="(character, i) in characters"
-          :key="i"
-          class="character">
-          <div class="character-emblem"><img :src="`https://bungie.net/${character.emblem}`"></div>
-          <div class="character-details">
-            <span class="class">{{character.class}}</span>
-            <div class="last-played">
-              <span class="last-played-date">Last played {{formatDate(character.lastPlayed)}}</span>
-              <span class="last-played-duration">{{character.minutesPlayedThisSession}} minutes</span>
-            </div>
-            <span class="light">{{character.light}}</span>
-            <span class="level">{{character.level}}</span>
-          </div>
-        </li>
-      </ul>
+      <v-list three-line v-if="!isLoading && characters.length > 0">
+        <template v-for="(character, i) in characters">
+          <v-list-tile avatar :key="i">
+            <v-list-tile-avatar :tile="true" :size="60" class="mr-3">
+              <img :src="`https://www.bungie.net${character.emblem}`">
+            </v-list-tile-avatar>
+
+            <v-list-tile-content>
+              <v-list-tile-title class="title">{{character.class}}</v-list-tile-title>
+              <v-list-tile-sub-title>Last played {{formatDate(character.lastPlayed)}}</v-list-tile-sub-title>
+              <v-list-tile-sub-title>{{character.minutesPlayedThisSession}} minutes</v-list-tile-sub-title>
+            </v-list-tile-content>
+
+            <v-list-tile-action>
+              <p class="light title">{{character.light}}</p>
+              <p class="level">{{character.level}}</p>
+            </v-list-tile-action>
+          </v-list-tile>
+        </template>
+      </v-list>
+
       <div class="loader" v-else-if="isLoading">
         <p class="sr-only">Loading</p>
         <v-progress-circular color="yellow" :size="100" indeterminate></v-progress-circular>
@@ -83,76 +87,7 @@ export default {
   height: 100%;
 }
 
-.characters {
-  list-style: none;
-}
-
-.characters .character {
-  display: block;
-  height: 96px;
-  position: relative;
-  margin-bottom: 20px;
-  max-width: 474px;
-}
-
-.characters .character .character-emblem {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 9000;
-  width: 474px;
-  height: 96px;
-  max-width: 100%;
-}
-
-.characters .character .character-emblem img {
-  z-index: 9000;
-  max-width: 100%;
-}
-
-.characters .character .character-details {
-  z-index: 9999;
-  color: white;
-  position: relative;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 100%;
-  height: 96px;
-  text-shadow: #000 1px 1px 5px;
-}
-
-.characters .character .character-details .class {
-  position: absolute;
-  top: 7px;
-  left: 100px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.characters .character .character-details .last-played {
-  position: absolute;
-  top: 32px;
-  left: 100px;
-  font-size: 14px;
-}
-
-.characters .character .character-details .last-played span {
-  display: block;
-}
-
-.characters .character .character-details .light {
-  position: absolute;
-  top: 7px;
-  right: 20px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.characters .character .character-details .level {
-  position: absolute;
-  top: 32px;
-  right: 20px;
-  font-size: 20px;
+.light {
+  color: #ffeb3b;
 }
 </style>
