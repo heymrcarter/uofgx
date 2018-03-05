@@ -13,6 +13,7 @@ export function get(endpoint) {
 
 export function post(endpoint, body, headers = {}) {
   const config = Object.assign({}, defaultConfig, { headers })
+  console.log('request config', config)
   return axios.post(endpoint, body, config)
 }
 

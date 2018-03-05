@@ -8,9 +8,10 @@ export function getClanRemovalHistory(clanId) {
   })
 }
 
-export function removeMemberFromClan(clanId, removalPayload) {
+export function removeMemberFromClan(clanId, removalPayload, bearerToken) {
   return new Promise((resolve, reject) => {
-    post(`/removal/${clanId}`, removalPayload)
+    const config = { Authorization: `Bearer ${bearerToken}` }
+    post(`/removal/${clanId}`, removalPayload, config)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

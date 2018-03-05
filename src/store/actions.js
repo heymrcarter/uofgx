@@ -154,7 +154,7 @@ export default {
       payload.adminMembershipId = state.session.membership_id
       payload.adminMembershipType = 'bungienet'
       removalService
-        .removeMemberFromClan(process.env.CLAN_ID, payload)
+        .removeMemberFromClan(process.env.CLAN_ID, payload, state.session.access_token)
         .then(removal => {
           commit('REMOVE_MEMBER', removal)
           resolve()
