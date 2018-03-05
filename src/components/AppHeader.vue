@@ -56,7 +56,7 @@ export default {
 </script>
 
 <style scoped>
-.toolbar--fixed {
+/* .toolbar--fixed {
   z-index: 10000;
-}
+} */
 </style>

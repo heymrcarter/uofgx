@@ -14,7 +14,8 @@ export default new Vuex.Store({
     exemptions: undefined,
     activeMemberCharacterActivity: undefined,
     activityDetails: {},
-    charactersCache: {}
+    charactersCache: {},
+    removalHistory: undefined
   },
   getters: {
     clanMembers: state => state.clanMembers,
@@ -23,7 +24,8 @@ export default new Vuex.Store({
     session: state => state.session,
     exemptions: state => state.exemptions,
     activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
-    activityDetails: state => state.activityDetails
+    activityDetails: state => state.activityDetails,
+    removalHistory: state => state.removalHistory
   },
   actions,
   mutations

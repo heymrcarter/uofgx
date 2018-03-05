@@ -50,5 +50,13 @@ export default {
   LIFT_EXEMPTION(state, exemption) {
     const index = state.exemptions[exemption.membershipId].history.findIndex(e => e.id === exemption.id)
     state.exemptions[exemption.membershipId].history.splice(index, 1, exemption)
+  },
+  SET_REMOVAL_HISTORY(state, history) {
+    state.removalHistory = history
+  },
+  REMOVE_MEMBER(state, removal) {
+    state.removalHistory.push(removal)
+    const index = state.clanMembers.findIndex(m => m.xboxMembershipId === removal.removedMembershipId)
+    state.clanMembers.splice(index, 1)
   }
 }

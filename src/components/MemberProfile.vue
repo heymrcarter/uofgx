@@ -5,11 +5,11 @@
         <characters :membershipId="currentMembershipId"></characters>
       </v-flex>
 
-      <v-flex xs12 md5 fill-height>
+      <v-flex xs12 md4 fill-height>
         <exemptions></exemptions>
       </v-flex>
 
-      <v-flex xs12 md2 fill-height>
+      <v-flex xs12 md3 fill-height>
         <profile-actions></profile-actions>
       </v-flex>
     </v-layout>
