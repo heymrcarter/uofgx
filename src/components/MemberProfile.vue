@@ -1,15 +1,15 @@
 <template>
   <v-container fluid grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs12 md5 fill-height>
+      <v-flex xs12 md5>
         <characters :membershipId="currentMembershipId"></characters>
       </v-flex>
 
-      <v-flex xs12 md4 fill-height>
+      <v-flex xs12 md4>
         <exemptions></exemptions>
       </v-flex>
 
-      <v-flex xs12 md3 fill-height>
+      <v-flex xs12 md3>
         <profile-actions></profile-actions>
       </v-flex>
     </v-layout>

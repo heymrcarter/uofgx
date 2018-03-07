@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card height="100%">
     <v-card-title class="headline">Exemptions</v-card-title>
     <v-card-text>
       <p v-if="exemptionHistory.length === 0">No exemptions</p>

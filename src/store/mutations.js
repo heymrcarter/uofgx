@@ -58,5 +58,11 @@ export default {
     state.removalHistory.push(removal)
     const index = state.clanMembers.findIndex(m => m.xboxMembershipId === removal.removedMembershipId)
     state.clanMembers.splice(index, 1)
+  },
+  SET_PENDING_MEMBERS(state, pendingMembers) {
+    state.pendingMembers = pendingMembers
+  },
+  SET_INVITED_MEMBERS(state, invitedMembers) {
+    state.invitedMembers = invitedMembers
   }
 }

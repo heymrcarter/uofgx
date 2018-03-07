@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card height="100%">
     <v-card-title class="headline">Actions</v-card-title>
     <v-card-text>
       <v-btn block v-if="!isCurrentlyExempt" @click="makeExempt" :disabled="isLoading" class="mb-3">

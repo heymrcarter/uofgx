@@ -159,7 +159,29 @@ export default {
           commit('REMOVE_MEMBER', removal)
           resolve()
         })
-        .catch(error => reject(error``))
+        .catch(error => reject(error))
+    })
+  },
+  getPendingMembers({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      clanService
+        .getPendingMembers(process.env.CLAN_ID, state.session.access_token)
+        .then(response => {
+          commit('SET_PENDING_MEMBERS', response.results)
+          resolve()
+        })
+        .catch(error => reject(error))
+    })
+  },
+  getInvitedMembers({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      clanService
+        .getInvitedMembers(process.env.CLAN_ID, state.session.access_token)
+        .then(response => {
+          commit('SET_INVITED_MEMBERS', response.results)
+          resolve()
+        })
+        .catch(error => reject(error))
     })
   }
 }

@@ -7,13 +7,14 @@ const defaultConfig = {
   }
 }
 
-export function get(endpoint) {
+export function get(endpoint, headers = {}) {
+  const completeHeaders = Object.assign({}, defaultConfig.headers, headers)
+  defaultConfig.headers = completeHeaders
   return axios.get(endpoint, defaultConfig)
 }
 
 export function post(endpoint, body, headers = {}) {
   const config = Object.assign({}, defaultConfig, { headers })
-  console.log('request config', config)
   return axios.post(endpoint, body, config)
 }
 

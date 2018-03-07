@@ -1,7 +1,11 @@
 <template>
   <v-container grid-list-lg fluid>
     <v-layout row wrap>
-      <v-flex xs12 md6>
+      <v-flex xs12 sm6>
+        <clan-overview></clan-overview>
+      </v-flex>
+
+      <v-flex xs12 sm6>
         <removal-history></removal-history>
       </v-flex>
     </v-layout>
@@ -38,13 +42,15 @@ import { mapGetters, mapActions } from 'vuex'
 import LoadingIndicator from './LoadingIndicator'
 import MemberRow from './members/MemberRow'
 import RemovalHistory from './members/RemovalHistory'
+import ClanOverview from './members/ClanOverview'
 
 export default {
   name: 'clan-member-list',
   components: {
     LoadingIndicator,
     MemberRow,
-    RemovalHistory
+    RemovalHistory,
+    ClanOverview
   },
   data() {
     return {

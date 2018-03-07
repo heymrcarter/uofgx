@@ -16,3 +16,23 @@ export function getActivityReport(clanId) {
       .catch(error => reject(error))
   })
 }
+
+export function getPendingMembers(clanId, authToken) {
+  return new Promise((resolve, reject) => {
+    get(`/clan/${clanId}/members/pending`, {
+      Authorization: `Bearer ${authToken}`
+    })
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
+
+export function getInvitedMembers(clanId, authToken) {
+  return new Promise((resolve, reject) => {
+    get(`/clan/${clanId}/members/invited`, {
+      Authorization: `Bearer ${authToken}`
+    })
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
