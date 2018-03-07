@@ -9,7 +9,9 @@
             <v-icon>group</v-icon>
           </v-list-tile-avatar>
 
-          <v-list-tile-title>{{ numberOfMembers }} members total</v-list-tile-title>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ numberOfMembers }} members total</v-list-tile-title>
+          </v-list-tile-content>
         </v-list-tile>
 
         <v-divider inset></v-divider>
@@ -19,7 +21,13 @@
             <v-icon>group_add</v-icon>
           </v-list-tile-avatar>
 
-          <v-list-tile-title>{{ pendingMembersText }}</v-list-tile-title>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ pendingMembersText }}</v-list-tile-title>
+          </v-list-tile-content>
+
+          <v-list-tile-action>
+            <v-btn flat @click="shouldRenderPendingMembers = true">View</v-btn>
+          </v-list-tile-action>
         </v-list-tile>
 
         <v-divider inset></v-divider>
@@ -29,17 +37,38 @@
             <v-icon>group_add</v-icon>
           </v-list-tile-avatar>
 
-          <v-list-tile-title>{{ invitedMembersText }}</v-list-tile-title>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ invitedMembersText }}</v-list-tile-title>
+          </v-list-tile-content>
+
+          <v-list-tile-action>
+            <v-btn flat @click="shouldRenderInvitedMembers = true">View</v-btn>
+          </v-list-tile-action>
         </v-list-tile>
       </v-list>
     </v-card-text>
+
+    <pending-members :active="shouldRenderPendingMembers" @close="shouldRenderPendingMembers = false"></pending-members>
+    <invited-members :active="shouldRenderInvitedMembers" @close="shouldRenderInvitedMembers = false"></invited-members>
   </v-card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import PendingMembers from './PendingMembers'
+import InvitedMembers from './InvitedMembers'
 export default {
   name: 'clan-overview',
+  components: {
+    PendingMembers,
+    InvitedMembers
+  },
+  data() {
+    return {
+      shouldRenderPendingMembers: false,
+      shouldRenderInvitedMembers: false
+    }
+  },
   computed: {
     ...mapGetters(['clanMembers', 'pendingMembers', 'invitedMembers']),
     numberOfMembers() {
