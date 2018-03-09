@@ -4,11 +4,10 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_KEY: '"076f6b2b8b4541eda553476e9379f7e4"',
+  API_KEY: '"b5cf1e00bfe644f9bf294f31fe3ea71d"',
   API_BASE_URL: '"https://uofgx-server-dev.cfapps.io"',
   CLAN_ID: '"1789424"',
   AUTH_ENDPOINT: '"https://www.bungie.net/en/OAuth/Authorize"',
-  CLIENT_ID: '"23346"',
-  OAUTH_SECRET: '"will you be my destiny dad?"',
-  CLIENT_SECRET: '"GsLBFDR6D597L9TobHRNrOf6XMHZJfdzURv3cci9Uc4"'
+  CLIENT_ID: '"23566"',
+  OAUTH_SECRET: '"will you be my destiny dad?"'
 })

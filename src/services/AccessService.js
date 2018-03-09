@@ -6,8 +6,7 @@ export function getAccessToken(authorizationToken) {
     const requestBody = {
       grant_type: 'authorization_code',
       code: authorizationToken,
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET
+      client_id: process.env.CLIENT_ID
     }
 
     post('https://www.bungie.net/platform/app/oauth/token/', qs.stringify(requestBody), { 'Content-Type': 'application/x-www-form-urlencoded' })
