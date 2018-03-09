@@ -37,7 +37,7 @@ export default {
       return this.activeMember.characters.find(c => c.characterId === this.selectedCharacter).light
     },
     characterDropdownOptions() {
-      if (this.activeMember) {
+      if (this.activeMember.characters) {
         this.isLoadingCharacters = false // eslint-disable-line
         return this.activeMember.characters.map((character, i) => {
           return {
