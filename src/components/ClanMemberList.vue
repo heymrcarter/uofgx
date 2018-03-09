@@ -66,13 +66,21 @@ export default {
         return []
       }
 
-      return this.filter !== null ? this.clanMembers.filter(m => m.bungieNetUserName.toLowerCase().includes(this.filter) || m.xboxUserName.toLowerCase().includes(this.filter)) : this.clanMembers
+      function searchByUsername(username) {
+        return username.toLowerCase().includes(this.filter)
+      }
+
+      return this.filter !== null ? this.clanMembers.filter(m => searchByUsername(m.bungieNetUserName) || searchByUsername(m.xboxUserName)) : this.clanMembers
     }
   },
   methods: {
-    ...mapActions(['getClanMembers', 'getCharactersForMember', 'getExemptions']),
+    ...mapActions(['getClanMembers', 'getCharactersForMember', 'getExemptions', 'setActiveMember']),
     showMemberDetail(member) {
-      this.$router.push({ name: 'Profile', params: { membershipId: member.xboxMembershipId } })
+      this.setActiveMember(member.xboxMembershipId)
+      this.$router.push({
+        name: 'Profile',
+        params: { membershipId: member.xboxMembershipId }
+      })
     }
   },
   mounted() {

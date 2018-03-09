@@ -29,6 +29,11 @@ import moment from 'moment-timezone'
 export default {
   name: 'exemptions',
   mixins: [dateFormatter],
+  data() {
+    return {
+      loadError: false
+    }
+  },
   computed: {
     ...mapGetters(['clanMembers']),
     ...mapState(['exemptions']),

@@ -27,6 +27,19 @@
         <p class="sr-only">Loading</p>
         <v-progress-circular color="yellow" :size="100" indeterminate></v-progress-circular>
       </div>
+
+      <v-flex justify-center v-if="loadError" class="load-error">
+        <p>
+          <v-icon size="75px">warning</v-icon>
+        </p>
+
+        <p>
+          Couldn't load characters.
+          <v-btn flat @click="loadCharacters">Try again
+            <v-icon class="ml-2">refresh</v-icon>
+          </v-btn>
+        </p>
+      </v-flex>
     </v-card-text>
   </v-card>
 </template>
@@ -40,7 +53,8 @@ export default {
   data() {
     return {
       isLoading: false,
-      characters: []
+      characters: [],
+      loadError: false
     }
   },
   props: {
@@ -50,24 +64,29 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getCharactersForMember'])
+    ...mapActions(['getCharactersForMember']),
+    loadCharacters() {
+      this.isLoading = true
+      this.loadError = false
+      this.getCharactersForMember(this.membershipId)
+        .then(characters => {
+          this.characters = characters
+          this.isLoading = false
+        })
+        .catch(error => {
+          console.error(error)
+          this.isLoading = false
+          this.loadError = true
+        })
+    }
   },
   mounted() {
-    this.isLoading = true
-    this.getCharactersForMember(this.membershipId)
-      .then(characters => {
-        this.characters = characters
-        this.isLoading = false
-      })
-      .catch(error => {
-        console.error(error)
-        this.isLoading = false
-      })
+    this.loadCharacters()
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .sr-only {
   border: 0;
   clip: rect(1px, 1px, 1px, 1px);
@@ -89,5 +108,11 @@ export default {
 
 .light {
   color: #ffeb3b;
+}
+
+.load-error {
+  p {
+    text-align: center;
+  }
 }
 </style>
