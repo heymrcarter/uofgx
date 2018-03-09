@@ -56,13 +56,17 @@ export default {
         .catch(error => reject(error))
     })
   },
-  checkAccessForMember({ commit }, session) {
+  checkAccessForMember({ commit, state }, session) {
     return new Promise((resolve, reject) => {
       memberService
         .isMemberAdmin(session.membership_id, session.access_token)
         .then(isAdmin => {
           if (isAdmin) {
             commit('GRANT_ACCESS', session.membership_id)
+
+            setTimeout(() => {
+              commit('SESSION_EXPIRED')
+            }, state.session.expires_in * 1000)
           }
 
           resolve(isAdmin)
@@ -157,11 +161,7 @@ export default {
       payload.adminMembershipId = state.session.membership_id
       payload.adminMembershipType = 'bungienet'
       removalService
-        .removeMemberFromClan(
-          process.env.CLAN_ID,
-          payload,
-          state.session.access_token
-        )
+        .removeMemberFromClan(process.env.CLAN_ID, payload, state.session.access_token)
         .then(removal => {
           commit('REMOVE_MEMBER', removal)
           resolve()
@@ -194,11 +194,7 @@ export default {
   approvePendingMemberships({ commit, state }, membershipIds) {
     return new Promise((resolve, reject) => {
       clanService
-        .approveMembershipRequest(
-          process.env.CLAN_ID,
-          membershipIds,
-          state.session.access_token
-        )
+        .approveMembershipRequest(process.env.CLAN_ID, membershipIds, state.session.access_token)
         .then(response => {
           commit('APPROVE_MEMBERSHIPS', membershipIds)
           resolve()
@@ -209,11 +205,7 @@ export default {
   denyPendingMemberships({ commit, state }, membershipIds) {
     return new Promise((resolve, reject) => {
       clanService
-        .denyMembershipRequest(
-          process.env.CLAN_ID,
-          membershipIds,
-          state.session.access_token
-        )
+        .denyMembershipRequest(process.env.CLAN_ID, membershipIds, state.session.access_token)
         .then(response => {
           commit('DENY_MEMBERSHIPS', membershipIds)
           resolve()
@@ -224,11 +216,7 @@ export default {
   rescindMembershipInvitation({ commit, state }, membershipId) {
     return new Promise((resolve, reject) => {
       clanService
-        .rescindMembershipInvitation(
-          process.env.CLAN_ID,
-          membershipId,
-          state.session.access_token
-        )
+        .rescindMembershipInvitation(process.env.CLAN_ID, membershipId, state.session.access_token)
         .then(response => {
           commit('RESCIND_INVITATION', membershipId)
           resolve()

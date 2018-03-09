@@ -17,7 +17,8 @@ export default new Vuex.Store({
     charactersCache: {},
     removalHistory: undefined,
     pendingMembers: undefined,
-    invitedMembers: undefined
+    invitedMembers: undefined,
+    showSessionExpirationDialog: false
   },
   getters: {
     clanMembers: state => state.clanMembers,
@@ -29,7 +30,8 @@ export default new Vuex.Store({
     activityDetails: state => state.activityDetails,
     removalHistory: state => state.removalHistory,
     pendingMembers: state => state.pendingMembers,
-    invitedMembers: state => state.invitedMembers
+    invitedMembers: state => state.invitedMembers,
+    showSessionExpirationDialog: state => state.showSessionExpirationDialog
   },
   actions,
   mutations
