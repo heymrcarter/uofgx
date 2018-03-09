@@ -1,11 +1,11 @@
 <template>
   <v-container grid-list-lg fluid>
     <v-layout row wrap>
-      <v-flex xs12 sm6>
+      <v-flex xs12 md6>
         <clan-overview></clan-overview>
       </v-flex>
 
-      <v-flex xs12 sm6>
+      <v-flex xs12 md6>
         <removal-history></removal-history>
       </v-flex>
     </v-layout>

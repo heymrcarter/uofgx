@@ -16,7 +16,15 @@
               <v-list-tile-content>
                 <v-list-tile-title>{{ member.destinyUserInfo.displayName }}</v-list-tile-title>
                 <v-list-tile-sub-title>Bungie.net {{ member.bungieNetUserInfo.displayName }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title>{{ resolveState(member.resolveState) }}</v-list-tile-sub-title>
               </v-list-tile-content>
+
+              <v-list-tile-action>
+                <pending-member-actions
+                  v-if="member.resolveState === 0"
+                  :membershipId="member.destinyUserInfo.membershipId"
+                  membershipType="pending"></pending-member-actions>
+              </v-list-tile-action>
             </v-list-tile>
             <v-divider v-if="i !== pendingMembers.length - 1" :key="i"></v-divider>
           </template>
@@ -28,8 +36,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import PendingMemberActions from './PendingMemberActions'
 export default {
   name: 'pending-members',
+  components: {
+    PendingMemberActions
+  },
   props: {
     active: Boolean
   },
@@ -39,6 +51,18 @@ export default {
   methods: {
     closeDialog() {
       this.$emit('close')
+    },
+    resolveState(state) {
+      switch (state) {
+        case 0:
+          return 'Pending'
+        case 1:
+          return 'Accepted'
+        case 2:
+          return 'Denied'
+        case 3:
+          return 'Rescinded'
+      }
     }
   }
 }

@@ -183,5 +183,38 @@ export default {
         })
         .catch(error => reject(error))
     })
+  },
+  approvePendingMemberships({ commit, state }, membershipIds) {
+    return new Promise((resolve, reject) => {
+      clanService
+        .approveMembershipRequest(process.env.CLAN_ID, membershipIds, state.session.access_token)
+        .then(response => {
+          commit('APPROVE_MEMBERSHIPS', membershipIds)
+          resolve()
+        })
+        .catch(error => reject(error))
+    })
+  },
+  denyPendingMemberships({ commit, state }, membershipIds) {
+    return new Promise((resolve, reject) => {
+      clanService
+        .denyMembershipRequest(process.env.CLAN_ID, membershipIds, state.session.access_token)
+        .then(response => {
+          commit('DENY_MEMBERSHIPS', membershipIds)
+          resolve()
+        })
+        .catch(error => reject(error))
+    })
+  },
+  rescindMembershipInvitation({ commit, state }, membershipId) {
+    return new Promise((resolve, reject) => {
+      clanService
+        .rescindMembershipInvitation(process.env.CLAN_ID, membershipId, state.session.access_token)
+        .then(response => {
+          commit('RESCIND_INVITATION', membershipId)
+          resolve()
+        })
+        .catch(error => reject(error))
+    })
   }
 }

@@ -64,5 +64,35 @@ export default {
   },
   SET_INVITED_MEMBERS(state, invitedMembers) {
     state.invitedMembers = invitedMembers
+  },
+  APPROVE_MEMBERSHIPS(state, membershipIds) {
+    membershipIds.forEach(membershipId => {
+      let index = state.invitedMembers.findIndex(m => m.destinyUserInfo.membershipId === membershipId)
+      if (index > -1) {
+        state.invitedMembers[index].resolveState = 1
+      } else {
+        index = state.pendingMembers.findIndex(m => m.destinyUserInfo.membershipId === membershipId)
+        if (index > -1) {
+          state.pendingMembers[index].resolveState = 1
+        }
+      }
+    })
+  },
+  DENY_MEMBERSHIPS(state, membershipIds) {
+    membershipIds.forEach(membershipId => {
+      let index = state.invitedMembers.findIndex(m => m.destinyUserInfo.membershipId === membershipId)
+      if (index > -1) {
+        state.invitedMembers[index].resolveState = 2
+      } else {
+        index = state.pendingMembers.findIndex(m => m.destinyUserInfo.membershipId === membershipId)
+        if (index > -1) {
+          state.pendingMembers[index].resolveState = 2
+        }
+      }
+    })
+  },
+  RESCIND_INVITATION(state, membershipId) {
+    let index = state.invitedMembers.findIndex(m => m.destinyUserInfo.membershipId === membershipId)
+    state.invitedMembers[index].resolveState = 3
   }
 }

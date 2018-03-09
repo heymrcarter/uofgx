@@ -48,8 +48,8 @@
       </v-list>
     </v-card-text>
 
-    <pending-members :active="shouldRenderPendingMembers" @close="shouldRenderPendingMembers = false"></pending-members>
-    <invited-members :active="shouldRenderInvitedMembers" @close="shouldRenderInvitedMembers = false"></invited-members>
+    <pending-members :active="shouldRenderPendingMembers" @close="onDialogClose('shouldRenderPendingMembers')"></pending-members>
+    <invited-members :active="shouldRenderInvitedMembers" @close="onDialogClose('shouldRenderInvitedMembers')"></invited-members>
   </v-card>
 </template>
 
@@ -98,7 +98,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getPendingMembers', 'getInvitedMembers'])
+    ...mapActions(['getPendingMembers', 'getInvitedMembers', 'getClanMembers']),
+    onDialogClose(dialog) {
+      this.getClanMembers()
+      this[dialog] = false
+    }
   },
   mounted() {
     if (!this.pendingMembers) {

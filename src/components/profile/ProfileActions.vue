@@ -3,14 +3,17 @@
     <v-card-title class="headline">Actions</v-card-title>
     <v-card-text>
       <v-btn block v-if="!isCurrentlyExempt" @click="makeExempt" :disabled="isLoading" class="mb-3">
-        <span :class="{'mr-3': isLoading}">Grant exemption</span><v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+        <span :class="{'mr-3': isLoading}">Grant exemption</span>
+        <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
       <v-btn block v-else @click="liftExemption" :disabled="isLoading" class="mb-3">
-        <span :class="{'mr-3': isLoading}">Lift exemption</span><v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+        <span :class="{'mr-3': isLoading}">Lift exemption</span>
+        <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
 
       <v-btn color="red" block @click="openConfirmationDialog" :disabled="isLoading">
-        <span :class="{'mr-3': isLoading}">Remove member</span><v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+        <span :class="{'mr-3': isLoading}">Remove member</span>
+        <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
     </v-card-text>
 
@@ -19,7 +22,9 @@
         <v-card-title class="headline">Confirm removal</v-card-title>
         <v-card-text>
           <p>Type the member's gamertag below to confirm removal</p>
-          <div><v-text-field ref="confirmation" v-model="gamertagConfirmation" @keyup.enter="kick" placeholder="Gamertag" color="red"></v-text-field></div>
+          <div>
+            <v-text-field ref="confirmation" v-model="gamertagConfirmation" @keyup.enter="kick" placeholder="Gamertag" color="red"></v-text-field>
+          </div>
         </v-card-text>
 
         <v-card-actions>
@@ -50,14 +55,16 @@ export default {
       return this.$route.params.membershipId
     },
     gamertag() {
-      return this.activeMember.gamertag
+      return this.activeMember !== undefined ? this.activeMember.gamertag : ''
     },
     isCurrentlyExempt() {
       if (!this.exemptions[this.membershipId]) {
         return false
       }
 
-      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))).asc(h => h.startDate)
+      const memberHistory = sort(
+        JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))
+      ).asc(h => h.startDate)
       const endDate = memberHistory[memberHistory.length - 1].endDate
       const today = moment.utc().format()
 
@@ -84,7 +91,9 @@ export default {
         })
     },
     liftExemption() {
-      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))).asc(h => h.startDate)
+      const memberHistory = sort(
+        JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))
+      ).asc(h => h.startDate)
       const currentExemption = memberHistory[memberHistory.length - 1]
 
       currentExemption.endDate = moment.utc()
