@@ -14,8 +14,8 @@ export default {
   },
   getCharactersForMember({ commit, state }, membershipId) {
     return new Promise((resolve, reject) => {
-      if (state.charactersCache[membershipId]) {
-        const characters = state.charactersCache[membershipId]
+      if (state.cache.characters[membershipId]) {
+        const characters = state.cache.characters[membershipId]
         commit('SET_ACTIVE_MEMBER', { characters, membershipId })
         resolve(characters)
         return

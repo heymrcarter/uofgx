@@ -5,6 +5,7 @@ import mutations from './mutations'
 import exemptions from './modules/exemptions'
 import removalHistory from './modules/removal-history'
 import activityReport from './modules/activity-report'
+import cache from './modules/cache'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,6 @@ export default new Vuex.Store({
     session: undefined,
     activeMemberCharacterActivity: undefined,
     activityDetails: {},
-    charactersCache: {},
     pendingMembers: undefined,
     invitedMembers: undefined,
     showSessionExpirationDialog: false
@@ -36,6 +36,7 @@ export default new Vuex.Store({
   modules: {
     exemptions,
     removalHistory,
-    activityReport
+    activityReport,
+    cache
   }
 })
