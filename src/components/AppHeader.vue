@@ -1,13 +1,13 @@
 <template>
   <v-toolbar app dark fixed>
-    <v-menu>
+    <v-menu offset-y>
       <v-toolbar-title slot="activator">
         <span>{{currentPageName}}</span>
         <v-icon dark v-if="renderDropDownIcon">arrow_drop_down</v-icon>
       </v-toolbar-title>
       <v-list dark>
-        <v-list-tile @click="$router.push('/member-list')">
-          <v-list-tile-title>Member List</v-list-tile-title>
+        <v-list-tile @click="$router.push('/dashboard')">
+          <v-list-tile-title>Dashboard</v-list-tile-title>
         </v-list-tile>
 
         <v-list-tile @click="$router.push('/inactive-players')" v-if="shouldRenderInactiveMembers">
@@ -35,7 +35,7 @@ export default {
           return 'Unity of Guardians'
         case 'OAuth':
           return 'Processing login...'
-        case 'MemberList':
+        case 'Dashboard':
           return 'Unity of Guardians'
         case 'InactivePlayers':
           return 'Inactive players'

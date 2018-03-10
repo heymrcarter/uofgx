@@ -39,7 +39,7 @@ export default {
         this.checkAccessForMember(session)
           .then(hasAccess => {
             if (hasAccess) {
-              this.$router.replace('/member-list')
+              this.$router.replace('/dashboard')
             } else {
               this.error = 'Unauthorized! The account you logged in with does not have access to administer Unity of Guardians. Log in with a valid admin account.'
             }

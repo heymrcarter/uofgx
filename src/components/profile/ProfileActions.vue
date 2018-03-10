@@ -62,9 +62,7 @@ export default {
         return false
       }
 
-      const memberHistory = sort(
-        JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))
-      ).asc(h => h.startDate)
+      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))).asc(h => h.startDate)
       const endDate = memberHistory[memberHistory.length - 1].endDate
       const today = moment.utc().format()
 
@@ -91,9 +89,7 @@ export default {
         })
     },
     liftExemption() {
-      const memberHistory = sort(
-        JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))
-      ).asc(h => h.startDate)
+      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))).asc(h => h.startDate)
       const currentExemption = memberHistory[memberHistory.length - 1]
 
       currentExemption.endDate = moment.utc()
@@ -114,7 +110,7 @@ export default {
           removedGamertag: this.activeMember.gamertag,
           removalDate: moment.utc()
         }).then(() => {
-          this.$router.push('/member-list')
+          this.$router.push('/dashboard')
         })
       }
     },
