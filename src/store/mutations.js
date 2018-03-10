@@ -2,9 +2,6 @@ export default {
   SET_CLAN_MEMBERS(state, members) {
     state.clanMembers = members
   },
-  SET_ACTIVITY_REPORT(state, report) {
-    state.activityReport = report
-  },
   SET_ACTIVE_MEMBER(state, member) {
     member.gamertag = state.clanMembers.find(m => m.xboxMembershipId === member.membershipId).xboxUserName
     state.activeMember = member

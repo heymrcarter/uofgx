@@ -12,14 +12,6 @@ export default {
       })
     })
   },
-  getActivityReport({ commit }) {
-    return new Promise(resolve => {
-      clanService.getActivityReport(process.env.CLAN_ID).then(report => {
-        commit('SET_ACTIVITY_REPORT', report)
-        resolve()
-      })
-    })
-  },
   getCharactersForMember({ commit, state }, membershipId) {
     return new Promise((resolve, reject) => {
       if (state.charactersCache[membershipId]) {

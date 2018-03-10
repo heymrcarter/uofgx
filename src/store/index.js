@@ -4,13 +4,14 @@ import actions from './actions'
 import mutations from './mutations'
 import exemptions from './modules/exemptions'
 import removalHistory from './modules/removal-history'
+import activityReport from './modules/activity-report'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    clanId: process.env.CLAN_ID,
     clanMembers: undefined,
-    activityReport: undefined,
     activeMember: undefined,
     session: undefined,
     activeMemberCharacterActivity: undefined,
@@ -22,7 +23,6 @@ export default new Vuex.Store({
   },
   getters: {
     clanMembers: state => state.clanMembers,
-    activityReport: state => state.activityReport,
     activeMember: state => state.activeMember,
     session: state => state.session,
     activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
@@ -35,6 +35,7 @@ export default new Vuex.Store({
   mutations,
   modules: {
     exemptions,
-    removalHistory
+    removalHistory,
+    activityReport
   }
 })
