@@ -30,14 +30,6 @@ export default {
   CACHE_MEMBER_CHARACTERS(state, { characters, membershipId }) {
     state.charactersCache[membershipId] = characters
   },
-  SET_REMOVAL_HISTORY(state, history) {
-    state.removalHistory = history
-  },
-  REMOVE_MEMBER(state, removal) {
-    state.removalHistory.push(removal)
-    const index = state.clanMembers.findIndex(m => m.xboxMembershipId === removal.removedMembershipId)
-    state.clanMembers.splice(index, 1)
-  },
   SET_PENDING_MEMBERS(state, pendingMembers) {
     state.pendingMembers = pendingMembers
   },

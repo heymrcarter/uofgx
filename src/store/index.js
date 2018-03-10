@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import actions from './actions'
 import mutations from './mutations'
 import exemptions from './modules/exemptions'
+import removalHistory from './modules/removal-history'
 
 Vue.use(Vuex)
 
@@ -15,7 +16,6 @@ export default new Vuex.Store({
     activeMemberCharacterActivity: undefined,
     activityDetails: {},
     charactersCache: {},
-    removalHistory: undefined,
     pendingMembers: undefined,
     invitedMembers: undefined,
     showSessionExpirationDialog: false
@@ -27,7 +27,6 @@ export default new Vuex.Store({
     session: state => state.session,
     activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
     activityDetails: state => state.activityDetails,
-    removalHistory: state => state.removalHistory,
     pendingMembers: state => state.pendingMembers,
     invitedMembers: state => state.invitedMembers,
     showSessionExpirationDialog: state => state.showSessionExpirationDialog
@@ -35,6 +34,7 @@ export default new Vuex.Store({
   actions,
   mutations,
   modules: {
-    exemptions
+    exemptions,
+    removalHistory
   }
 })
