@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import actions from './actions'
 import mutations from './mutations'
+import exemptions from './modules/exemptions'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,6 @@ export default new Vuex.Store({
     activityReport: undefined,
     activeMember: undefined,
     session: undefined,
-    exemptions: undefined,
     activeMemberCharacterActivity: undefined,
     activityDetails: {},
     charactersCache: {},
@@ -25,7 +25,6 @@ export default new Vuex.Store({
     activityReport: state => state.activityReport,
     activeMember: state => state.activeMember,
     session: state => state.session,
-    exemptions: state => state.exemptions,
     activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
     activityDetails: state => state.activityDetails,
     removalHistory: state => state.removalHistory,
@@ -34,5 +33,8 @@ export default new Vuex.Store({
     showSessionExpirationDialog: state => state.showSessionExpirationDialog
   },
   actions,
-  mutations
+  mutations,
+  modules: {
+    exemptions
+  }
 })

@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 export default {
   SET_CLAN_MEMBERS(state, members) {
     state.clanMembers = members
@@ -23,21 +21,6 @@ export default {
       state.session.hasAccess = true
     }
   },
-  SET_EXEMPTIONS(state, exemptions) {
-    state.exemptions = exemptions
-  },
-  SAVE_EXEMPTION(state, exemption) {
-    if (!state.exemptions[exemption.membershipId]) {
-      Vue.set(state.exemptions, exemption.membershipId, {
-        membershipId: exemption.membershipId,
-        history: [],
-        numberExemptions: 0
-      })
-    }
-
-    state.exemptions[exemption.membershipId].history.push(exemption)
-    state.exemptions[exemption.membershipId].numberExemptions++
-  },
   SET_ACTIVE_MEMBER_CHARACTER_ACTIVITY(state, activity) {
     state.activeMemberCharacterActivity = activity
   },
@@ -46,10 +29,6 @@ export default {
   },
   CACHE_MEMBER_CHARACTERS(state, { characters, membershipId }) {
     state.charactersCache[membershipId] = characters
-  },
-  LIFT_EXEMPTION(state, exemption) {
-    const index = state.exemptions[exemption.membershipId].history.findIndex(e => e.id === exemption.id)
-    state.exemptions[exemption.membershipId].history.splice(index, 1, exemption)
   },
   SET_REMOVAL_HISTORY(state, history) {
     state.removalHistory = history

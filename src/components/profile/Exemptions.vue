@@ -36,7 +36,11 @@ export default {
   },
   computed: {
     ...mapGetters(['clanMembers']),
-    ...mapState(['exemptions']),
+    ...mapState({
+      exemptions(state) {
+        return state.exemptions.exemptions
+      }
+    }),
     exemptionHistory() {
       const currentMemberExemption = this.exemptions[this.$route.params.membershipId]
       return currentMemberExemption ? currentMemberExemption.history : []
