@@ -3,7 +3,7 @@ import * as clanService from '@/services/ClanService'
 export function getInvitedMembers({ commit, state, rootState }) {
   return new Promise((resolve, reject) => {
     clanService
-      .getInvitedMembers(process.env.CLAN_ID, rootState.session.access_token)
+      .getInvitedMembers(process.env.CLAN_ID, rootState.session.accessToken)
       .then(response => {
         commit('SET_INVITED_MEMBERS', response.results)
         resolve()
@@ -15,7 +15,7 @@ export function getInvitedMembers({ commit, state, rootState }) {
 export function rescindMembershipInvitation({ commit, state, rootState }, membershipId) {
   return new Promise((resolve, reject) => {
     clanService
-      .rescindMembershipInvitation(process.env.CLAN_ID, membershipId, rootState.session.access_token)
+      .rescindMembershipInvitation(process.env.CLAN_ID, membershipId, rootState.session.accessToken)
       .then(response => {
         commit('RESCIND_INVITATION', membershipId)
         resolve()

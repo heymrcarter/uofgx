@@ -1,5 +1,4 @@
 import * as clanService from '../services/ClanService'
-import * as accessService from '../services/AccessService'
 import * as memberService from '../services/MemberService'
 
 export default {
@@ -26,36 +25,6 @@ export default {
           commit('CACHE_MEMBER_CHARACTERS', { characters, membershipId })
           dispatch('members/active/set', { characters, membershipId }, { root: true })
           resolve(characters)
-        })
-        .catch(error => reject(error))
-    })
-  },
-  getAccessToken({ commit }, authorizationCode) {
-    return new Promise((resolve, reject) => {
-      accessService
-        .getAccessToken(authorizationCode)
-        .then(accessResponse => {
-          accessResponse.hasAccess = false
-          commit('SET_SESSION', accessResponse)
-          resolve(accessResponse)
-        })
-        .catch(error => reject(error))
-    })
-  },
-  checkAccessForMember({ commit, state }, session) {
-    return new Promise((resolve, reject) => {
-      memberService
-        .isMemberAdmin(session.membership_id, session.access_token)
-        .then(isAdmin => {
-          if (isAdmin) {
-            commit('GRANT_ACCESS', session.membership_id)
-
-            setTimeout(() => {
-              commit('SESSION_EXPIRED')
-            }, state.session.expires_in * 1000)
-          }
-
-          resolve(isAdmin)
         })
         .catch(error => reject(error))
     })

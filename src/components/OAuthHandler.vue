@@ -23,7 +23,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getAccessToken', 'checkAccessForMember'])
+    ...mapActions('session', ['getAccessToken', 'checkAccessForMember'])
   },
   mounted() {
     const self = this

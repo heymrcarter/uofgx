@@ -30,7 +30,7 @@ export default {
     AppHeader
   },
   computed: {
-    ...mapGetters(['showSessionExpirationDialog']),
+    ...mapGetters('session', ['showSessionExpirationDialog']),
     bungieNetAuthorizeEndpoint() {
       return `${process.env.AUTH_ENDPOINT}?client_id=${[process.env.CLIENT_ID]}&response_type=code&state=${btoa(process.env.OAUTH_SECRET)}`
     }
