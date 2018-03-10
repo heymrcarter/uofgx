@@ -35,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['clanMembers']),
+    ...mapGetters('members', ['clanMembers']),
     ...mapState({
       exemptions(state) {
         return state.exemptions.exemptions

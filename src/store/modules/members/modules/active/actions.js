@@ -3,6 +3,6 @@ export function reset({ commit }) {
 }
 
 export function set({ commit, rootState }, member) {
-  member.gamertag = rootState.clanMembers.find(m => m.xboxMembershipId === member.membershipId).xboxUserName
+  member.gamertag = rootState.members.list.find(m => m.xboxMembershipId === member.membershipId).xboxUserName
   commit('SET_ACTIVE_MEMBER', member)
 }

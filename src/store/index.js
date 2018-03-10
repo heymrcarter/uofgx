@@ -13,12 +13,8 @@ import session from './modules/session'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-    clanMembers: undefined
-  },
   getters: {
-    clanId: () => process.env.CLAN_ID,
-    clanMembers: state => state.clanMembers
+    clanId: () => process.env.CLAN_ID
   },
   actions,
   mutations,

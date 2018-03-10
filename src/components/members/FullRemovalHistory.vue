@@ -37,7 +37,8 @@ export default {
     active: Boolean
   },
   computed: {
-    ...mapGetters(['removalHistory', 'clanMembers']),
+    ...mapGetters('members', ['clanMembers']),
+    ...mapGetters(['removalHistory']),
     orderedHistory() {
       if (this.removalHistory) {
         return sort(JSON.parse(JSON.stringify(this.removalHistory))).desc(h => h.removalDate)

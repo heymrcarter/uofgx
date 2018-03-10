@@ -57,7 +57,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['removalHistory', 'clanMembers']),
+    ...mapGetters('members', ['clanMembers']),
+    ...mapGetters(['removalHistory']),
     recentRemovals() {
       if (this.removalHistory) {
         const copy = JSON.parse(JSON.stringify(this.removalHistory))

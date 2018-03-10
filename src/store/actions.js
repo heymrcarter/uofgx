@@ -1,15 +1,6 @@
-import * as clanService from '../services/ClanService'
 import * as memberService from '../services/MemberService'
 
 export default {
-  getClanMembers({ commit }) {
-    return new Promise((resolve, reject) => {
-      clanService.getMembers().then(members => {
-        commit('SET_CLAN_MEMBERS', members)
-        resolve()
-      })
-    })
-  },
   getCharactersForMember({ commit, state, dispatch }, membershipId) {
     return new Promise((resolve, reject) => {
       if (state.cache.characters[membershipId]) {

@@ -60,7 +60,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['clanMembers', 'activeMember', 'exemptions']),
+    ...mapGetters('members', ['clanMembers']),
+    ...mapGetters(['activeMember', 'exemptions']),
     presentedList() {
       if (!this.clanMembers) {
         return []
@@ -74,7 +75,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getClanMembers', 'getExemptions']),
+    ...mapActions(['getExemptions']),
+    ...mapActions('members', ['getClanMembers']),
     ...mapActions('members/active', {
       setActiveMember: 'set'
     }),

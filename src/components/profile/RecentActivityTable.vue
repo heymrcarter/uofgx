@@ -96,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['clanMembers']),
+    ...mapGetters('members', ['clanMembers']),
     activityTableHeaders() {
       return activityContent.tableHeaders
     }
