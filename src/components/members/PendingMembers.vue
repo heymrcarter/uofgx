@@ -22,8 +22,7 @@
               <v-list-tile-action>
                 <pending-member-actions
                   v-if="member.resolveState === 0"
-                  :membershipId="member.destinyUserInfo.membershipId"
-                  membershipType="pending"></pending-member-actions>
+                  :membershipId="member.destinyUserInfo.membershipId"></pending-member-actions>
               </v-list-tile-action>
             </v-list-tile>
             <v-divider v-if="i !== pendingMembers.length - 1" :key="i"></v-divider>
@@ -46,7 +45,7 @@ export default {
     active: Boolean
   },
   computed: {
-    ...mapGetters(['pendingMembers'])
+    ...mapGetters('members/pending', ['pendingMembers'])
   },
   methods: {
     closeDialog() {

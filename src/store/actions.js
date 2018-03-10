@@ -96,45 +96,12 @@ export default {
         .catch(error => reject(error))
     })
   },
-  getPendingMembers({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      clanService
-        .getPendingMembers(process.env.CLAN_ID, state.session.access_token)
-        .then(response => {
-          commit('SET_PENDING_MEMBERS', response.results)
-          resolve()
-        })
-        .catch(error => reject(error))
-    })
-  },
   getInvitedMembers({ commit, state }) {
     return new Promise((resolve, reject) => {
       clanService
         .getInvitedMembers(process.env.CLAN_ID, state.session.access_token)
         .then(response => {
           commit('SET_INVITED_MEMBERS', response.results)
-          resolve()
-        })
-        .catch(error => reject(error))
-    })
-  },
-  approvePendingMemberships({ commit, state }, membershipIds) {
-    return new Promise((resolve, reject) => {
-      clanService
-        .approveMembershipRequest(process.env.CLAN_ID, membershipIds, state.session.access_token)
-        .then(response => {
-          commit('APPROVE_MEMBERSHIPS', membershipIds)
-          resolve()
-        })
-        .catch(error => reject(error))
-    })
-  },
-  denyPendingMemberships({ commit, state }, membershipIds) {
-    return new Promise((resolve, reject) => {
-      clanService
-        .denyMembershipRequest(process.env.CLAN_ID, membershipIds, state.session.access_token)
-        .then(response => {
-          commit('DENY_MEMBERSHIPS', membershipIds)
           resolve()
         })
         .catch(error => reject(error))

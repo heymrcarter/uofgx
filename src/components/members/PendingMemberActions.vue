@@ -20,20 +20,6 @@ import { mapActions } from 'vuex'
 export default {
   name: 'pending-member-actions',
   props: {
-    memberType: {
-      type: String,
-      default: 'pending',
-      validator: val => {
-        if (
-          val.toLowerCase() !== 'pending' ||
-          val.toLowerCase() !== 'invited'
-        ) {
-          return true
-        }
-
-        return false
-      }
-    },
     membershipId: {
       type: String,
       required: true
@@ -48,11 +34,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'approvePendingMemberships',
-      'rescindInvitation',
-      'denyPendingMemberships'
-    ]),
+    ...mapActions('members/pending', ['approvePendingMemberships', 'denyPendingMemberships']),
     triggerAction(action) {
       action = action.toLowerCase()
 
@@ -61,17 +43,13 @@ export default {
           this.disableMenu = true
           this.approvePendingMemberships([this.membershipId])
             .then(() => this.handleActionResult('Request approved'))
-            .catch(error =>
-              this.handleActionResult(`An error occurred: ${error.message}`)
-            )
+            .catch(error => this.handleActionResult(`An error occurred: ${error.message}`))
           break
         case 'deny':
           this.disableMenu = true
           this.denyPendingMemberships([this.membershipId])
             .then(() => this.handleActionResult('Request denied'))
-            .catch(error =>
-              this.handleActionResult(`An error occurred: ${error.message}`)
-            )
+            .catch(error => this.handleActionResult(`An error occurred: ${error.message}`))
           break
       }
     },

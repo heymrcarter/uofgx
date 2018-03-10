@@ -21,7 +21,7 @@
         <clan-overview-item
           v-if="pendingMembersLoadError"
           icon="warning"
-          text="`Couldn't load pending members`"
+          :text="`Couldn't load pending members`"
           actionText="Retry"
           @action="fetchPendingMembers"></clan-overview-item>
         <clan-overview-item
@@ -36,7 +36,7 @@
         <clan-overview-item
           v-if="invitedMembersLoadError"
           icon="warning"
-          text="`Couldn't load invited members`"
+          :text="`Couldn't load invited members`"
           actionText="Retry"
           @action="fetchInvitedMembers"></clan-overview-item>
         <clan-overview-item
@@ -80,7 +80,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['clanMembers', 'pendingMembers', 'invitedMembers']),
+    ...mapGetters('members/pending', ['pendingMembers']),
+    ...mapGetters(['clanMembers', 'invitedMembers']),
     isLoading() {
       return this.isLoadingClanMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
     },
@@ -119,7 +120,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getPendingMembers', 'getInvitedMembers', 'getClanMembers']),
+    ...mapActions('members/pending', ['getPendingMembers']),
+    ...mapActions(['getInvitedMembers', 'getClanMembers']),
     onDialogClose(dialog) {
       this.getClanMembers()
       this[dialog] = false
