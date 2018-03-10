@@ -12,11 +12,11 @@ export default {
       })
     })
   },
-  getCharactersForMember({ commit, state }, membershipId) {
+  getCharactersForMember({ commit, state, dispatch }, membershipId) {
     return new Promise((resolve, reject) => {
       if (state.cache.characters[membershipId]) {
         const characters = state.cache.characters[membershipId]
-        commit('SET_ACTIVE_MEMBER', { characters, membershipId })
+        dispatch('members/active/set', { characters, membershipId }, { root: true })
         resolve(characters)
         return
       }
@@ -25,14 +25,11 @@ export default {
         .getMemberCharacters(membershipId)
         .then(characters => {
           commit('CACHE_MEMBER_CHARACTERS', { characters, membershipId })
-          commit('SET_ACTIVE_MEMBER', { characters, membershipId })
+          dispatch('members/active/set', { characters, membershipId }, { root: true })
           resolve(characters)
         })
         .catch(error => reject(error))
     })
-  },
-  resetActiveMember({ commit }) {
-    commit('RESET_ACTIVE_MEMBER')
   },
   getAccessToken({ commit }, authorizationCode) {
     return new Promise((resolve, reject) => {
@@ -153,8 +150,5 @@ export default {
         })
         .catch(error => reject(error))
     })
-  },
-  setActiveMember({ commit }, membershipId) {
-    commit('SET_ACTIVE_MEMBER', { membershipId, characters: undefined })
   }
 }

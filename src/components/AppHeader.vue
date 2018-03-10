@@ -28,7 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['activeMember']),
+    ...mapGetters('members/active', ['activeMember']),
     currentPageName() {
       switch (this.$route.name) {
         case 'Home':

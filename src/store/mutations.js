@@ -2,14 +2,6 @@ export default {
   SET_CLAN_MEMBERS(state, members) {
     state.clanMembers = members
   },
-  SET_ACTIVE_MEMBER(state, member) {
-    member.gamertag = state.clanMembers.find(m => m.xboxMembershipId === member.membershipId).xboxUserName
-    state.activeMember = member
-    state.activeMemberCharacterActivity = undefined
-  },
-  RESET_ACTIVE_MEMBER(state) {
-    state.activeMember = undefined
-  },
   SET_SESSION(state, session) {
     state.session = session
   },

@@ -74,9 +74,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getClanMembers', 'getCharactersForMember', 'getExemptions', 'setActiveMember']),
+    ...mapActions(['getClanMembers', 'getExemptions']),
+    ...mapActions('members/active', {
+      setActiveMember: 'set'
+    }),
     showMemberDetail(member) {
-      this.setActiveMember(member.xboxMembershipId)
+      this.setActiveMember({ membershipId: member.xboxMembershipId })
       this.$router.push({
         name: 'Profile',
         params: { membershipId: member.xboxMembershipId }

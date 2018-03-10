@@ -29,7 +29,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['activeMember']),
+    ...mapGetters('members/active', ['activeMember']),
     selectedCharacterClass() {
       return this.activeMember.characters.find(c => c.characterId === this.selectedCharacter).class
     },

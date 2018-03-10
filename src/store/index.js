@@ -6,6 +6,7 @@ import exemptions from './modules/exemptions'
 import removalHistory from './modules/removal-history'
 import activityReport from './modules/activity-report'
 import cache from './modules/cache'
+import members from './modules/members'
 
 Vue.use(Vuex)
 
@@ -13,7 +14,6 @@ export default new Vuex.Store({
   state: {
     clanId: process.env.CLAN_ID,
     clanMembers: undefined,
-    activeMember: undefined,
     session: undefined,
     activeMemberCharacterActivity: undefined,
     activityDetails: {},
@@ -23,7 +23,6 @@ export default new Vuex.Store({
   },
   getters: {
     clanMembers: state => state.clanMembers,
-    activeMember: state => state.activeMember,
     session: state => state.session,
     activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
     activityDetails: state => state.activityDetails,
@@ -37,6 +36,7 @@ export default new Vuex.Store({
     exemptions,
     removalHistory,
     activityReport,
-    cache
+    cache,
+    members
   }
 })
