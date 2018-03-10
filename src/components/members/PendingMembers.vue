@@ -34,9 +34,9 @@
 </template>
 
 <script>
+import PendingMemberActions from './PendingMemberActions'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('members/pending')
-import PendingMemberActions from './PendingMemberActions'
 export default {
   name: 'pending-members',
   components: {

@@ -7,6 +7,7 @@ import removalHistory from './modules/removal-history'
 import activityReport from './modules/activity-report'
 import cache from './modules/cache'
 import members from './modules/members'
+import activity from './modules/activity'
 
 Vue.use(Vuex)
 
@@ -15,15 +16,11 @@ export default new Vuex.Store({
     clanId: process.env.CLAN_ID,
     clanMembers: undefined,
     session: undefined,
-    activeMemberCharacterActivity: undefined,
-    activityDetails: {},
     showSessionExpirationDialog: false
   },
   getters: {
     clanMembers: state => state.clanMembers,
     session: state => state.session,
-    activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
-    activityDetails: state => state.activityDetails,
     showSessionExpirationDialog: state => state.showSessionExpirationDialog
   },
   actions,
@@ -33,6 +30,7 @@ export default new Vuex.Store({
     removalHistory,
     activityReport,
     cache,
-    members
+    members,
+    activity
   }
 })

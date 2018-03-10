@@ -1,7 +1,6 @@
 import * as clanService from '../services/ClanService'
 import * as accessService from '../services/AccessService'
 import * as memberService from '../services/MemberService'
-import * as activityService from '../services/ActivityService'
 
 export default {
   getClanMembers({ commit }) {
@@ -66,17 +65,6 @@ export default {
       memberService
         .getActivityForMemberCharacter(membershipId, characterId)
         .then(activity => resolve(activity))
-        .catch(error => reject(error))
-    })
-  },
-  getActivityDetails({ commit }, activityId) {
-    return new Promise((resolve, reject) => {
-      activityService
-        .getPostGameCarnageReport(activityId)
-        .then(activityDetails => {
-          commit('SET_ACTIVITY_DETAILS', activityDetails)
-          resolve(activityDetails)
-        })
         .catch(error => reject(error))
     })
   },

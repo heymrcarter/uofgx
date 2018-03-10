@@ -13,9 +13,6 @@ export default {
   SET_ACTIVE_MEMBER_CHARACTER_ACTIVITY(state, activity) {
     state.activeMemberCharacterActivity = activity
   },
-  SET_ACTIVITY_DETAILS(state, details) {
-    state.activityDetails[details.activityDetails.instanceId] = details
-  },
   SESSION_EXPIRED(state) {
     state.showSessionExpirationDialog = true
     state.session = undefined
