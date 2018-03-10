@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions } = createNamespacedHelpers('members/pending')
 export default {
   name: 'pending-member-actions',
   props: {
@@ -34,7 +35,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('members/pending', ['approvePendingMemberships', 'denyPendingMemberships']),
+    ...mapActions(['approvePendingMemberships', 'denyPendingMemberships']),
     triggerAction(action) {
       action = action.toLowerCase()
 

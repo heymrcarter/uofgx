@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('members/pending')
 import PendingMemberActions from './PendingMemberActions'
 export default {
   name: 'pending-members',
@@ -45,7 +46,7 @@ export default {
     active: Boolean
   },
   computed: {
-    ...mapGetters('members/pending', ['pendingMembers'])
+    ...mapGetters(['pendingMembers'])
   },
   methods: {
     closeDialog() {

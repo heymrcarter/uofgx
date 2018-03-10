@@ -16,13 +16,6 @@ export default {
   SET_ACTIVITY_DETAILS(state, details) {
     state.activityDetails[details.activityDetails.instanceId] = details
   },
-  SET_INVITED_MEMBERS(state, invitedMembers) {
-    state.invitedMembers = invitedMembers
-  },
-  RESCIND_INVITATION(state, membershipId) {
-    let index = state.invitedMembers.findIndex(m => m.destinyUserInfo.membershipId === membershipId)
-    state.invitedMembers[index].resolveState = 3
-  },
   SESSION_EXPIRED(state) {
     state.showSessionExpirationDialog = true
     state.session = undefined

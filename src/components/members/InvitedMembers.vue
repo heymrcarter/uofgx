@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('members/invited')
 export default {
   name: 'invited-members',
   props: {
@@ -71,9 +72,7 @@ export default {
       this.disableButton = true
       this.rescindMembershipInvitation(membershipId)
         .then(() => this.handleActionResult('Invitation canceled'))
-        .catch(error =>
-          this.handleActionResult(`An error occurred: ${error.message}`)
-        )
+        .catch(error => this.handleActionResult(`An error occurred: ${error.message}`))
     },
     handleActionResult(message) {
       this.disableButton = false

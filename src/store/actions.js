@@ -95,27 +95,5 @@ export default {
         .then(recentActivityByDate => resolve(recentActivityByDate))
         .catch(error => reject(error))
     })
-  },
-  getInvitedMembers({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      clanService
-        .getInvitedMembers(process.env.CLAN_ID, state.session.access_token)
-        .then(response => {
-          commit('SET_INVITED_MEMBERS', response.results)
-          resolve()
-        })
-        .catch(error => reject(error))
-    })
-  },
-  rescindMembershipInvitation({ commit, state }, membershipId) {
-    return new Promise((resolve, reject) => {
-      clanService
-        .rescindMembershipInvitation(process.env.CLAN_ID, membershipId, state.session.access_token)
-        .then(response => {
-          commit('RESCIND_INVITATION', membershipId)
-          resolve()
-        })
-        .catch(error => reject(error))
-    })
   }
 }

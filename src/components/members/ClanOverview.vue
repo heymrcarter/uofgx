@@ -81,7 +81,8 @@ export default {
   },
   computed: {
     ...mapGetters('members/pending', ['pendingMembers']),
-    ...mapGetters(['clanMembers', 'invitedMembers']),
+    ...mapGetters('members/invited', ['invitedMembers']),
+    ...mapGetters(['clanMembers']),
     isLoading() {
       return this.isLoadingClanMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
     },
@@ -121,7 +122,8 @@ export default {
   },
   methods: {
     ...mapActions('members/pending', ['getPendingMembers']),
-    ...mapActions(['getInvitedMembers', 'getClanMembers']),
+    ...mapActions('members/invited', ['getInvitedMembers']),
+    ...mapActions(['getClanMembers']),
     onDialogClose(dialog) {
       this.getClanMembers()
       this[dialog] = false

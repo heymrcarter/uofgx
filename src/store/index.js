@@ -17,7 +17,6 @@ export default new Vuex.Store({
     session: undefined,
     activeMemberCharacterActivity: undefined,
     activityDetails: {},
-    invitedMembers: undefined,
     showSessionExpirationDialog: false
   },
   getters: {
@@ -25,7 +24,6 @@ export default new Vuex.Store({
     session: state => state.session,
     activeMemberCharacterActivity: state => state.activeMemberCharacterActivity,
     activityDetails: state => state.activityDetails,
-    invitedMembers: state => state.invitedMembers,
     showSessionExpirationDialog: state => state.showSessionExpirationDialog
   },
   actions,
