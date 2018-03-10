@@ -3,12 +3,14 @@
     <v-card>
       <v-card-title class="headline">Recent removal history</v-card-title>
       <v-card-text>
-        <div class="loader" v-if="isLoading">
-          <p class="sr-only">Loading</p>
-          <v-progress-circular color="yellow" :size="100" indeterminate></v-progress-circular>
-        </div>
+        <loadable-indicator v-if="isLoading"></loadable-indicator>
+        <loadable-failure
+          v-else-if="loadError"
+          :message="`Couldn't load history.`"
+          :retryable="true"
+          @retry="reload"></loadable-failure>
 
-        <p v-else-if="!isLoading && removalHistory && removalHistory.length === 0">No history</p>
+        <p v-else-if="(!isLoading && !loadError) && removalHistory && removalHistory.length === 0">No history</p>
 
         <v-list two-line v-else>
           <template v-for="(history, i) in recentRemovals">
@@ -23,7 +25,7 @@
         </v-list>
       </v-card-text>
 
-      <v-card-actions v-if="!isLoading && removalHistory">
+      <v-card-actions v-if="(!isLoading && !loadError) && removalHistory">
         <v-btn flat @click="showFullHistory = true">View full history</v-btn>
       </v-card-actions>
     </v-card>
@@ -33,19 +35,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import dateFormatter from '@/mixins/date-formatter'
 import sort from 'fast-sort'
 import FullRemovalHistory from './FullRemovalHistory'
+import loadable from '@/mixins/loadable'
+import LoadableIndicator from '@/components/LoadableIndicator'
+import LoadableFailure from '@/components/LoadableFailure'
 export default {
   name: 'removal-history',
-  mixins: [dateFormatter],
+  mixins: [dateFormatter, loadable],
   components: {
-    FullRemovalHistory
+    FullRemovalHistory,
+    LoadableIndicator,
+    LoadableFailure
   },
   data() {
     return {
-      isLoading: false,
+      loadAction: 'getRemovalHistory',
       showFullHistory: false
     }
   },
@@ -61,7 +68,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getRemovalHistory']),
     adminUserName(adminMembershipId) {
       if (this.clanMembers) {
         return this.clanMembers.find(m => m.bungieNetMembershipId === adminMembershipId).bungieNetUserName
@@ -70,33 +76,6 @@ export default {
     closeDialog() {
       this.showFullHistory = false
     }
-  },
-  mounted() {
-    this.isLoading = true
-    this.getRemovalHistory().then(() => {
-      this.isLoading = false
-    })
   }
 }
 </script>
-
-<style scoped>
-.sr-only {
-  border: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  width: 1px;
-  word-wrap: normal !important;
-}
-
-.loader {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-}
-</style>
