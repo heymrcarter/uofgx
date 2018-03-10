@@ -3,48 +3,48 @@
     <v-card-title class="headline">Clan overview</v-card-title>
 
     <v-card-text>
+      <loadable-indicator v-if="isLoading"></loadable-indicator>
       <v-list>
-        <v-list-tile v-if="clanMembers">
-          <v-list-tile-avatar>
-            <v-icon>group</v-icon>
-          </v-list-tile-avatar>
+        <clan-overview-item
+          v-if="clanMembersLoadError"
+          icon="warning"
+          :text="`Couldn't load clan members`"
+          actionText="Retry"
+          @action="fetchClanMembers"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingClanMembers && !clanMembersLoadError && clanMembers"
+          icon="group"
+          :text="numberOfMembersText"></clan-overview-item>
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ numberOfMembers }} members total</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-divider inset v-if="!isLoadingClanMembers"></v-divider>
 
-        <v-divider inset></v-divider>
+        <clan-overview-item
+          v-if="pendingMembersLoadError"
+          icon="warning"
+          text="`Couldn't load pending members`"
+          actionText="Retry"
+          @action="fetchPendingMembers"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers"
+          icon="group_add"
+          actionText="View"
+          :text="pendingMembersText"
+          @action="shouldRenderPendingMembers = true"></clan-overview-item>
 
-        <v-list-tile v-if="pendingMembers">
-          <v-list-tile-avatar>
-            <v-icon>group_add</v-icon>
-          </v-list-tile-avatar>
+        <v-divider inset v-if="!isLoadingPendingMembers"></v-divider>
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ pendingMembersText }}</v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn flat @click="shouldRenderPendingMembers = true">View</v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-
-        <v-divider inset></v-divider>
-
-        <v-list-tile v-if="invitedMembers">
-          <v-list-tile-avatar>
-            <v-icon>group_add</v-icon>
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title>{{ invitedMembersText }}</v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn flat @click="shouldRenderInvitedMembers = true">View</v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
+        <clan-overview-item
+          v-if="invitedMembersLoadError"
+          icon="warning"
+          text="`Couldn't load invited members`"
+          actionText="Retry"
+          @action="fetchInvitedMembers"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers"
+          icon="group_add"
+          actionText="View"
+          :text="invitedMembersText"
+          @action="shouldRenderInvitedMembers = true"></clan-overview-item>
       </v-list>
     </v-card-text>
 
@@ -57,22 +57,43 @@
 import { mapGetters, mapActions } from 'vuex'
 import PendingMembers from './PendingMembers'
 import InvitedMembers from './InvitedMembers'
+import LoadableIndicator from '@/components/LoadableIndicator'
+import ClanOverviewItem from './ClanOverviewItem'
 export default {
   name: 'clan-overview',
   components: {
     PendingMembers,
-    InvitedMembers
+    InvitedMembers,
+    LoadableIndicator,
+    ClanOverviewItem
   },
   data() {
     return {
       shouldRenderPendingMembers: false,
-      shouldRenderInvitedMembers: false
+      shouldRenderInvitedMembers: false,
+      isLoadingClanMembers: false,
+      isLoadingPendingMembers: false,
+      isLoadingInvitedMembers: false,
+      clanMembersLoadError: false,
+      pendingMembersLoadError: false,
+      invitedMembersLoadError: false
     }
   },
   computed: {
     ...mapGetters(['clanMembers', 'pendingMembers', 'invitedMembers']),
-    numberOfMembers() {
-      return this.clanMembers ? this.clanMembers.length : 0
+    isLoading() {
+      return this.isLoadingClanMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
+    },
+    numberOfMembersText() {
+      if (this.clanMembers) {
+        if (this.clanMembers.length === 0) {
+          return 'No Members'
+        } else if (this.clanMembers.length === 1) {
+          return '1 member'
+        } else {
+          return `${this.clanMembers.length} members`
+        }
+      }
     },
     pendingMembersText() {
       if (this.pendingMembers) {
@@ -102,16 +123,54 @@ export default {
     onDialogClose(dialog) {
       this.getClanMembers()
       this[dialog] = false
+    },
+    fetchAll() {
+      this.fetchClanMembers()
+      this.fetchPendingMembers()
+      this.fetchInvitedMembers()
+    },
+    fetchClanMembers() {
+      this.isLoadingClanMembers = true
+      this.clanMembersLoadError = false
+      this.getClanMembers()
+        .then(() => {
+          this.isLoadingClanMembers = false
+        })
+        .catch(error => {
+          console.error(error)
+          this.clanMembersLoadError = true
+          this.isLoadingClanMembers = false
+        })
+    },
+    fetchPendingMembers() {
+      this.isLoadingPendingMembers = true
+      this.pendingMembersLoadError = false
+      this.getPendingMembers()
+        .then(() => {
+          this.isLoadingPendingMembers = false
+        })
+        .catch(error => {
+          console.error(error)
+          this.isLoadingClanMembers = false
+          this.pendingMembersLoadError = true
+        })
+    },
+    fetchInvitedMembers() {
+      this.isLoadingInvitedMembers = true
+      this.invitedMembersLoadError = false
+      this.getInvitedMembers()
+        .then(() => {
+          this.isLoadingInvitedMembers = false
+        })
+        .catch(error => {
+          console.error(error)
+          this.isLoadingInvitedMembers = false
+          this.invitedMembersLoadError = true
+        })
     }
   },
   mounted() {
-    if (!this.pendingMembers) {
-      this.getPendingMembers()
-    }
-
-    if (!this.invitedMembers) {
-      this.getInvitedMembers()
-    }
+    this.fetchAll()
   }
 }
 </script>
