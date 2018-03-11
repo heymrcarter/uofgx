@@ -12,11 +12,11 @@
           actionText="Retry"
           @action="fetchClanMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingClanMembers && !clanMembersLoadError && clanMembers"
+          v-if="!isLoadingMembers && !clanMembersLoadError && clanMembers"
           icon="group"
           :text="numberOfMembersText"></clan-overview-item>
 
-        <v-divider inset v-if="!isLoadingClanMembers"></v-divider>
+        <v-divider inset v-if="!isLoadingMembers"></v-divider>
 
         <clan-overview-item
           v-if="pendingMembersLoadError"
@@ -71,7 +71,6 @@ export default {
     return {
       shouldRenderPendingMembers: false,
       shouldRenderInvitedMembers: false,
-      isLoadingClanMembers: false,
       isLoadingPendingMembers: false,
       isLoadingInvitedMembers: false,
       clanMembersLoadError: false,
@@ -82,9 +81,9 @@ export default {
   computed: {
     ...mapGetters('members/pending', ['pendingMembers']),
     ...mapGetters('members/invited', ['invitedMembers']),
-    ...mapGetters('members', ['clanMembers']),
+    ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers']),
     isLoading() {
-      return this.isLoadingClanMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
+      return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
     },
     numberOfMembersText() {
       if (this.clanMembers) {
@@ -134,17 +133,14 @@ export default {
       this.fetchInvitedMembers()
     },
     fetchClanMembers() {
-      this.isLoadingClanMembers = true
-      this.clanMembersLoadError = false
-      this.getClanMembers()
-        .then(() => {
-          this.isLoadingClanMembers = false
-        })
-        .catch(error => {
+      if (!this.didLoadMembers) {
+        this.clanMembersLoadError = false
+        this.getClanMembers().catch(error => {
           console.error(error)
           this.clanMembersLoadError = true
           this.isLoadingClanMembers = false
         })
+      }
     },
     fetchPendingMembers() {
       this.isLoadingPendingMembers = true
@@ -155,7 +151,6 @@ export default {
         })
         .catch(error => {
           console.error(error)
-          this.isLoadingClanMembers = false
           this.pendingMembersLoadError = true
         })
     },

@@ -7,10 +7,14 @@ import * as mutations from './mutations'
 export default {
   namespaced: true,
   state: {
-    list: undefined
+    list: undefined,
+    isLoadingMembers: false,
+    didLoadMembers: false
   },
   getters: {
-    clanMembers: state => state.list
+    clanMembers: state => state.list,
+    isLoadingMembers: state => state.isLoadingMembers,
+    didLoadMembers: state => state.didLoadMembers
   },
   actions,
   mutations,
