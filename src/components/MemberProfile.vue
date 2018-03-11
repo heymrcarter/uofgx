@@ -1,6 +1,6 @@
 <template>
   <v-container fluid grid-list-lg>
-    <v-layout row wrap>
+    <v-layout row wrap class="mt-2">
       <v-flex xs12 md5>
         <characters :membershipId="currentMembershipId"></characters>
       </v-flex>
@@ -75,7 +75,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
