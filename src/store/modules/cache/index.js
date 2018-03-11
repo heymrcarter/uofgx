@@ -1,4 +1,5 @@
 import * as mutations from './mutations'
+import * as actions from './actions'
 
 export default {
   state: {
@@ -7,5 +8,6 @@ export default {
   getters: {
     characters: state => state.characters
   },
+  actions,
   mutations
 }

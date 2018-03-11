@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      loadAction: 'getCharactersForMember',
+      loadAction: 'members/active/getCharactersForMember',
       loadParams: this.membershipId
     }
   },
