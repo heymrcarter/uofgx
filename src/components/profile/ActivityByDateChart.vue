@@ -4,20 +4,29 @@
       <p class="title">Activity by date</p>
     </v-card-title>
     <v-card-text>
-      <line-chart :data="chartData" :library="chartOptions" :colors="chartColor" v-if="Object.keys(chartData).length > 0 && !isLoading"></line-chart>
-      <div class="loader" v-else-if="isLoading">
-        <p class="sr-only">Loading</p>
-        <v-progress-circular color="yellow" :size="100" indeterminate></v-progress-circular>
-      </div>
+      <loadable-indicator v-if="isLoading"></loadable-indicator>
+      <loadable-failure
+        v-else-if="loadError"
+        :message="`Couldn't load activity breakdown`"
+        :retryable="true"
+        @retry="fetch(characterId)"></loadable-failure>
+
+      <line-chart :data="chartData" :library="chartOptions" :colors="chartColor" v-if="Object.keys(chartData).length > 0 && !isLoading && !loadError"></line-chart>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
+import LoadableIndicator from '@/components/LoadableIndicator'
+import LoadableFailure from '@/components/LoadableFailure'
 import { mapActions } from 'vuex'
 import colors from 'vuetify/es5/util/colors'
 export default {
   name: 'activity-by-date-chart',
+  components: {
+    LoadableIndicator,
+    LoadableFailure
+  },
   data() {
     return {
       chartColor: [colors.yellow.base],
@@ -45,7 +54,8 @@ export default {
         }
       },
       chartData: {},
-      isLoading: false
+      isLoading: false,
+      loadError: false
     }
   },
   props: {
@@ -61,42 +71,26 @@ export default {
   watch: {
     characterId(nextCharacterId) {
       if (nextCharacterId) {
-        this.isLoading = true
-        this.getRecentActivityByDate({ membershipId: this.membershipId, characterId: nextCharacterId })
-          .then(data => {
-            this.isLoading = false
-            this.chartData = data
-          })
-          .catch(error => {
-            this.isLoading = false
-            console.error(error)
-          })
+        this.fetch(nextCharacterId)
       }
     }
   },
   methods: {
-    ...mapActions(['getRecentActivityByDate'])
+    ...mapActions(['getRecentActivityByDate']),
+    fetch(characterId) {
+      this.isLoading = true
+      this.loadError = false
+      this.getRecentActivityByDate({ membershipId: this.membershipId, characterId })
+        .then(data => {
+          this.isLoading = false
+          this.chartData = data
+        })
+        .catch(error => {
+          this.isLoading = false
+          this.loadError = true
+          console.error(error)
+        })
+    }
   }
 }
 </script>
-
-<style scoped>
-.sr-only {
-  border: 0;
-  clip: rect(1px, 1px, 1px, 1px);
-  clip-path: inset(50%);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute !important;
-  width: 1px;
-  word-wrap: normal !important;
-}
-
-.loader {
-  display: flex;
-  justify-content: center;
-  height: 100%;
-}
-</style>
