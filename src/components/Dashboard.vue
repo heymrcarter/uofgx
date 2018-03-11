@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-lg fluid>
+  <v-container grid-list-lg fluid class="mt-2">
     <v-layout row wrap>
       <v-flex xs12 md6>
         <clan-overview></clan-overview>
