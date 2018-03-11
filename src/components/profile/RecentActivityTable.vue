@@ -5,15 +5,22 @@
     </v-card-title>
 
     <v-card-text>
+      <loadable-indicator v-if="isLoadingCharacterActivity"></loadable-indicator>
+      <loadable-failure
+        v-else-if="loadError"
+        :message="`Couldn't load recent activity`"
+        :retryable="true"
+        @retry="fetch(characterId)"></loadable-failure>
+
       <v-data-table
+        v-else
         hide-actions
         color="yellow"
         class="elevation-1"
         item-key="date"
         disable-initial-sort
         :headers="activityTableHeaders"
-        :items="activityTableData"
-        :loading="isLoadingCharacterActivity ? 'yellow': false">
+        :items="activityTableData">
 
         <template slot="items" slot-scope="props">
           <tr @click="expandActivity(props)">
@@ -35,6 +42,8 @@
 </template>
 
 <script>
+import LoadableFailure from '@/components/LoadableFailure'
+import LoadableIndicator from '@/components/LoadableIndicator'
 import activityContent from '@/content/activity'
 import dateFormatter from '@/mixins/date-formatter'
 import { activityModeToName } from '@/mappers/activity-name-mapper'
@@ -45,14 +54,17 @@ export default {
   name: 'recent-activity-table',
   mixins: [dateFormatter],
   components: {
-    ActivityDetailTable
+    ActivityDetailTable,
+    LoadableFailure,
+    LoadableIndicator
   },
   data() {
     return {
       activityTableData: [],
       isLoadingCharacterActivity: false,
       isLoadingDetails: false,
-      activityDetails: []
+      activityDetails: [],
+      loadError: false
     }
   },
   props: {
@@ -68,30 +80,7 @@ export default {
   watch: {
     characterId(nextCharacterId) {
       if (nextCharacterId) {
-        this.isLoadingCharacterActivity = true
-        this.getCharacterActivity({ membershipId: this.membershipId, characterId: nextCharacterId })
-          .then(activities => {
-            this.isLoadingCharacterActivity = false
-            this.activityTableData = sort(
-              activities.map(activityObject => {
-                const supportingCompletionText = activityObject.values.standing !== undefined ? activityObject.values.standing.basic.displayValue : activityObject.values.completionReason.basic.displayValue
-
-                return {
-                  value: false,
-                  activity: activityModeToName(activityObject.activityDetails.mode),
-                  date: activityObject.period,
-                  kills: activityObject.values.kills.basic.value,
-                  completed: `${activityObject.values.completed.basic.displayValue} - ${supportingCompletionText}`,
-                  deaths: activityObject.values.deaths.basic.value,
-                  timePlayed: activityObject.values.timePlayedSeconds.basic.displayValue,
-                  activityId: activityObject.activityDetails.instanceId
-                }
-              })
-            ).desc(a => a.date)
-          })
-          .catch(error => {
-            console.error(error)
-          })
+        this.fetch(nextCharacterId)
       }
     }
   },
@@ -127,6 +116,35 @@ export default {
     },
     isClanMember(gamertag) {
       return this.clanMembers.find(m => m.xboxUserName === gamertag) !== undefined
+    },
+    fetch(characterId) {
+      this.isLoadingCharacterActivity = true
+      this.loadError = false
+      this.getCharacterActivity({ membershipId: this.membershipId, characterId })
+        .then(activities => {
+          this.isLoadingCharacterActivity = false
+          this.activityTableData = sort(
+            activities.map(activityObject => {
+              const supportingCompletionText = activityObject.values.standing !== undefined ? activityObject.values.standing.basic.displayValue : activityObject.values.completionReason.basic.displayValue
+
+              return {
+                value: false,
+                activity: activityModeToName(activityObject.activityDetails.mode),
+                date: activityObject.period,
+                kills: activityObject.values.kills.basic.value,
+                completed: `${activityObject.values.completed.basic.displayValue} - ${supportingCompletionText}`,
+                deaths: activityObject.values.deaths.basic.value,
+                timePlayed: activityObject.values.timePlayedSeconds.basic.displayValue,
+                activityId: activityObject.activityDetails.instanceId
+              }
+            })
+          ).desc(a => a.date)
+        })
+        .catch(error => {
+          console.error(error)
+          this.loadError = true
+          this.isLoadingCharacterActivity = false
+        })
     }
   }
 }
