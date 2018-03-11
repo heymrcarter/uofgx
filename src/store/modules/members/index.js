@@ -9,12 +9,14 @@ export default {
   state: {
     list: undefined,
     isLoadingMembers: false,
-    didLoadMembers: false
+    didLoadMembers: false,
+    loadMembersError: false
   },
   getters: {
     clanMembers: state => state.list,
     isLoadingMembers: state => state.isLoadingMembers,
-    didLoadMembers: state => state.didLoadMembers
+    didLoadMembers: state => state.didLoadMembers,
+    loadMembersError: state => state.loadMembersError
   },
   actions,
   mutations,

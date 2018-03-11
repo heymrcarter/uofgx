@@ -3,6 +3,7 @@ import * as clanService from '@/services/ClanService'
 export function getClanMembers({ commit }) {
   return new Promise((resolve, reject) => {
     commit('START_LOADING_MEMBERS')
+    commit('CLEAR_LOAD_ERROR')
     clanService
       .getMembers()
       .then(members => {
@@ -17,6 +18,7 @@ export function getClanMembers({ commit }) {
       })
       .catch(error => {
         commit('FINISH_LOADING_MEMBERS')
+        commit('SET_LOAD_ERROR')
         reject(error)
       })
   })

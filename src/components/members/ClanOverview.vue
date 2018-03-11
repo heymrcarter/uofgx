@@ -6,13 +6,13 @@
       <loadable-indicator v-if="isLoading"></loadable-indicator>
       <v-list>
         <clan-overview-item
-          v-if="clanMembersLoadError"
+          v-if="loadMembersError"
           icon="warning"
           :text="`Couldn't load clan members`"
           actionText="Retry"
           @action="fetchClanMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingMembers && !clanMembersLoadError && clanMembers"
+          v-if="!isLoadingMembers && !loadMembersError && clanMembers"
           icon="group"
           :text="numberOfMembersText"></clan-overview-item>
 
@@ -73,7 +73,6 @@ export default {
       shouldRenderInvitedMembers: false,
       isLoadingPendingMembers: false,
       isLoadingInvitedMembers: false,
-      clanMembersLoadError: false,
       pendingMembersLoadError: false,
       invitedMembersLoadError: false
     }
@@ -81,7 +80,7 @@ export default {
   computed: {
     ...mapGetters('members/pending', ['pendingMembers']),
     ...mapGetters('members/invited', ['invitedMembers']),
-    ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers']),
+    ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
     isLoading() {
       return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
     },
@@ -133,12 +132,9 @@ export default {
       this.fetchInvitedMembers()
     },
     fetchClanMembers() {
-      if (!this.didLoadMembers) {
-        this.clanMembersLoadError = false
+      if (!this.didLoadMembers && !this.isLoadingMembers) {
         this.getClanMembers().catch(error => {
           console.error(error)
-          this.clanMembersLoadError = true
-          this.isLoadingClanMembers = false
         })
       }
     },

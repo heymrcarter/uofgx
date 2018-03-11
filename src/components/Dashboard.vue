@@ -12,90 +12,34 @@
 
     <v-layout row wrap>
       <v-flex xs12>
-        <v-card>
-          <v-form>
-            <div>
-              <v-text-field solo dark placeholder="Filter" v-model="filter" clearable></v-text-field>
-            </div>
-          </v-form>
-          <v-list dark three-line>
-            <v-list-tile v-if="presentedList.length === 0">
-              <v-list-tile-content>
-                No members
-              </v-list-tile-content>
-            </v-list-tile>
-            <template v-for="(member, i) in presentedList" v-if="presentedList.length > 0">
-              <member-row :key="member.xboxMembershipId" :member="member" @click="showMemberDetail(member)"></member-row>
-              <v-divider inset :key="i" v-if="i !== presentedList.length"></v-divider>
-            </template>
-          </v-list>
-        </v-card>
+        <members></members>
       </v-flex>
     </v-layout>
-
-    <loading-indicator :is-loading="isLoading" context="global"></loading-indicator>
   </v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import LoadingIndicator from './LoadingIndicator'
 import MemberRow from './members/MemberRow'
 import RemovalHistory from './members/RemovalHistory'
 import ClanOverview from './members/ClanOverview'
+import Members from './members/Members'
 
 export default {
-  name: 'clan-member-list',
+  name: 'dashboard',
   components: {
-    LoadingIndicator,
     MemberRow,
     RemovalHistory,
-    ClanOverview
-  },
-  data() {
-    return {
-      isLoading: false,
-      isLoadingCharacters: false,
-      filter: null
-    }
+    ClanOverview,
+    Members
   },
   computed: {
-    ...mapGetters('members', ['clanMembers']),
-    ...mapGetters(['activeMember', 'exemptions']),
-    presentedList() {
-      if (!this.clanMembers) {
-        return []
-      }
-
-      function searchByUsername(username) {
-        return username.toLowerCase().includes(this.filter)
-      }
-
-      return this.filter !== null ? this.clanMembers.filter(m => searchByUsername(m.bungieNetUserName) || searchByUsername(m.xboxUserName)) : this.clanMembers
-    }
+    ...mapGetters(['exemptions'])
   },
   methods: {
-    ...mapActions(['getExemptions']),
-    ...mapActions('members', ['getClanMembers']),
-    ...mapActions('members/active', {
-      setActiveMember: 'set'
-    }),
-    showMemberDetail(member) {
-      this.setActiveMember({ membershipId: member.xboxMembershipId })
-      this.$router.push({
-        name: 'Profile',
-        params: { membershipId: member.xboxMembershipId }
-      })
-    }
+    ...mapActions(['getExemptions'])
   },
   mounted() {
-    if (!this.clanMembers) {
-      this.isLoading = true
-      this.getClanMembers().then(() => {
-        this.isLoading = false
-      })
-    }
-
     this.getExemptions()
   }
 }
