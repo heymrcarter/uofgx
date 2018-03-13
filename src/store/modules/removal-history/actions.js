@@ -17,7 +17,7 @@ export function removeMember({ commit, state }, payload) {
     payload.adminMembershipId = state.session.membership_id
     payload.adminMembershipType = 'bungienet'
     removalService
-      .removeMemberFromClan(process.env.CLAN_ID, payload, state.session.access_token)
+      .removeMemberFromClan(process.env.CLAN_ID, payload, state.session.accessToken)
       .then(removal => {
         commit('REMOVE_MEMBER', removal)
         resolve()

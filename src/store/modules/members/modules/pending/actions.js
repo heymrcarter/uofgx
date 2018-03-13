@@ -1,9 +1,9 @@
 import * as clanService from '@/services/ClanService'
 
-export function getPendingMembers({ commit, state, rootState }) {
+export function getPendingMembers({ commit, rootState, getters }) {
   return new Promise((resolve, reject) => {
     clanService
-      .getPendingMembers(process.env.CLAN_ID, rootState.session.accessToken)
+      .getPendingMembers(getters.clanId, rootState.session.accessToken)
       .then(response => {
         commit('SET_PENDING_MEMBERS', response.results)
         resolve()
@@ -12,10 +12,10 @@ export function getPendingMembers({ commit, state, rootState }) {
   })
 }
 
-export function approvePendingMemberships({ commit, state, rootState }, membershipIds) {
+export function approvePendingMemberships({ commit, getters, rootState }, membershipIds) {
   return new Promise((resolve, reject) => {
     clanService
-      .approveMembershipRequest(process.env.CLAN_ID, membershipIds, rootState.session.accessToken)
+      .approveMembershipRequest(getters.clanId, membershipIds, rootState.session.accessToken)
       .then(response => {
         commit('APPROVE_MEMBERSHIPS', membershipIds)
         resolve()
@@ -24,10 +24,10 @@ export function approvePendingMemberships({ commit, state, rootState }, membersh
   })
 }
 
-export function denyPendingMemberships({ commit, state, rootState }, membershipIds) {
+export function denyPendingMemberships({ commit, getters, rootState }, membershipIds) {
   return new Promise((resolve, reject) => {
     clanService
-      .denyMembershipRequest(process.env.CLAN_ID, membershipIds, rootState.session.access_token)
+      .denyMembershipRequest(getters.clanId, membershipIds, rootState.session.accessToken)
       .then(response => {
         commit('DENY_MEMBERSHIPS', membershipIds)
         resolve()
