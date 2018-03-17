@@ -70,14 +70,12 @@ export default {
   data() {
     return {
       shouldRenderPendingMembers: false,
-      shouldRenderInvitedMembers: false,
-      isLoadingInvitedMembers: false,
-      invitedMembersLoadError: false
+      shouldRenderInvitedMembers: false
     }
   },
   computed: {
     ...mapGetters('members/pending', ['pendingMembers', 'isLoadingPendingMembers', 'didLoadPendingMembers', 'pendingMembersLoadError']),
-    ...mapGetters('members/invited', ['invitedMembers']),
+    ...mapGetters('members/invited', ['invitedMembers', 'isLoadingInvitedMembers', 'didLoadInvitedMembers', 'invitedMembersLoadError']),
     ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
     isLoading() {
       return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
@@ -130,29 +128,25 @@ export default {
       this.fetchInvitedMembers()
     },
     fetchClanMembers() {
-      if (!this.didLoadMembers && !this.isLoadingMembers) {
+      if (!this.didLoadMembers || !this.isLoadingMembers) {
         this.getClanMembers().catch(error => {
           console.error(error)
         })
       }
     },
     fetchPendingMembers() {
-      this.getPendingMembers().catch(error => {
-        console.error(error)
-      })
+      if (!this.didLoadPendingMembers || !this.isLoadingPendingMembers) {
+        this.getPendingMembers().catch(error => {
+          console.error(error)
+        })
+      }
     },
     fetchInvitedMembers() {
-      this.isLoadingInvitedMembers = true
-      this.invitedMembersLoadError = false
-      this.getInvitedMembers()
-        .then(() => {
-          this.isLoadingInvitedMembers = false
-        })
-        .catch(error => {
+      if (!this.didLoadInvitedMembers || !this.isLoadingInvitedMembers) {
+        this.getInvitedMembers().catch(error => {
           console.error(error)
-          this.isLoadingInvitedMembers = false
-          this.invitedMembersLoadError = true
         })
+      }
     }
   },
   mounted() {
