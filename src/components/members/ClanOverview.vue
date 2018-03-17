@@ -71,14 +71,12 @@ export default {
     return {
       shouldRenderPendingMembers: false,
       shouldRenderInvitedMembers: false,
-      isLoadingPendingMembers: false,
       isLoadingInvitedMembers: false,
-      pendingMembersLoadError: false,
       invitedMembersLoadError: false
     }
   },
   computed: {
-    ...mapGetters('members/pending', ['pendingMembers']),
+    ...mapGetters('members/pending', ['pendingMembers', 'isLoadingPendingMembers', 'didLoadPendingMembers', 'pendingMembersLoadError']),
     ...mapGetters('members/invited', ['invitedMembers']),
     ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
     isLoading() {
@@ -139,16 +137,9 @@ export default {
       }
     },
     fetchPendingMembers() {
-      this.isLoadingPendingMembers = true
-      this.pendingMembersLoadError = false
-      this.getPendingMembers()
-        .then(() => {
-          this.isLoadingPendingMembers = false
-        })
-        .catch(error => {
-          console.error(error)
-          this.pendingMembersLoadError = true
-        })
+      this.getPendingMembers().catch(error => {
+        console.error(error)
+      })
     },
     fetchInvitedMembers() {
       this.isLoadingInvitedMembers = true

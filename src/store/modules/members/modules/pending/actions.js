@@ -1,21 +1,33 @@
 import * as clanService from '@/services/ClanService'
 
-export function getPendingMembers({ commit, rootState, getters }) {
+export function getPendingMembers({ commit, rootState, rootGetters }) {
   return new Promise((resolve, reject) => {
+    commit('START_LOADING')
+    commit('RESET_LOAD_ERROR')
     clanService
-      .getPendingMembers(getters.clanId, rootState.session.accessToken)
+      .getPendingMembers(rootGetters.clanId, rootState.session.accessToken)
       .then(response => {
+        commit('FINISH_LOADING')
         commit('SET_PENDING_MEMBERS', response.results)
+
+        setTimeout(() => {
+          commit('RELOAD_PENDING_MEMBERS')
+        }, 1000 * 60 * 15)
+
         resolve()
       })
-      .catch(error => reject(error))
+      .catch(error => {
+        commit('FINISH_LOADING')
+        commit('LOAD_ERROR')
+        reject(error)
+      })
   })
 }
 
-export function approvePendingMemberships({ commit, getters, rootState }, membershipIds) {
+export function approvePendingMemberships({ commit, rootGetters, rootState }, membershipIds) {
   return new Promise((resolve, reject) => {
     clanService
-      .approveMembershipRequest(getters.clanId, membershipIds, rootState.session.accessToken)
+      .approveMembershipRequest(rootGetters.clanId, membershipIds, rootState.session.accessToken)
       .then(response => {
         commit('APPROVE_MEMBERSHIPS', membershipIds)
         resolve()
@@ -24,10 +36,10 @@ export function approvePendingMemberships({ commit, getters, rootState }, member
   })
 }
 
-export function denyPendingMemberships({ commit, getters, rootState }, membershipIds) {
+export function denyPendingMemberships({ commit, rootGetters, rootState }, membershipIds) {
   return new Promise((resolve, reject) => {
     clanService
-      .denyMembershipRequest(getters.clanId, membershipIds, rootState.session.accessToken)
+      .denyMembershipRequest(rootGetters.clanId, membershipIds, rootState.session.accessToken)
       .then(response => {
         commit('DENY_MEMBERSHIPS', membershipIds)
         resolve()

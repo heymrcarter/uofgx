@@ -133,4 +133,79 @@ describe('pending members mutations', () => {
       })
     })
   })
+
+  describe('START_LOADING', () => {
+    let state
+    beforeEach(() => {
+      state = {
+        isLoadingPendingMembers: false
+      }
+
+      subject.START_LOADING(state)
+    })
+
+    it('sets isLoadingPendingMembers state to true', () => {
+      expect(state.isLoadingPendingMembers).toEqual(true)
+    })
+  })
+
+  describe('FINISH_LOADING', () => {
+    let state
+    beforeEach(() => {
+      state = {
+        isLoadingPendingMembers: true
+      }
+
+      subject.FINISH_LOADING(state)
+    })
+
+    it('sets isLoadingPendingMembers state to false', () => {
+      expect(state.isLoadingPendingMembers).toBe(false)
+    })
+  })
+
+  describe('RESET_LOAD_ERROR', () => {
+    let state
+    beforeEach(() => {
+      state = {
+        pendingMembersLoadError: true
+      }
+
+      subject.RESET_LOAD_ERROR(state)
+    })
+
+    it('sets pendingMembersLoadError state to false', () => {
+      expect(state.pendingMembersLoadError).toBe(false)
+    })
+  })
+
+  describe('LOAD_ERROR', () => {
+    let state
+    beforeEach(() => {
+      state = {
+        pendingMembersLoadError: false
+      }
+
+      subject.LOAD_ERROR(state)
+    })
+
+    it('sets pendingMembersLoadError state to true', () => {
+      expect(state.pendingMembersLoadError).toBe(true)
+    })
+  })
+
+  describe('RELOAD_PENDING_MEMBERS', () => {
+    let state
+    beforeEach(() => {
+      state = {
+        didLoadPendingMembers: true
+      }
+
+      subject.RELOAD_PENDING_MEMBERS(state)
+    })
+
+    it('sets didLoadPendingMembers state to false', () => {
+      expect(state.didLoadPendingMembers).toBe(false)
+    })
+  })
 })

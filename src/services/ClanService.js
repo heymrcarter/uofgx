@@ -91,11 +91,7 @@ export function rescindMembershipInvitation(clanId, membershipId, authToken) {
       Authorization: `Bearer ${authToken}`
     }
 
-    post(
-      `/clan/${clanId}/members/invited/rescind/${membershipId}`,
-      null,
-      headers
-    )
+    post(`/clan/${clanId}/members/invited/rescind/${membershipId}`, null, headers)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

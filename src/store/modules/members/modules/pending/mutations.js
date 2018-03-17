@@ -19,3 +19,23 @@ export function DENY_MEMBERSHIPS(state, membershipIds) {
     }
   })
 }
+
+export function START_LOADING(state) {
+  state.isLoadingPendingMembers = true
+}
+
+export function FINISH_LOADING(state) {
+  state.isLoadingPendingMembers = false
+}
+
+export function RESET_LOAD_ERROR(state) {
+  state.pendingMembersLoadError = false
+}
+
+export function LOAD_ERROR(state) {
+  state.pendingMembersLoadError = true
+}
+
+export function RELOAD_PENDING_MEMBERS(state) {
+  state.didLoadPendingMembers = false
+}
