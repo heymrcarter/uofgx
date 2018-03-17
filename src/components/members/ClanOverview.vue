@@ -128,21 +128,21 @@ export default {
       this.fetchInvitedMembers()
     },
     fetchClanMembers() {
-      if (!this.didLoadMembers || !this.isLoadingMembers) {
+      if (!this.didLoadMembers && !this.isLoadingMembers) {
         this.getClanMembers().catch(error => {
           console.error(error)
         })
       }
     },
     fetchPendingMembers() {
-      if (!this.didLoadPendingMembers || !this.isLoadingPendingMembers) {
+      if (!this.didLoadPendingMembers && !this.isLoadingPendingMembers) {
         this.getPendingMembers().catch(error => {
           console.error(error)
         })
       }
     },
     fetchInvitedMembers() {
-      if (!this.didLoadInvitedMembers || !this.isLoadingInvitedMembers) {
+      if (!this.didLoadInvitedMembers && !this.isLoadingInvitedMembers) {
         this.getInvitedMembers().catch(error => {
           console.error(error)
         })

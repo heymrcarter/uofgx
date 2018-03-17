@@ -22,10 +22,12 @@ export function DENY_MEMBERSHIPS(state, membershipIds) {
 
 export function START_LOADING(state) {
   state.isLoadingPendingMembers = true
+  state.didLoadPendingMembers = false
 }
 
 export function FINISH_LOADING(state) {
   state.isLoadingPendingMembers = false
+  state.didLoadPendingMembers = true
 }
 
 export function RESET_LOAD_ERROR(state) {

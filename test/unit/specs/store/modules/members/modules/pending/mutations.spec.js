@@ -147,6 +147,10 @@ describe('pending members mutations', () => {
     it('sets isLoadingPendingMembers state to true', () => {
       expect(state.isLoadingPendingMembers).toEqual(true)
     })
+
+    it('sets didLoadPendingMembers state to false', () => {
+      expect(state.didLoadPendingMembers).toBe(false)
+    })
   })
 
   describe('FINISH_LOADING', () => {
@@ -161,6 +165,10 @@ describe('pending members mutations', () => {
 
     it('sets isLoadingPendingMembers state to false', () => {
       expect(state.isLoadingPendingMembers).toBe(false)
+    })
+
+    it('sets didLoadPendingMembers state to true', () => {
+      expect(state.didLoadPendingMembers).toBe(true)
     })
   })
 
