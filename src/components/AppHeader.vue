@@ -1,7 +1,7 @@
 <template>
   <v-toolbar app dark fixed>
-    <v-menu offset-y>
-      <v-toolbar-title slot="activator">
+    <v-menu offset-y :disabled="!renderDropDownIcon">
+      <v-toolbar-title class="clan-name" slot="activator">
         <span>{{currentPageName}}</span>
         <v-icon dark v-if="renderDropDownIcon">arrow_drop_down</v-icon>
       </v-toolbar-title>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'app-header',
   data() {
@@ -28,6 +28,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['clanName']),
     ...mapGetters('members/active', ['activeMember']),
     currentPageName() {
       switch (this.$route.name) {
@@ -36,7 +37,7 @@ export default {
         case 'OAuth':
           return 'Processing login...'
         case 'Dashboard':
-          return 'Unity of Guardians'
+          return this.clanName
         case 'InactivePlayers':
           return 'Inactive players'
         case 'Profile':
@@ -54,9 +55,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* .toolbar--fixed {
-  z-index: 10000;
-} */
-</style>
