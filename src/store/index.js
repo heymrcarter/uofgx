@@ -7,13 +7,21 @@ import cache from './modules/cache'
 import members from './modules/members'
 import activity from './modules/activity'
 import session from './modules/session'
+import * as actions from './actions'
+import * as mutations from './mutations'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  state: {
+    clanId: undefined,
+    clanName: undefined
+  },
   getters: {
     clanId: () => process.env.CLAN_ID
   },
+  actions,
+  mutations,
   modules: {
     exemptions,
     removalHistory,

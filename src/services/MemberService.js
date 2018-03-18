@@ -58,3 +58,9 @@ export function isMemberAdmin(membershipId, bearerToken) {
       .catch(error => reject(error))
   })
 }
+
+export function getAdminGroups(membershipId) {
+  return new Promise((resolve, reject) => {
+    get(`/member/254/${membershipId}/admin-groups`).then(response => resolve(response.data))
+  })
+}

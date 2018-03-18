@@ -31,3 +31,21 @@ export function checkAccessForMember({ commit }, session) {
       .catch(error => reject(error))
   })
 }
+
+export function getUserGroups({ commit, dispatch }, session) {
+  return new Promise(resolve => {
+    memberService.getAdminGroups(session.membership_id).then(groups => {
+      if (groups.length > 0) {
+        commit('GRANT_ACCESS', session.membership_id)
+        dispatch('setClanId', groups[0].groupId, { root: true })
+        dispatch('setClanName', groups[0].groupName, { root: true })
+
+        setTimeout(() => {
+          commit('SESSION_EXPIRED')
+        }, session.expires_in * 1000)
+
+        resolve(groups)
+      }
+    })
+  })
+}

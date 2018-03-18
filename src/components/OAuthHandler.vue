@@ -1,18 +1,10 @@
 <template>
-  <div>
-    <v-dialog color="error" icon="warning" :value="error !== undefined">
-      {{this.error}} <v-btn flat exact to="/">Back to login</v-btn>
-    </v-dialog>
-
-    <v-snackbar :timeout="6000" bottom v-model="errorToast">
-      {{ errorToastText }}
-      <v-btn flat to="/">Back</v-btn>
-    </v-snackbar>
-  </div>
+  <div></div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import { checkOAuthState } from '@/utils/oauth-util'
 export default {
   name: 'oauth-handler',
   data() {
@@ -23,31 +15,28 @@ export default {
     }
   },
   methods: {
-    ...mapActions('session', ['getAccessToken', 'checkAccessForMember'])
+    ...mapActions('session', ['getAccessToken', 'getUserGroups'])
   },
   mounted() {
     const self = this
     const state = this.$route.query.state
     const code = decodeURIComponent(this.$route.query.code)
 
-    if (atob(state) !== process.env.OAUTH_SECRET) {
-      this.error = 'Your login attempt may have been tampered with! Try logging in again.'
+    if (!checkOAuthState(state)) {
+      this.$router.replace('/')
+      return
     }
-
     this.getAccessToken(code)
       .then(session => {
-        this.checkAccessForMember(session)
-          .then(hasAccess => {
-            if (hasAccess) {
+        this.getUserGroups(session)
+          .then(groups => {
+            if (groups && groups.length > 0) {
               this.$router.replace('/dashboard')
-            } else {
-              this.error = 'Unauthorized! The account you logged in with does not have access to administer Unity of Guardians. Log in with a valid admin account.'
             }
           })
           .catch(error => {
-            if (error.response) {
-              self.$router.replace('/')
-            }
+            console.error(error)
+            self.$router.replace('/')
           })
       })
       .catch(error => {
@@ -57,7 +46,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
