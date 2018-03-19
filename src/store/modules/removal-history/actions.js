@@ -1,9 +1,9 @@
 import * as removalService from '@/services/RemovalService'
 
-export function getRemovalHistory({ commit }) {
+export function getRemovalHistory({ commit, rootState }) {
   return new Promise((resolve, reject) => {
     removalService
-      .getClanRemovalHistory(process.env.CLAN_ID)
+      .getClanRemovalHistory(rootState.clanId)
       .then(history => {
         commit('SET_REMOVAL_HISTORY', history)
         resolve()
@@ -12,12 +12,12 @@ export function getRemovalHistory({ commit }) {
   })
 }
 
-export function removeMember({ commit, state }, payload) {
+export function removeMember({ commit, rootState }, payload) {
   return new Promise((resolve, reject) => {
-    payload.adminMembershipId = state.session.membership_id
+    payload.adminMembershipId = rootState.session.membershipId
     payload.adminMembershipType = 'bungienet'
     removalService
-      .removeMemberFromClan(process.env.CLAN_ID, payload, state.session.accessToken)
+      .removeMemberFromClan(rootState.clanId, payload, rootState.session.accessToken)
       .then(removal => {
         commit('REMOVE_MEMBER', removal)
         resolve()
