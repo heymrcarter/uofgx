@@ -23,7 +23,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import MemberRow from '@/components/members/MemberRow'
+import MemberRow from '@/components/dashboard/MemberRow'
 const { mapGetters } = createNamespacedHelpers('members')
 const { mapActions } = createNamespacedHelpers('members/active')
 export default {

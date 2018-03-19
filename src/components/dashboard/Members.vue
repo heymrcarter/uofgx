@@ -17,7 +17,7 @@
 import { createNamespacedHelpers } from 'vuex'
 import LoadableIndicator from '@/components/LoadableIndicator'
 import LoadableFailure from '@/components/LoadableFailure'
-import MemberList from '@/components/members/MemberList'
+import MemberList from '@/components/dashboard/MemberList'
 const { mapActions, mapGetters } = createNamespacedHelpers('members')
 export default {
   name: 'members',

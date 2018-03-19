@@ -5,7 +5,7 @@ import AppHeader from '@/components/AppHeader'
 import Vuetify from 'vuetify'
 
 describe('AppHeader', () => {
-  let wrapper, subject, store
+  let wrapper, store
   beforeEach(() => {
     const localVue = createLocalVue()
     localVue.use(Vuex)

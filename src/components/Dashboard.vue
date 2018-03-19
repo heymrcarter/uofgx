@@ -20,10 +20,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import MemberRow from './members/MemberRow'
-import RemovalHistory from './members/RemovalHistory'
-import ClanOverview from './members/ClanOverview'
-import Members from './members/Members'
+import MemberRow from './dashboard/MemberRow'
+import RemovalHistory from './dashboard/RemovalHistory'
+import ClanOverview from './dashboard/ClanOverview'
+import Members from './dashboard/Members'
 
 export default {
   name: 'dashboard',
