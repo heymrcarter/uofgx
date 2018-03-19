@@ -1,10 +1,12 @@
 import { get, post } from '@/utils/network-util'
-import { mapResponseToView } from '../mappers/clan-members-mapper'
+import { mapResponseToView } from '@/mappers/clan-members-mapper'
 
-export function getMembers() {
+export function getMembers(clanId) {
   return new Promise((resolve, reject) => {
-    get(`/clan/${process.env.CLAN_ID}/members`)
-      .then(response => resolve(mapResponseToView(response.data)))
+    get(`/clan/${clanId}/members`)
+      .then(response => {
+        resolve(mapResponseToView(response.data))
+      })
       .catch(error => reject(error))
   })
 }

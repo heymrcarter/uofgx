@@ -1,11 +1,11 @@
 import * as clanService from '@/services/ClanService'
 
-export function getClanMembers({ commit }) {
+export function getClanMembers({ commit, rootState }) {
   return new Promise((resolve, reject) => {
     commit('START_LOADING_MEMBERS')
     commit('CLEAR_LOAD_ERROR')
     clanService
-      .getMembers()
+      .getMembers(rootState.clanId)
       .then(members => {
         commit('SET_CLAN_MEMBERS', members)
         commit('FINISH_LOADING_MEMBERS')
