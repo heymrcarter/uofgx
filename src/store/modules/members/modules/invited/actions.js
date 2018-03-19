@@ -1,11 +1,11 @@
 import * as clanService from '@/services/ClanService'
 
-export function getInvitedMembers({ commit, rootGetters, rootState }) {
+export function getInvitedMembers({ commit, rootState }) {
   return new Promise((resolve, reject) => {
     commit('START_LOADING')
     commit('RESET_LOAD_ERROR')
     clanService
-      .getInvitedMembers(rootGetters.clanId, rootState.session.accessToken)
+      .getInvitedMembers(rootState.clanId, rootState.session.accessToken)
       .then(response => {
         commit('FINISH_LOADING')
         commit('SET_INVITED_MEMBERS', response.results)
@@ -24,10 +24,10 @@ export function getInvitedMembers({ commit, rootGetters, rootState }) {
   })
 }
 
-export function rescindMembershipInvitation({ commit, rootGetters, rootState }, membershipId) {
+export function rescindMembershipInvitation({ commit, rootState }, membershipId) {
   return new Promise((resolve, reject) => {
     clanService
-      .rescindMembershipInvitation(rootGetters.clanId, membershipId, rootState.session.accessToken)
+      .rescindMembershipInvitation(rootState.clanId, membershipId, rootState.session.accessToken)
       .then(response => {
         commit('RESCIND_INVITATION', membershipId)
         resolve()

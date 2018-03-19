@@ -1,7 +1,7 @@
 const td = global.td
 
 describe('invited members actions', () => {
-  let clanService, subject, commit, rootState, rootGetters
+  let clanService, subject, commit, rootState
 
   beforeEach(() => {
     jest.useFakeTimers()
@@ -10,12 +10,10 @@ describe('invited members actions', () => {
     rootState = {
       session: {
         accessToken: 'the-access-token'
-      }
-    }
-    commit = jest.fn()
-    rootGetters = {
+      },
       clanId: 'clan-id'
     }
+    commit = jest.fn()
   })
 
   describe('getInvitedMembers', () => {
@@ -25,7 +23,7 @@ describe('invited members actions', () => {
           results: 'the-invited-members'
         })
 
-        subject.getInvitedMembers({ commit, rootState, rootGetters }).finally(done)
+        subject.getInvitedMembers({ commit, rootState }).finally(done)
       })
 
       it('starts loading invited members', () => {
@@ -56,7 +54,7 @@ describe('invited members actions', () => {
         td.when(clanService.getInvitedMembers('clan-id', 'the-access-token')).thenReject(new Error('Oh no'))
 
         subject
-          .getInvitedMembers({ commit, rootState, rootGetters })
+          .getInvitedMembers({ commit, rootState })
           .catch(error => {
             expect(error.message).toEqual('Oh no')
           })
@@ -86,7 +84,7 @@ describe('invited members actions', () => {
       beforeEach(done => {
         td.when(clanService.rescindMembershipInvitation('clan-id', 'membershipId', 'the-access-token')).thenResolve()
 
-        subject.rescindMembershipInvitation({ commit, rootState, rootGetters }, 'membershipId').finally(done)
+        subject.rescindMembershipInvitation({ commit, rootState }, 'membershipId').finally(done)
       })
 
       it('rescnds the invitation', () => {
@@ -101,7 +99,7 @@ describe('invited members actions', () => {
         })
 
         it('rescnds the invitation', done => {
-          subject.rescindMembershipInvitation({ commit, rootState, rootGetters }, 'membershipId').catch(error => {
+          subject.rescindMembershipInvitation({ commit, rootState }, 'membershipId').catch(error => {
             expect(error.message).toEqual('Oh no')
             done()
           })
