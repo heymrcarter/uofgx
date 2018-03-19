@@ -1,7 +1,7 @@
 const td = global.td
 
 describe('pending members actions', () => {
-  let clanService, subject, commit, rootState, rootGetters
+  let clanService, subject, commit, rootState
 
   beforeEach(() => {
     jest.useFakeTimers()
@@ -10,12 +10,10 @@ describe('pending members actions', () => {
     rootState = {
       session: {
         accessToken: 'the-access-token'
-      }
-    }
-    commit = jest.fn()
-    rootGetters = {
+      },
       clanId: 'clan-id'
     }
+    commit = jest.fn()
   })
 
   describe('getPendingMembers', () => {
@@ -25,7 +23,7 @@ describe('pending members actions', () => {
           results: 'the-pending-members'
         })
 
-        subject.getPendingMembers({ commit, rootState, rootGetters }).finally(done)
+        subject.getPendingMembers({ commit, rootState }).finally(done)
       })
 
       it('starts loading pending members', () => {
@@ -56,7 +54,7 @@ describe('pending members actions', () => {
         td.when(clanService.getPendingMembers('clan-id', 'the-access-token')).thenReject(new Error('Oh no'))
 
         subject
-          .getPendingMembers({ commit, rootState, rootGetters })
+          .getPendingMembers({ commit, rootState })
           .catch(error => {
             expect(error.message).toEqual('Oh no')
           })
@@ -91,7 +89,7 @@ describe('pending members actions', () => {
       })
 
       it('approves the membership request for the given membership ids', done => {
-        subject.approvePendingMemberships({ commit, rootGetters, rootState }, membershipIds).then(() => {
+        subject.approvePendingMemberships({ commit, rootState }, membershipIds).then(() => {
           expect(commit).toHaveBeenCalledWith('APPROVE_MEMBERSHIPS', membershipIds)
           done()
         })
@@ -107,7 +105,7 @@ describe('pending members actions', () => {
       })
 
       it('bubbles up the error', done => {
-        subject.denyPendingMemberships({ commit, rootGetters, rootState }, membershipIds).catch(error => {
+        subject.denyPendingMemberships({ commit, rootState }, membershipIds).catch(error => {
           expect(commit).not.toHaveBeenCalled()
           expect(error.message).toEqual('Oh no')
           done()
@@ -126,7 +124,7 @@ describe('pending members actions', () => {
       })
 
       it('approves the membership request for the given membership ids', done => {
-        subject.denyPendingMemberships({ commit, rootGetters, rootState }, membershipIds).then(() => {
+        subject.denyPendingMemberships({ commit, rootState }, membershipIds).then(() => {
           expect(commit).toHaveBeenCalledWith('DENY_MEMBERSHIPS', membershipIds)
           done()
         })
@@ -142,7 +140,7 @@ describe('pending members actions', () => {
       })
 
       it('bubbles up the error', done => {
-        subject.denyPendingMemberships({ commit, rootGetters, rootState }, membershipIds).catch(error => {
+        subject.denyPendingMemberships({ commit, rootState }, membershipIds).catch(error => {
           expect(commit).not.toHaveBeenCalled()
           expect(error.message).toEqual('Oh no')
           done()
