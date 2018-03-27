@@ -77,7 +77,7 @@ export default {
         case 0:
           return 'None'
         case 1:
-          return 'Beginner'
+          return 'grey'
         case 2:
           return 'grey'
         case 3:
