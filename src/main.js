@@ -8,6 +8,7 @@ import store from './store'
 import Chartkick from 'chartkick'
 import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js' // eslint-disable-line
+import VueAnalytics from 'vue-analytics'
 import '../node_modules/vuetify/dist/vuetify.min.css'
 
 Vue.use(VueChartkick, { Chartkick })
@@ -15,6 +16,14 @@ Vue.use(VueChartkick, { Chartkick })
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
+
+if (process.env.NODE_ENV === 'production') {
+  Vue.use(VueAnalytics, {
+    id: process.env.ANALYTICS_ID,
+    router,
+    ignoreRoutes: ['OAuth']
+  })
+}
 
 /* eslint-disable no-new */
 new Vue({
