@@ -2,6 +2,8 @@
   <v-card height="100%">
     <v-card-title class="headline">Actions</v-card-title>
     <v-card-text>
+      <add-note-action :membershipId="membershipId"></add-note-action>
+
       <v-btn block v-if="!isCurrentlyExempt" @click="makeExempt" :disabled="isLoading" class="mb-3">
         <span :class="{'mr-3': isLoading}">Grant exemption</span>
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
@@ -40,8 +42,12 @@
 import { mapState, mapActions } from 'vuex'
 import moment from 'moment-timezone'
 import sort from 'fast-sort'
+import AddNoteAction from './AddNoteAction'
 export default {
   name: 'profile-actions',
+  components: {
+    AddNoteAction
+  },
   data() {
     return {
       isLoading: false,

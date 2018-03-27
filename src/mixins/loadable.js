@@ -6,7 +6,8 @@ export default {
       loadError: false,
       errorMessage: undefined,
       loadParams: undefined,
-      loadResult: undefined
+      loadResult: undefined,
+      actionOptions: undefined
     }
   },
   methods: {
@@ -15,7 +16,7 @@ export default {
         this.isLoading = true
         this.loadError = false
         this.$store
-          .dispatch(this.loadAction, this.loadParams)
+          .dispatch(this.loadAction, this.loadParams, this.actionOptions)
           .then(result => {
             this.isLoading = false
             this.loadResult = result

@@ -9,6 +9,7 @@ import activity from './modules/activity'
 import session from './modules/session'
 import * as actions from './actions'
 import * as mutations from './mutations'
+import notes from './modules/notes'
 
 Vue.use(Vuex)
 
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     cache,
     members,
     activity,
-    session
+    session,
+    notes
   }
 })

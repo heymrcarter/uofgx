@@ -16,6 +16,12 @@
 
     <v-layout row wrap>
       <v-flex xs12>
+        <notes :membership-id="currentMembershipId"></notes>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap>
+      <v-flex xs12>
         <character-selector @characterChanged="characterChange"></character-selector>
       </v-flex>
     </v-layout>
@@ -46,6 +52,7 @@ import ActivityBreakdownChart from './profile/ActivityBreakdownChart'
 import ActivityByDateChart from './profile/ActivityByDateChart'
 import RecentActivityTable from './profile/RecentActivityTable'
 import ProfileActions from './profile/ProfileActions'
+import Notes from './profile/Notes'
 
 export default {
   name: 'member-profile',
@@ -56,7 +63,8 @@ export default {
     ActivityBreakdownChart,
     ActivityByDateChart,
     RecentActivityTable,
-    ProfileActions
+    ProfileActions,
+    Notes
   },
   data() {
     return {

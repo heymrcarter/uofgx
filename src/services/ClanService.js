@@ -1,5 +1,6 @@
 import { get, post } from '@/utils/network-util'
 import { mapResponseToView } from '@/mappers/clan-members-mapper'
+import moment from 'moment-timezone'
 
 export function getMembers(clanId) {
   return new Promise((resolve, reject) => {
@@ -94,6 +95,23 @@ export function rescindMembershipInvitation(clanId, membershipId, authToken) {
     }
 
     post(`/clan/${clanId}/members/invited/rescind/${membershipId}`, null, headers)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
+
+export function addNoteForMember(clanId, note) {
+  return new Promise((resolve, reject) => {
+    note.date = moment.utc()
+    post(`/clan/${clanId}/members/${note.membershipId}/note`, note)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
+
+export function getNotesForMember(clanId, membershipId) {
+  return new Promise((resolve, reject) => {
+    get(`/clan/${clanId}/members/${membershipId}/note`)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })
