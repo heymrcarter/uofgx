@@ -1,9 +1,9 @@
 import * as exemptionService from '@/services/ExemptionsService'
 
-export function getExemptions({ commit }) {
+export function getExemptions({ commit, rootState }) {
   return new Promise((resolve, reject) => {
     exemptionService
-      .getExemptionsForClan(process.env.CLAN_ID)
+      .getExemptionsForClan(rootState.clanId)
       .then(exemptions => {
         commit('SET_EXEMPTIONS', exemptions)
         resolve()
@@ -12,13 +12,13 @@ export function getExemptions({ commit }) {
   })
 }
 
-export function grantExemption({ commit, state }, exemption) {
+export function grantExemption({ commit, rootState }, exemption) {
   return new Promise((resolve, reject) => {
-    exemption.adminMembershipId = state.session.membership_id
+    exemption.adminMembershipId = rootState.session.membershipId
     exemption.adminMembershipType = 'bungienet'
 
     exemptionService
-      .grantExemptionForMember(process.env.CLAN_ID, exemption)
+      .grantExemptionForMember(rootState.clanId, exemption)
       .then(savedExemption => {
         commit('SAVE_EXEMPTION', savedExemption)
         resolve()
@@ -27,10 +27,10 @@ export function grantExemption({ commit, state }, exemption) {
   })
 }
 
-export function editExemption({ commit }, exemption) {
+export function editExemption({ commit, rootState }, exemption) {
   return new Promise((resolve, reject) => {
     exemptionService
-      .editExemption(process.env.CLAN_ID, exemption)
+      .editExemption(rootState.clanId, exemption)
       .then(updatedExemption => {
         commit('LIFT_EXEMPTION', updatedExemption)
         resolve()
