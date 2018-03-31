@@ -1,16 +1,21 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="mt-3">
     <v-layout row wrap>
       <v-flex>
-        <v-card dark tile v-if="showWarning">
-          <v-card-title primary-title class="card-content">
-            <h2 class="headline">Inactive Player Report</h2>
-            <div>The report takes a few minutes to run. Sit tight while it finishes up.</div>
-          </v-card-title>
+        <v-card dark tile>
+          <v-card-title primary-title class="headline">Inactive Player Report</v-card-title>
 
-          <v-card-actions>
-            <v-btn flat dark @click="generateReport" v-if="activityReport === undefined">Run report</v-btn>
-            <v-btn flat dark @click="showWarning = false">Got it</v-btn>
+          <v-card-text v-if="isRunningReport || loadError" :class="{'pa-0': isRunningReport}">
+            <loadable-indicator v-if="isRunningReport"></loadable-indicator>
+            <loadable-failure
+              v-if="loadError"
+              :retryable="true"
+              :message="`Couldn't load activity report`"
+              @retry="generateReport"></loadable-failure>
+          </v-card-text>
+
+          <v-card-actions v-if="!loadError">
+            <v-btn flat dark @click="generateReport">Run report</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -18,70 +23,39 @@
 
     <v-layout row wrap v-if="activityReport !== undefined" class="inactive-member-table">
       <v-flex>
-        <v-card>
-          <v-list three-line subheader>
-            <v-subheader>A month or more ({{ greaterThan30Days.length }})</v-subheader>
-            <template v-for="(profile, i) in greaterThan30Days">
-              <div :key="i">
-                <inactivity-report-row
-                  :profile="profile"
-                  :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
-                  :numberExemptions="getNumberOfExemptions(profile.membershipId)"
-                  @click="showMemberDetail(profile)"></inactivity-report-row>
-                <v-divider v-if="i !== greaterThan30Days.length - 1"></v-divider>
-              </div>
-            </template>
-          </v-list>
-        </v-card>
+        <inactivity-report-list title="A month or more" :items="greaterThan30Days"></inactivity-report-list>
       </v-flex>
     </v-layout>
 
     <v-layout row wrap v-if="activityReport !== undefined" class="inactive-member-table">
       <v-flex>
-        <v-card>
-          <v-list three-line subheader>
-            <v-subheader>A week or more ({{ weekOrMore.length }})</v-subheader>
-            <template v-for="(profile, i) in weekOrMore">
-              <div :key="i">
-                <inactivity-report-row
-                  :profile="profile"
-                  :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
-                  :numberExemptions="getNumberOfExemptions(profile.membershipId)"
-                  @click="showMemberDetail(profile)"></inactivity-report-row>
-                <v-divider v-if="i !== weekOrMore.length - 1"></v-divider>
-              </div>
-            </template>
-          </v-list>
-        </v-card>
+        <inactivity-report-list title="A week or more" :items="weekOrMore"></inactivity-report-list>
       </v-flex>
     </v-layout>
-
-    <div class="loading-indicator" v-show="isRunningReport" :class="{active: isRunningReport}">
-      <img src="../assets/loading-ghost.png"> <span><strong>ATTENTION</strong> Contacting Destiny 2 Servers</span>
-    </div>
   </v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import sort from 'fast-sort'
-import moment from 'moment-timezone'
-import InactivityReportRow from './inactive-players/InactivityReportRow'
+import InactivityReportList from './inactive-players/InactivityReportList'
+import LoadableIndicator from './LoadableIndicator'
+import LoadableFailure from './LoadableFailure'
 
 export default {
   name: 'inactive-players',
   components: {
-    InactivityReportRow
+    InactivityReportList,
+    LoadableIndicator,
+    LoadableFailure
   },
   data() {
     return {
-      showWarning: true,
       isRunningReport: false,
-      isLoadingCharacters: false
+      loadError: false
     }
   },
   computed: {
-    ...mapGetters(['activityReport', 'exemptions']),
+    ...mapGetters(['activityReport']),
     greaterThan30Days() {
       return this.activityReport.filter(p => p.daysSinceLastPlayed >= 30)
     },
@@ -91,34 +65,19 @@ export default {
   },
   methods: {
     ...mapActions(['getActivityReport', 'getCharactersForMember']),
-    showMemberDetail(profile) {
-      this.$router.push({ name: 'Profile', params: { membershipId: profile.membershipId } })
-    },
     generateReport() {
       const self = this
       this.isRunningReport = true
+      this.loadError = false
 
-      this.getActivityReport().then(() => {
-        self.isRunningReport = false
-      })
-    },
-    isCurrentlyExempt(membershipId) {
-      if (!this.exemptions[membershipId]) {
-        return false
-      }
-
-      const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[membershipId].history))).asc(h => h.startDate)
-      const endDate = memberHistory[memberHistory.length - 1].endDate
-      const today = moment.utc().format()
-
-      return today <= endDate
-    },
-    getNumberOfExemptions(membershipId) {
-      if (!this.exemptions[membershipId]) {
-        return 0
-      }
-
-      return this.exemptions[membershipId].numberOfExemptions
+      this.getActivityReport()
+        .then(() => {
+          self.isRunningReport = false
+        })
+        .catch(error => {
+          console.error(error)
+          this.loadError = true
+        })
     }
   }
 }
