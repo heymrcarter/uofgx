@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, createNamespacedHelpers } from 'vuex'
 import InactivityReportRow from './InactivityReportRow'
 import sort from 'fast-sort'
 import moment from 'moment-timezone'
-
+const { mapActions } = createNamespacedHelpers('members/active')
 export default {
   name: 'inactivity-report-list',
   props: {
@@ -35,6 +35,7 @@ export default {
     InactivityReportRow
   },
   methods: {
+    ...mapActions({ setActiveMember: 'set' }),
     isCurrentlyExempt(membershipId) {
       if (!this.exemptions[membershipId]) {
         return false
@@ -54,6 +55,7 @@ export default {
       return this.exemptions[membershipId].numberOfExemptions
     },
     showMemberDetail(profile) {
+      this.setActiveMember({ membershipId: profile.membershipId })
       this.$router.push({ name: 'Profile', params: { membershipId: profile.membershipId } })
     }
   }
