@@ -45,6 +45,21 @@
           actionText="View"
           :text="invitedMembersText"
           @action="shouldRenderInvitedMembers = true"></clan-overview-item>
+
+        <v-divider inset v-if="!isLoadingPendingMembers"></v-divider>
+
+        <clan-overview-item
+          v-if="inactiveMembersLoadError"
+          icon="warning"
+          :text="`Couldn't load inactive members`"
+          actionText="Retry"
+          @action="fetchInactiveMembers"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingInactiveMembers && !inactiveMembersLoadError && inactiveMembers"
+          icon="local_hotel"
+          actionText="View"
+          :text="inactiveMembersText"
+          @action="$router.push('/inactive-players')"></clan-overview-item>
       </v-list>
     </v-card-text>
 
@@ -70,15 +85,26 @@ export default {
   data() {
     return {
       shouldRenderPendingMembers: false,
-      shouldRenderInvitedMembers: false
+      shouldRenderInvitedMembers: false,
+      inactiveMembersLoadError: false,
+      isLoadingInactiveMembers: false,
+      didLoadInactiveMembers: false
     }
   },
   computed: {
     ...mapGetters('members/pending', ['pendingMembers', 'isLoadingPendingMembers', 'didLoadPendingMembers', 'pendingMembersLoadError']),
     ...mapGetters('members/invited', ['invitedMembers', 'isLoadingInvitedMembers', 'didLoadInvitedMembers', 'invitedMembersLoadError']),
     ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
+    ...mapGetters(['activityReport']),
     isLoading() {
-      return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers
+      return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers || this.isLoadingInactiveMembers
+    },
+    inactiveMembers() {
+      if (!this.activityReport) {
+        return []
+      }
+
+      return this.activityReport.filter(p => p.isInactive)
     },
     numberOfMembersText() {
       if (this.clanMembers) {
@@ -112,12 +138,24 @@ export default {
           return `${this.invitedMembers.length} invited members`
         }
       }
+    },
+    inactiveMembersText() {
+      if (this.inactiveMembers) {
+        if (this.inactiveMembers.length === 0) {
+          return 'No inactive members'
+        } else if (this.inactiveMembers === 1) {
+          return '1 inactive member'
+        } else {
+          return `${this.inactiveMembers.length} inactive members`
+        }
+      }
     }
   },
   methods: {
     ...mapActions('members/pending', ['getPendingMembers']),
     ...mapActions('members/invited', ['getInvitedMembers']),
     ...mapActions('members', ['getClanMembers']),
+    ...mapActions(['getActivityReport']),
     onDialogClose(dialog) {
       this.getClanMembers()
       this[dialog] = false
@@ -126,6 +164,7 @@ export default {
       this.fetchClanMembers()
       this.fetchPendingMembers()
       this.fetchInvitedMembers()
+      this.fetchInactiveMembers()
     },
     fetchClanMembers() {
       if (!this.didLoadMembers && !this.isLoadingMembers) {
@@ -147,6 +186,22 @@ export default {
           console.error(error)
         })
       }
+    },
+    fetchInactiveMembers() {
+      if (!this.didLoadInactiveMembers && !this.isLoadingInactiveMembers) {
+        this.inactiveMembersLoadError = false
+        this.isLoadingInactiveMembers = true
+        this.getActivityReport()
+          .then(() => {
+            this.isLoadingInactiveMembers = false
+            this.didLoadInactiveMembers = true
+          })
+          .catch(error => {
+            console.error(error)
+            this.inactiveMembersLoadError = true
+            this.isLoadingInactiveMembers = false
+          })
+      }
     }
   },
   mounted() {
@@ -154,7 +209,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

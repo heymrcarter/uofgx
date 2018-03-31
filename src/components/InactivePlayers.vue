@@ -4,19 +4,6 @@
       <v-flex>
         <v-card dark tile>
           <v-card-title primary-title class="headline">Inactive Player Report</v-card-title>
-
-          <v-card-text v-if="isRunningReport || loadError" :class="{'pa-0': isRunningReport}">
-            <loadable-indicator v-if="isRunningReport"></loadable-indicator>
-            <loadable-failure
-              v-if="loadError"
-              :retryable="true"
-              :message="`Couldn't load activity report`"
-              @retry="generateReport"></loadable-failure>
-          </v-card-text>
-
-          <v-card-actions v-if="!loadError">
-            <v-btn flat dark @click="generateReport">Run report</v-btn>
-          </v-card-actions>
         </v-card>
       </v-flex>
     </v-layout>
@@ -64,7 +51,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getActivityReport', 'getCharactersForMember']),
+    ...mapActions(['getActivityReport']),
     generateReport() {
       const self = this
       this.isRunningReport = true
@@ -82,9 +69,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.inactive-member-table {
-  margin-top: 20px;
-}
-</style>
