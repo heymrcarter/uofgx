@@ -5,7 +5,7 @@
       <router-view></router-view>
     </main>
 
-    <v-dialog v-model="showSessionExpirationDialog" persistent>
+    <v-dialog v-model="showSessionExpirationDialog" persistent max-width="500">
       <v-card>
         <v-card-title class="headline">Session expired</v-card-title>
 
