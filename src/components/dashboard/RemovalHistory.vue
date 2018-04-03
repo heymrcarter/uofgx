@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-card>
+  <div class="full-height">
+    <v-card height="100%">
       <v-card-title class="headline">Recent removal history</v-card-title>
       <v-card-text>
         <loadable-indicator v-if="isLoading"></loadable-indicator>
@@ -80,3 +80,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.full-height {
+  height: 100%;
+
+  .card {
+    display: flex;
+    flex-direction: column;
+
+    .card__text {
+      flex: 1;
+    }
+  }
+}
+</style>
