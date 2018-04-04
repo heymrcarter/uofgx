@@ -3,7 +3,7 @@
     <v-btn to="/dashboard" icon v-if="shouldRenderBackButton">
       <v-icon>arrow_back</v-icon>
     </v-btn>
-    <v-toolbar-title>{{currentPageName}}</v-toolbar-title>
+    <v-toolbar-title class="clan-name">{{currentPageName}}</v-toolbar-title>
   </v-toolbar>
 </template>
 
