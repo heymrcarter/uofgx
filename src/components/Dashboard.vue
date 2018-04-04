@@ -12,6 +12,12 @@
 
     <v-layout row wrap>
       <v-flex xs12>
+        <invite-member></invite-member>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap>
+      <v-flex xs12>
         <members></members>
       </v-flex>
     </v-layout>
@@ -24,6 +30,7 @@ import MemberRow from './dashboard/MemberRow'
 import RemovalHistory from './dashboard/RemovalHistory'
 import ClanOverview from './dashboard/ClanOverview'
 import Members from './dashboard/Members'
+import InviteMember from './dashboard/InviteMember'
 
 export default {
   name: 'dashboard',
@@ -31,7 +38,8 @@ export default {
     MemberRow,
     RemovalHistory,
     ClanOverview,
-    Members
+    Members,
+    InviteMember
   },
   computed: {
     ...mapGetters(['exemptions'])

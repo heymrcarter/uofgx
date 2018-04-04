@@ -60,4 +60,8 @@ describe('member actions', () => {
       })
     })
   })
+
+  describe('validateMemberName', () => {
+    beforeEach(() => {})
+  })
 })
