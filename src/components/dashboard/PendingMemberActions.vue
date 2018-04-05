@@ -17,6 +17,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import analytics from '@/mixins/analytics'
 const { mapActions } = createNamespacedHelpers('members/pending')
 export default {
   name: 'pending-member-actions',
@@ -26,6 +27,7 @@ export default {
       required: true
     }
   },
+  mixins: [analytics],
   data() {
     return {
       actions: ['Approve', 'Deny'],
@@ -37,6 +39,8 @@ export default {
   methods: {
     ...mapActions(['approvePendingMemberships', 'denyPendingMemberships']),
     triggerAction(action) {
+      this.recordEvent('Dashboard', action, `${action} Pending Member`)
+
       action = action.toLowerCase()
 
       switch (action) {
