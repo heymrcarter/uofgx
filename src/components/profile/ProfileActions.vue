@@ -118,6 +118,7 @@ export default {
     },
     kick() {
       if (this.gamertag === this.gamertagConfirmation) {
+        this.recordEvent('Member Profile', 'Remove', 'Member')
         this.removeMember({
           removedMembershipId: this.membershipId,
           removedGamertag: this.activeMember.gamertag,
@@ -128,12 +129,14 @@ export default {
       }
     },
     openConfirmationDialog() {
+      this.recordEvent('Member Profile', 'Start', 'Remove Member')
       this.showConfirmationDialog = true
       this.$nextTick(() => {
         this.$refs.confirmation.focus()
       })
     },
     closeConfirmationDialog() {
+      this.recordEvent('Member Profile', 'Cancel', 'Remove Member')
       this.showConfirmationDialog = false
       this.gamertagConfirmation = ''
     }
