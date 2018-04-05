@@ -35,12 +35,14 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import analytics from '@/mixins/analytics'
 const { mapGetters, mapActions } = createNamespacedHelpers('members/invited')
 export default {
   name: 'invited-members',
   props: {
     active: Boolean
   },
+  mixins: [analytics],
   data() {
     return {
       disableButton: false,
@@ -69,6 +71,7 @@ export default {
       }
     },
     cancelInvite(membershipId) {
+      this.recordEvent('Dashboard', 'Cancel', 'Cancel Invitation')
       this.disableButton = true
       this.rescindMembershipInvitation(membershipId)
         .then(() => this.handleActionResult('Invitation canceled'))
