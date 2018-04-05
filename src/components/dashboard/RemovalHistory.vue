@@ -26,7 +26,7 @@
       </v-card-text>
 
       <v-card-actions v-if="(!isLoading && !loadError) && removalHistory">
-        <v-btn flat @click="showFullHistory = true">View full history</v-btn>
+        <v-btn flat @click="viewFullHistory">View full history</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -42,9 +42,10 @@ import FullRemovalHistory from './FullRemovalHistory'
 import loadable from '@/mixins/loadable'
 import LoadableIndicator from '@/components/LoadableIndicator'
 import LoadableFailure from '@/components/LoadableFailure'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'removal-history',
-  mixins: [dateFormatter, loadable],
+  mixins: [dateFormatter, loadable, analytics],
   components: {
     FullRemovalHistory,
     LoadableIndicator,
@@ -76,6 +77,10 @@ export default {
     },
     closeDialog() {
       this.showFullHistory = false
+    },
+    viewFullHistory() {
+      this.recordEvent('Dashboard', 'View', 'Full Removal History')
+      this.showFullHistory = true
     }
   }
 }
