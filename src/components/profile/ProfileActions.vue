@@ -4,11 +4,11 @@
     <v-card-text>
       <add-note-action :membershipId="membershipId"></add-note-action>
 
-      <v-btn block v-if="!isCurrentlyExempt" @click="makeExempt" :disabled="isLoading" class="mb-3">
+      <v-btn block v-if="!isCurrentlyExempt" @click="makeExempt" :disabled="isLoadingExemption" class="mb-3">
         <span :class="{'mr-3': isLoading}">Grant exemption</span>
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
-      <v-btn block v-else @click="liftExemption" :disabled="isLoading" class="mb-3">
+      <v-btn block v-else @click="liftExemption" :disabled="isLoadingExemption" class="mb-3">
         <span :class="{'mr-3': isLoading}">Lift exemption</span>
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
@@ -43,14 +43,17 @@ import { mapState, mapActions } from 'vuex'
 import moment from 'moment-timezone'
 import sort from 'fast-sort'
 import AddNoteAction from './AddNoteAction'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'profile-actions',
   components: {
     AddNoteAction
   },
+  mixins: [analytics],
   data() {
     return {
       isLoading: false,
+      isLoadingExemption: false,
       showConfirmationDialog: false,
       gamertagConfirmation: ''
     }
@@ -78,6 +81,8 @@ export default {
   methods: {
     ...mapActions(['grantExemption', 'editExemption', 'removeMember']),
     makeExempt() {
+      this.recordEvent('Member Profile', 'Grant', 'Exemption')
+
       const exemption = {
         membershipId: this.membershipId,
         startDate: moment.utc(),
@@ -85,28 +90,30 @@ export default {
         adminMembershipId: ''
       }
 
-      this.isLoading = true
+      this.isLoadingExemption = true
       this.grantExemption(exemption)
         .then(() => {
-          this.isLoading = false
+          this.isLoadingExemption = false
         })
         .catch(() => {
-          this.isLoading = false
+          this.isLoadingExemption = false
         })
     },
     liftExemption() {
+      this.recordEvent('Member Profile', 'Lift', 'Exemption')
+
       const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions.exemptions[this.membershipId].history))).asc(h => h.startDate)
       const currentExemption = memberHistory[memberHistory.length - 1]
 
       currentExemption.endDate = moment.utc()
 
-      this.isLoading = true
+      this.isLoadingExemption = true
       this.editExemption(currentExemption)
         .then(() => {
-          this.isLoading = false
+          this.isLoadingExemption = false
         })
         .catch(() => {
-          this.isLoading = false
+          this.isLoadingExemption = false
         })
     },
     kick() {
