@@ -7,5 +7,6 @@ module.exports = {
   AUTH_ENDPOINT: '"https://www.bungie.net/en/OAuth/Authorize"',
   CLIENT_ID: '"#{OAUTH_CLIENT_ID}#"',
   OAUTH_SECRET: '"#{OAUTH_SECRET}#"',
-  ANALYTICS_ID: '"UA-116561820-1"'
+  ANALYTICS_ID: '"UA-116561820-1"',
+  ANALYTICS_ENABLED: 'true'
 }

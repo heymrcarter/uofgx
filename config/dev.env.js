@@ -9,5 +9,6 @@ module.exports = merge(prodEnv, {
   CLAN_ID: '"1789424"',
   AUTH_ENDPOINT: '"https://www.bungie.net/en/OAuth/Authorize"',
   CLIENT_ID: '"23566"',
-  OAUTH_SECRET: '"will you be my destiny dad?"'
+  OAUTH_SECRET: '"will you be my destiny dad?"',
+  ANALYTICS_ENABLED: 'false'
 })

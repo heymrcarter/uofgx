@@ -9,5 +9,6 @@ module.exports = merge(devEnv, {
   CLAN_ID: '"clan-id"',
   AUTH_ENDPOINT: '"auth-endpoint"',
   CLIENT_ID: '"client-id"',
-  OAUTH_SECRET: '"oauth-secret"'
+  OAUTH_SECRET: '"oauth-secret"',
+  ANALYTICS_ENABLED: 'true'
 })

@@ -29,7 +29,7 @@
           icon="group_add"
           actionText="View"
           :text="pendingMembersText"
-          @action="shouldRenderPendingMembers = true"></clan-overview-item>
+          @action="viewPendingMembers"></clan-overview-item>
 
         <v-divider inset v-if="!isLoadingPendingMembers"></v-divider>
 
@@ -44,7 +44,7 @@
           icon="group_add"
           actionText="View"
           :text="invitedMembersText"
-          @action="shouldRenderInvitedMembers = true"></clan-overview-item>
+          @action="viewInvitedMembers"></clan-overview-item>
 
         <v-divider inset v-if="!isLoadingPendingMembers"></v-divider>
 
@@ -74,6 +74,7 @@ import PendingMembers from './PendingMembers'
 import InvitedMembers from './InvitedMembers'
 import LoadableIndicator from '@/components/LoadableIndicator'
 import ClanOverviewItem from './ClanOverviewItem'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'clan-overview',
   components: {
@@ -82,6 +83,7 @@ export default {
     LoadableIndicator,
     ClanOverviewItem
   },
+  mixins: [analytics],
   data() {
     return {
       shouldRenderPendingMembers: false,
@@ -202,6 +204,14 @@ export default {
             this.isLoadingInactiveMembers = false
           })
       }
+    },
+    viewPendingMembers() {
+      this.recordEvent('Dashboard', 'View', 'Pending Members')
+      this.shouldRenderPendingMembers = true
+    },
+    viewInvitedMembers() {
+      this.recordEvent('Dashboard', 'View', 'Invited Members')
+      this.shouldRenderInvitedMembers = true
     }
   },
   mounted() {
