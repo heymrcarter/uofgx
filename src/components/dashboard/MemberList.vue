@@ -2,7 +2,7 @@
   <div>
     <v-form>
       <div>
-        <v-text-field solo placeholder="Search by Gamertag or Bungie.net username" v-model="filter" clearable></v-text-field>
+        <v-text-field color="yellow" solo placeholder="Search by Gamertag or Bungie.net username" v-model="filter" append-icon="close" :append-icon-cb="clearFilter"></v-text-field>
       </div>
     </v-form>
 
@@ -24,13 +24,16 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import MemberRow from '@/components/dashboard/MemberRow'
+import analytics from '@/mixins/analytics'
 const { mapGetters } = createNamespacedHelpers('members')
 const { mapActions } = createNamespacedHelpers('members/active')
 export default {
   name: 'member-list',
+  mixins: [analytics],
   data() {
     return {
-      filter: ''
+      filter: '',
+      didRecordEvent: false
     }
   },
   computed: {
@@ -41,6 +44,14 @@ export default {
       }
 
       const filter = this.filter
+
+      if (filter && !this.didRecordEvent) {
+        this.recordEvent('Dashboard', 'Filter', 'Member List')
+        this.didRecordEvent = true
+      } else if (!filter) {
+        this.didRecordEvent = false
+      }
+
       function searchByUsername(username) {
         return username.toLowerCase().includes(filter)
       }
@@ -56,6 +67,10 @@ export default {
         name: 'Profile',
         params: { membershipId: member.xboxMembershipId }
       })
+    },
+    clearFilter() {
+      this.filter = ''
+      this.didRecordEvent = false
     }
   },
   components: {
