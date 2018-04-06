@@ -22,8 +22,10 @@
 
 <script>
 import { mapActions } from 'vuex'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'add-note-action',
+  mixins: [analytics],
   data() {
     return {
       shouldRenderNoteDialog: false,
@@ -34,6 +36,7 @@ export default {
   methods: {
     ...mapActions('notes', ['addNote']),
     submitNote() {
+      this.recordEvent('Member Profile', 'Add', 'Note')
       const payload = {
         membershipId: this.membershipId,
         note: this.note
