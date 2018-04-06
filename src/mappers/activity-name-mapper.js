@@ -43,7 +43,7 @@ export function activityModeToName(mode) {
     case 24:
       return 'Reserved24'
     case 25:
-      return 'Mayhem (The Dawning)'
+      return 'Mayhem'
     case 26:
       return 'Reserved26'
     case 27:
@@ -76,6 +76,16 @@ export function activityModeToName(mode) {
       return 'Iron Banner'
     case 45:
       return 'Iron Banner'
+    case 46:
+      return 'Nightfall'
+    case 47:
+      return 'Prestige Nightfall'
+    case 48:
+      return 'Rumble'
+    case 49:
+      return 'Doubles'
+    case 50:
+      return 'Doubles'
     default:
       return 'N/A'
   }
