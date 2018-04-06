@@ -50,9 +50,10 @@ import { activityModeToName } from '@/mappers/activity-name-mapper'
 import { mapActions, mapGetters } from 'vuex'
 import sort from 'fast-sort'
 import ActivityDetailTable from './ActivityDetailTable'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'recent-activity-table',
-  mixins: [dateFormatter],
+  mixins: [dateFormatter, analytics],
   components: {
     ActivityDetailTable,
     LoadableFailure,
@@ -93,6 +94,7 @@ export default {
   methods: {
     ...mapActions(['getCharacterActivity', 'getActivityDetails']),
     expandActivity(props) {
+      this.recordEvent('Member Profile', 'View', 'Activity Details')
       this.isLoadingDetails = true
       props.expanded = !props.expanded
       this.activityDetails = []
