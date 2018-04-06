@@ -20,8 +20,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'character-selector',
+  mixins: [analytics],
   data() {
     return {
       selectedCharacter: undefined,
@@ -53,6 +55,7 @@ export default {
   },
   methods: {
     selectedCharacterChanged(characterId) {
+      this.recordEvent('Member Profile', 'Select', 'Character')
       this.selectedCharacter = characterId
       this.$emit('characterChanged', characterId)
     }
