@@ -5,7 +5,7 @@ const devEnv = require('./dev.env')
 module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
   API_KEY: '"api-key"',
-  API_BASE_URL: '"api-base-url"',
+  API_BASE_URL: '"http://api-base-url"',
   CLAN_ID: '"clan-id"',
   AUTH_ENDPOINT: '"auth-endpoint"',
   CLIENT_ID: '"client-id"',

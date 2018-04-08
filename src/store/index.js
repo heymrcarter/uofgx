@@ -10,6 +10,7 @@ import session from './modules/session'
 import * as actions from './actions'
 import * as mutations from './mutations'
 import notes from './modules/notes'
+import roadmap from './modules/roadmap'
 
 Vue.use(Vuex)
 
@@ -31,6 +32,7 @@ export default new Vuex.Store({
     members,
     activity,
     session,
-    notes
+    notes,
+    roadmap
   }
 })
