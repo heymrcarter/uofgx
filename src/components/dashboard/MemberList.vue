@@ -47,9 +47,9 @@ export default {
 
       if (filter && !this.didRecordEvent) {
         this.recordEvent('Dashboard', 'Filter', 'Member List')
-        this.didRecordEvent = true
+        this.didRecordEvent = true // eslint-disable-line
       } else if (!filter) {
-        this.didRecordEvent = false
+        this.didRecordEvent = false // eslint-disable-line
       }
 
       function searchByUsername(username) {
