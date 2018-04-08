@@ -27,7 +27,7 @@
         </v-toolbar>
 
         <v-card-text class="mt-2">
-          <v-card class="mb-3">
+          <v-card class="mb-3" v-if="inProgress.length > 0">
             <v-card-title class="headline">In progress</v-card-title>
             <v-card-text>
               <v-list two-line>
@@ -47,7 +47,7 @@
             </v-card-text>
           </v-card>
 
-          <v-card class="mb-3">
+          <v-card class="mb-3" v-if="planned.length > 0">
             <v-card-title class="headline">Planned</v-card-title>
             <v-card-text>
               <v-list two-line>
@@ -67,7 +67,7 @@
             </v-card-text>
           </v-card>
 
-          <v-card>
+          <v-card v-if="downTheRoad.length > 0">
             <v-card-title class="headline">Down the road</v-card-title>
             <v-card-text>
               <v-list two-line>
