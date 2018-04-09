@@ -14,6 +14,17 @@
     </v-jumbotron>
 
     <v-container grid-list-lg fluid>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-alert type="warning" :value="true" class="black--text beta">
+            <p class="title mb-1">Beta</p>
+            Destiny Clan Manager is currently in beta. At this time only <strong>Xbox</strong> clans can be managed.
+          </v-alert>
+        </v-flex>
+      </v-layout>
+    </v-container>
+
+    <v-container grid-list-lg fluid>
       <v-layout row wrap justify-center>
         <v-flex xs12 md4>
           <v-card height="100%">
@@ -75,6 +86,10 @@ export default {
 </script>
 
 <style scoped>
+.beta {
+ background-color: #E59775 !important;
+}
+
 .welcome {
   text-shadow: #000 1px 1px 5px;
 }
