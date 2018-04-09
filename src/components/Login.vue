@@ -1,29 +1,66 @@
 <template>
-  <v-container fluid>
-    <v-layout row justify-center>
-      <v-flex xs12>
-        <v-card>
-          <v-card-media
-            class="white--text"
-            height="400px"
-            src="https://bungie.net/img/Themes/Group_Titan1/struct_images/group_top_banner.jpg"
-          >
-            <v-container fill-height fluid>
-              <v-layout fill-height>
-                <v-flex xs12 align-end flexbox class="welcome-box">
-                  <div class="welcome">
-                    <h1 class="headline mb-3">Unity of Guardians clan administration</h1>
-                    <div class="mb-3 instructions">To view the roster and run reports you need to sign in with your Bungie.net account</div>
-                    <div><v-btn :href="bungieNetAuthorizeEndpoint">Sign in with your Bungie.net account</v-btn></div>
-                  </div>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-media>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <section>
+    <v-jumbotron class="welcome" src="https://bungie.net/img/Themes/Group_Titan1/struct_images/group_top_banner.jpg">
+      <v-container fill-height>
+        <v-layout align-center>
+          <v-flex class="welcome-content">
+            <h3 class="display-3">Destiny Clan Manager</h3>
+            <v-spacer class="my-3"></v-spacer>
+            <div class="title mb-3">Sign in with your Bungie.net account</div>
+            <v-btn large class="mx-0" :href="bungieNetAuthorizeEndpoint">Sign in</v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-jumbotron>
+
+    <v-container grid-list-lg fluid>
+      <v-layout row wrap justify-center>
+        <v-flex xs12 md4>
+          <v-card height="100%">
+            <v-card-title class="headline">Find inactive members</v-card-title>
+            <v-card-text>
+              <p class="subheading">See who's playing and who's not</p>
+              <p>With Destiny Clan Manager find out how long its been since a member logged on.</p>
+              <p>With the inactive members report you can see everyone in the clan who has not played in 30 days or longer.</p>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+
+        <v-flex xs12 md4>
+          <v-card height="100%">
+            <v-card-title class="headline">Manage roster</v-card-title>
+            <v-card-text>
+              <p class="subheading">Grow and prune</p>
+              <p>With Destiny Clan Manager you can approve or reject new members and cancel pending invitations.</p>
+              <p>Prune away members once they move on to something else.</p>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+
+        <v-flex xs12 md4>
+          <v-card height="100%">
+            <v-card-title class="headline">Coordinate with other admins</v-card-title>
+            <v-card-text>
+              <p class="subheading">Get everyone on the same page</p>
+              <p>With exemptions and notes make sure the entire admin team is up to date with the latest happenings.</p>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+
+    <v-footer app height="60px" class="pa-2">
+      <v-layout row align-center>
+        <v-flex flex="1">
+          &copy; {{ new Date().getFullYear() }} - Tom Carter
+        </v-flex>
+
+        <div>
+          <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>
+        </div>
+      </v-layout>
+    </v-footer>
+  </section>
 </template>
 
 <script>
@@ -38,49 +75,10 @@ export default {
 </script>
 
 <style scoped>
-.headline {
-  display: block;
-  font-size: 30px !important;
-}
-
 .welcome {
   text-shadow: #000 1px 1px 5px;
-  background-color: rgba(0, 0, 0, 0.38);
-  position: absolute;
-  bottom: 15px;
-  padding: 15px;
-  width: auto;
-}
-
-.welcome .btn {
-  margin-left: 0;
-}
-
-.instructions {
-  font-size: 18px;
 }
 
 @media only screen and (max-width: 736px) {
-  .container {
-    padding: 0;
-  }
-
-  .welcome {
-    bottom: 0;
-    width: 100%;
-  }
-
-  .headline {
-    font-size: 24px !important;
-  }
-
-  .instructions {
-    font-size: 16px;
-  }
-
-  .btn {
-    height: 44px;
-    font-size: 16px;
-  }
 }
 </style>
