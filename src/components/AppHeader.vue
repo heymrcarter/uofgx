@@ -94,6 +94,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'app-header',
   data() {
@@ -101,6 +102,7 @@ export default {
       shouldRenderRoadmap: false
     }
   },
+  mixins: [analytics],
   filters: {
     initialCap(value) {
       let replacementValue = value.substring(0, 1).toUpperCase() + value.substring(1)
@@ -147,6 +149,7 @@ export default {
   methods: {
     ...mapActions(['getRoadmap']),
     showRoadmap() {
+      this.recordEvent(this.$route.name, 'View', 'Roadmap')
       this.shouldRenderRoadmap = true
     },
     getChipColor(type) {
@@ -171,6 +174,6 @@ export default {
 <style scoped>
 .roadmap {
   width: 100%;
-  background-color: #2A2A2A;
+  background-color: #2a2a2a;
 }
 </style>
