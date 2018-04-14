@@ -2,7 +2,7 @@
 module.exports = {
   NODE_ENV: '"production"',
   API_KEY: '"#{API_KEY}#"',
-  API_BASE_URL: '"https://uofgx-server.cfapps.io"',
+  API_BASE_URL: '"https://dcm-gateway.herokuapp.com/"',
   CLAN_ID: '"1789424"',
   AUTH_ENDPOINT: '"https://www.bungie.net/en/OAuth/Authorize"',
   CLIENT_ID: '"#{OAUTH_CLIENT_ID}#"',
