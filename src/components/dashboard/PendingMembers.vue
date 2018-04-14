@@ -15,7 +15,7 @@
             <v-list-tile :key="member.destinyUserInfo.membershipId">
               <v-list-tile-content>
                 <v-list-tile-title>{{ member.destinyUserInfo.displayName }}</v-list-tile-title>
-                <v-list-tile-sub-title>Bungie.net {{ member.bungieNetUserInfo.displayName }}</v-list-tile-sub-title>
+                <v-list-tile-sub-title v-if="member.bungieNetUserInfo">Bungie.net {{ member.bungieNetUserInfo.displayName }}</v-list-tile-sub-title>
                 <v-list-tile-sub-title>{{ resolveState(member.resolveState) }}</v-list-tile-sub-title>
               </v-list-tile-content>
 
