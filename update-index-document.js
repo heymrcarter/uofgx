@@ -7,6 +7,10 @@ const indexDocIndex = flags.findIndex(f => f.includes('indexDocument'))
 const awsKeyIdIndex = flags.findIndex(f => f.includes('awsKeyId'))
 const awsSecretKeyIndex = flags.findIndex(f => f.includes('awsSecretKey'))
 
+console.log('script:index document', args[indexDocIndex])
+console.log('script:aws key idt', args[awsKeyIdIndex])
+console.log('script:aws secret', args[awsSecretKeyIndex])
+
 const opts = {
   accessKeyId: args[awsKeyIdIndex],
   secretAccessKey: args[awsSecretKeyIndex]
