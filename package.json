@@ -11,8 +11,7 @@
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js",
-    "postbuild": "cp ./Staticfile ./dist/Staticfile && cp ./manifest.yml ./dist/manifest.yml",
-    "deploy": "npm run build && cf push -p dist"
+    "postbuild": "cp ./update-index-document.js ./dist/update-index-document.js"
   },
   "dependencies": {
     "axios": "^0.17.1",
@@ -96,9 +95,5 @@
     "node": ">= 6.0.0",
     "npm": ">= 3.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }
