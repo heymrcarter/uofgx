@@ -6,7 +6,7 @@ const args = rawArgs.filter(a => !a.startsWith('--'))
 const indexDocIndex = flags.findIndex(f => f.includes('indexDocument'))
 const awsKeyIdIndex = flags.findIndex(f => f.includes('awsKeyId'))
 const awsSecretKeyIndex = flags.findIndex(f => f.includes('awsSecretKey'))
-const bucketNameIndex = flags.findIndex(f => f, includes('bucketName'))
+const bucketNameIndex = flags.findIndex(f => f.includes('bucketName'))
 
 const opts = {
   accessKeyId: args[awsKeyIdIndex],
