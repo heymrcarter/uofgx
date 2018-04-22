@@ -12,14 +12,15 @@ export function getRemovalHistory({ commit, rootState }) {
   })
 }
 
-export function removeMember({ commit, rootState }, payload) {
+export function removeMember({ commit, rootState, dispatch }, payload) {
   return new Promise((resolve, reject) => {
     payload.adminMembershipId = rootState.session.membershipId
     payload.adminMembershipType = 'bungienet'
     removalService
       .removeMemberFromClan(rootState.clanId, payload, rootState.session.accessToken)
       .then(removal => {
-        commit('REMOVE_MEMBER', removal)
+        commit('ADD_REMOVAL_TO_HISTORY', removal)
+        dispatch('members/removeClanMember', removal.removedMembershipId, { root: true })
         resolve()
       })
       .catch(error => reject(error))

@@ -23,3 +23,8 @@ export function CLEAR_LOAD_ERROR(state) {
 export function SET_LOAD_ERROR(state) {
   state.loadMembersError = true
 }
+
+export function REMOVE_CLAN_MEMBER(state, membershipId) {
+  const index = state.list.findIndex(m => m.xboxMembershipId === membershipId)
+  state.list.splice(index, 1)
+}

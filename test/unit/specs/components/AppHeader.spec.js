@@ -14,7 +14,7 @@ describe('AppHeader', () => {
     const activeMembersModule = createMockModule('active', { namespaced: true }).withGetters(['activeMember'])
     const membersModule = createMockModule('members', { namespaced: true }).withModule(activeMembersModule.name, activeMembersModule.module)
     const roadmapModule = createMockModule('roadmap')
-      .withState({ roadmap: 'roadmap' })
+      .withState({ roadmap: undefined })
       .withActions(['getRoadmap'])
 
     store = createMockStore()

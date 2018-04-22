@@ -21,16 +21,14 @@
 
     <v-dialog v-model="showConfirmationDialog" max-width="500">
       <v-card>
-        <v-card-title class="headline">Confirm removal</v-card-title>
+        <v-card-title class="headline">Remove {{ gamertag }}?</v-card-title>
         <v-card-text>
-          <p>Type the member's gamertag below to confirm removal</p>
-          <div>
-            <v-text-field ref="confirmation" v-model="gamertagConfirmation" @keyup.enter="kick" placeholder="Gamertag" color="red"></v-text-field>
-          </div>
+          <p>Are you sure you want to remove <strong class="subheading bold">{{ gamertag }}</strong> from the clan?</p>
+          <p>This action cannot be undone!</p>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="red" @click="kick" :disabled="this.gamertag !== this.gamertagConfirmation">Confirm</v-btn>
+          <v-btn color="red" @click="kick">Confirm</v-btn>
           <v-btn flat @click="closeConfirmationDialog">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -54,17 +52,18 @@ export default {
     return {
       isLoading: false,
       isLoadingExemption: false,
-      showConfirmationDialog: false,
-      gamertagConfirmation: ''
+      showConfirmationDialog: false
     }
   },
   computed: {
-    ...mapState(['exemptions', 'activeMember']),
+    ...mapState(['exemptions']),
+    ...mapState('members/active', {
+      gamertag(state) {
+        return state.gamertag
+      }
+    }),
     membershipId() {
       return this.$route.params.membershipId
-    },
-    gamertag() {
-      return this.activeMember !== undefined ? this.activeMember.gamertag : ''
     },
     isCurrentlyExempt() {
       if (!this.exemptions.exemptions[this.membershipId]) {
@@ -117,29 +116,29 @@ export default {
         })
     },
     kick() {
-      if (this.gamertag === this.gamertagConfirmation) {
-        this.recordEvent('Member Profile', 'Remove', 'Member')
-        this.removeMember({
-          removedMembershipId: this.membershipId,
-          removedGamertag: this.activeMember.gamertag,
-          removalDate: moment.utc()
-        }).then(() => {
-          this.$router.push('/dashboard')
-        })
-      }
+      this.recordEvent('Member Profile', 'Remove', 'Member')
+      this.removeMember({
+        removedMembershipId: this.membershipId,
+        removedGamertag: this.gamertag,
+        removalDate: moment.utc()
+      }).then(() => {
+        this.$router.push('/dashboard')
+      })
     },
     openConfirmationDialog() {
       this.recordEvent('Member Profile', 'Start', 'Remove Member')
       this.showConfirmationDialog = true
-      this.$nextTick(() => {
-        this.$refs.confirmation.focus()
-      })
     },
     closeConfirmationDialog() {
       this.recordEvent('Member Profile', 'Cancel', 'Remove Member')
       this.showConfirmationDialog = false
-      this.gamertagConfirmation = ''
     }
   }
 }
 </script>
+
+<style scoped>
+.bold {
+  font-weight: bold;
+}
+</style>

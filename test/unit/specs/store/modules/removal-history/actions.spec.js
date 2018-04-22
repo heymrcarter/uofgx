@@ -20,7 +20,7 @@ describe('removal history actions', () => {
   })
 
   describe('removeMember', () => {
-    let payload
+    let payload, dispatch
     beforeEach(done => {
       payload = {}
       rootState.session = {}
@@ -32,13 +32,20 @@ describe('removal history actions', () => {
         adminMembershipType: 'bungienet'
       }
 
-      td.when(removalService.removeMemberFromClan('clan-id', expectedPayload, 'access-token')).thenResolve('the-removal')
+      const response = { removedMembershipId: 'removed-membership-id' }
+      td.when(removalService.removeMemberFromClan('clan-id', expectedPayload, 'access-token')).thenResolve(response)
 
-      subject.removeMember({ commit, rootState }, payload).finally(done)
+      dispatch = td.function()
+
+      subject.removeMember({ commit, rootState, dispatch }, payload).finally(done)
+    })
+
+    it('adds the removal to the removal history', () => {
+      td.verify(commit('ADD_REMOVAL_TO_HISTORY', { removedMembershipId: 'removed-membership-id' }))
     })
 
     it('removes the member from the roster', () => {
-      td.verify(commit('REMOVE_MEMBER', 'the-removal'))
+      td.verify(dispatch('members/removeClanMember', 'removed-membership-id', { root: true }))
     })
   })
 })

@@ -23,3 +23,7 @@ export function getClanMembers({ commit, rootState }) {
       })
   })
 }
+
+export function removeClanMember({ commit }, membershipId) {
+  commit('REMOVE_CLAN_MEMBER', membershipId)
+}
