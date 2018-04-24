@@ -21,6 +21,7 @@ export function removeMember({ commit, rootState, dispatch }, payload) {
       .then(removal => {
         commit('ADD_REMOVAL_TO_HISTORY', removal)
         dispatch('members/removeClanMember', removal.removedMembershipId, { root: true })
+        dispatch('removeMemberFromReport', removal.removedMembershipId)
         resolve()
       })
       .catch(error => reject(error))

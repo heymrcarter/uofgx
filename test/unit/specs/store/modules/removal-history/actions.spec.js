@@ -47,5 +47,9 @@ describe('removal history actions', () => {
     it('removes the member from the roster', () => {
       td.verify(dispatch('members/removeClanMember', 'removed-membership-id', { root: true }))
     })
+
+    it('removes the member from the inactivity report', () => {
+      td.verify(dispatch('removeMemberFromReport', 'removed-membership-id'))
+    })
   })
 })

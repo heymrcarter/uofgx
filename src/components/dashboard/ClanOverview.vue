@@ -49,13 +49,13 @@
         <v-divider inset v-if="!isLoadingPendingMembers"></v-divider>
 
         <clan-overview-item
-          v-if="inactiveMembersLoadError"
+          v-if="activityReportLoadError"
           icon="warning"
           :text="`Couldn't load inactive members`"
           actionText="Retry"
           @action="fetchInactiveMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingInactiveMembers && !inactiveMembersLoadError && inactiveMembers"
+          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers"
           icon="local_hotel"
           actionText="View"
           :text="inactiveMembersText"
@@ -87,17 +87,14 @@ export default {
   data() {
     return {
       shouldRenderPendingMembers: false,
-      shouldRenderInvitedMembers: false,
-      inactiveMembersLoadError: false,
-      isLoadingInactiveMembers: false,
-      didLoadInactiveMembers: false
+      shouldRenderInvitedMembers: false
     }
   },
   computed: {
     ...mapGetters('members/pending', ['pendingMembers', 'isLoadingPendingMembers', 'didLoadPendingMembers', 'pendingMembersLoadError']),
     ...mapGetters('members/invited', ['invitedMembers', 'isLoadingInvitedMembers', 'didLoadInvitedMembers', 'invitedMembersLoadError']),
     ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
-    ...mapGetters(['activityReport']),
+    ...mapGetters(['activityReport', 'activityReportLoadError', 'isLoadingActivityReport', 'didLoadActivityReport']),
     isLoading() {
       return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers || this.isLoadingInactiveMembers
     },
@@ -190,19 +187,10 @@ export default {
       }
     },
     fetchInactiveMembers() {
-      if (!this.didLoadInactiveMembers && !this.isLoadingInactiveMembers) {
-        this.inactiveMembersLoadError = false
-        this.isLoadingInactiveMembers = true
-        this.getActivityReport()
-          .then(() => {
-            this.isLoadingInactiveMembers = false
-            this.didLoadInactiveMembers = true
-          })
-          .catch(error => {
-            console.error(error)
-            this.inactiveMembersLoadError = true
-            this.isLoadingInactiveMembers = false
-          })
+      if (!this.didLoadActivityReport && !this.isLoadingActivityReport) {
+        this.getActivityReport().catch(error => {
+          console.error(error)
+        })
       }
     },
     viewPendingMembers() {
