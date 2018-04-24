@@ -3,29 +3,31 @@ const AWS = require('aws-sdk')
 const rawArgs = process.argv.slice(2)
 const flags = rawArgs.filter(a => a.startsWith('--'))
 const args = rawArgs.filter(a => !a.startsWith('--'))
-const indexDocIndex = flags.findIndex(f => f.includes('indexDocument'))
+const distributionIdIndex = flags.findIndex(f => f.includes('distributionId'))
 const awsKeyIdIndex = flags.findIndex(f => f.includes('awsKeyId'))
 const awsSecretKeyIndex = flags.findIndex(f => f.includes('awsSecretKey'))
-const bucketNameIndex = flags.findIndex(f => f.includes('bucketName'))
 
 const opts = {
   accessKeyId: args[awsKeyIdIndex],
-  secretAccessKey: args[awsSecretKeyIndex]
+  secretAccessKey: args[distributionId]
 }
 
-const s3 = new AWS.S3(opts)
+const cf = new AWS.CloudFront(opts)
+const caller = Math.round(new Date().getTime() / 1000)
 
 var params = {
-  Bucket: args[bucketNameIndex],
-  WebsiteConfiguration: {
-    IndexDocument: {
-      Suffix: args[indexDocIndex]
+  DistributionId: args[distributionIdIndex],
+  InvalidationBatch: {
+    CallerReference: caller,
+    Paths: {
+      Quantity: 1,
+      Items: ['/index.html']
     }
   }
 }
 
-s3
-  .putBucketWebsite(params)
+cf
+  .createInvalidation(params)
   .promise()
   .then(result => {
     console.log(result)
