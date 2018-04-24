@@ -18,7 +18,7 @@ const caller = Math.round(new Date().getTime() / 1000)
 var params = {
   DistributionId: args[distributionIdIndex],
   InvalidationBatch: {
-    CallerReference: caller,
+    CallerReference: `${caller}`,
     Paths: {
       Quantity: 1,
       Items: ['/index.html']
