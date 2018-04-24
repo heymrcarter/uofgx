@@ -9,7 +9,7 @@ const awsSecretKeyIndex = flags.findIndex(f => f.includes('awsSecretKey'))
 
 const opts = {
   accessKeyId: args[awsKeyIdIndex],
-  secretAccessKey: args[distributionId]
+  secretAccessKey: args[awsSecretKeyIndex]
 }
 
 const cf = new AWS.CloudFront(opts)
