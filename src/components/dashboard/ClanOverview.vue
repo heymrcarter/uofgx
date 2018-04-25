@@ -25,7 +25,13 @@
           actionText="Retry"
           @action="fetchPendingMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers"
+          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers.length == 0"
+          icon="group_add"
+          actionText="Reload"
+          :text="pendingMembersText"
+          @action="fetchPendingMembers(true)"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers.length > 0"
           icon="group_add"
           actionText="View"
           :text="pendingMembersText"
@@ -40,7 +46,13 @@
           actionText="Retry"
           @action="fetchInvitedMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers"
+          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers.length == 0"
+          icon="group_add"
+          actionText="Reload"
+          :text="invitedMembersText"
+          @action="fetchInvitedMembers(true)"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers.length > 0"
           icon="group_add"
           actionText="View"
           :text="invitedMembersText"
@@ -55,7 +67,13 @@
           actionText="Retry"
           @action="fetchInactiveMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers"
+          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers.length === 0"
+          icon="local_hotel"
+          actionText="Reload"
+          :text="inactiveMembersText"
+          @action="fetchInactiveMembers(true)"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers.length > 0"
           icon="local_hotel"
           actionText="View"
           :text="inactiveMembersText"
@@ -172,25 +190,46 @@ export default {
         })
       }
     },
-    fetchPendingMembers() {
-      if (!this.didLoadPendingMembers && !this.isLoadingPendingMembers) {
+    fetchPendingMembers(bypass = false) {
+      if (bypass) {
+        this.recordEvent('Dashboard', 'Reload', 'Pending Members')
         this.getPendingMembers().catch(error => {
           console.error(error)
         })
+      } else {
+        if (!this.didLoadPendingMembers && !this.isLoadingPendingMembers) {
+          this.getPendingMembers().catch(error => {
+            console.error(error)
+          })
+        }
       }
     },
-    fetchInvitedMembers() {
-      if (!this.didLoadInvitedMembers && !this.isLoadingInvitedMembers) {
+    fetchInvitedMembers(bypass = false) {
+      if (bypass) {
+        this.recordEvent('Dashboard', 'Reload', 'Invited Members')
         this.getInvitedMembers().catch(error => {
           console.error(error)
         })
+      } else {
+        if (!this.didLoadInvitedMembers && !this.isLoadingInvitedMembers) {
+          this.getInvitedMembers().catch(error => {
+            console.error(error)
+          })
+        }
       }
     },
-    fetchInactiveMembers() {
-      if (!this.didLoadActivityReport && !this.isLoadingActivityReport) {
+    fetchInactiveMembers(bypass = false) {
+      if (bypass) {
+        this.recordEvent('Dashboard', 'Reload', 'Inactive Members')
         this.getActivityReport().catch(error => {
           console.error(error)
         })
+      } else {
+        if (!this.didLoadActivityReport && !this.isLoadingActivityReport) {
+          this.getActivityReport().catch(error => {
+            console.error(error)
+          })
+        }
       }
     },
     viewPendingMembers() {
