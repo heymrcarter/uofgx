@@ -11,10 +11,12 @@ export default {
   },
   methods: {
     formatDate(date) {
-      return moment
+      const value = moment
         .utc(date)
         .tz('America/New_York')
         .format('MM/DD/YYYY')
+
+      return value
     }
   }
 }

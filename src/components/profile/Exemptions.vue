@@ -24,11 +24,9 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import dateFormatter from '@/mixins/date-formatter'
 import moment from 'moment-timezone'
 export default {
   name: 'exemptions',
-  mixins: [dateFormatter],
   data() {
     return {
       loadError: false
@@ -47,6 +45,9 @@ export default {
     }
   },
   methods: {
+    formatDate(date) {
+      return moment.utc(date).format('MM/DD/YYYY')
+    },
     adminUserName(adminMembershipId) {
       return this.clanMembers.find(m => m.bungieNetMembershipId === adminMembershipId).bungieNetUserName
     },

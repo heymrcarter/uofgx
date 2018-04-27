@@ -10,6 +10,7 @@ import VueChartkick from 'vue-chartkick'
 import Chart from 'chart.js' // eslint-disable-line
 import VueAnalytics from 'vue-analytics'
 import '../node_modules/vuetify/dist/vuetify.min.css'
+import './scss/vuetify-overrides.scss'
 
 Vue.use(VueChartkick, { Chartkick })
 

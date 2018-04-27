@@ -4,7 +4,7 @@
     <v-card-text>
       <add-note-action :membershipId="membershipId"></add-note-action>
 
-      <v-btn block v-if="!isCurrentlyExempt" @click="makeExempt" :disabled="isLoadingExemption" class="mb-3">
+      <v-btn block v-if="!isCurrentlyExempt" @click="showExemptionDialog = true" :disabled="isLoadingExemption" class="mb-3">
         <span :class="{'mr-3': isLoading}">Grant exemption</span>
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
@@ -33,6 +33,30 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="showExemptionDialog" max-width="700">
+      <v-card>
+        <v-card-title class="headline">Grant exemption</v-card-title>
+        <v-card-text>
+          <div class="exemption-range">
+            <v-flex class="exemption-start">
+              <p class="title">Start</p>
+              <v-date-picker class="elevation-2" v-model="today" readonly width="300"></v-date-picker>
+            </v-flex>
+
+            <v-flex class="exemption-end">
+              <p class="title">End</p>
+              <v-date-picker class="elevation-2" v-model="exemptionEndDatePickerValue" show-current="yellow" :min="today" width="300"></v-date-picker>
+            </v-flex>
+          </div>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn flat @click="showExemptionDialog = false">Cancel</v-btn>
+          <v-btn @click="makeExempt">Grant</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -42,17 +66,24 @@ import moment from 'moment-timezone'
 import sort from 'fast-sort'
 import AddNoteAction from './AddNoteAction'
 import analytics from '@/mixins/analytics'
+import dateFormatter from '@/mixins/date-formatter'
 export default {
   name: 'profile-actions',
   components: {
     AddNoteAction
   },
-  mixins: [analytics],
+  mixins: [analytics, dateFormatter],
   data() {
     return {
       isLoading: false,
       isLoadingExemption: false,
-      showConfirmationDialog: false
+      showConfirmationDialog: false,
+      showExemptionDialog: false,
+      exemptionEndDatePickerValue: moment
+        .utc()
+        .add(1, 'month')
+        .tz('America/New_York')
+        .format('YYYY-MM-DD')
     }
   },
   computed: {
@@ -62,6 +93,12 @@ export default {
         return state.gamertag
       }
     }),
+    today() {
+      return moment
+        .utc()
+        .tz('America/New_York')
+        .format('YYYY-MM-DD')
+    },
     membershipId() {
       return this.$route.params.membershipId
     },
@@ -81,15 +118,17 @@ export default {
     ...mapActions(['grantExemption', 'editExemption', 'removeMember']),
     makeExempt() {
       this.recordEvent('Member Profile', 'Grant', 'Exemption')
-
+      const endDate = moment.utc(this.exemptionEndDatePickerValue).format()
+      console.log('-->', endDate)
       const exemption = {
         membershipId: this.membershipId,
-        startDate: moment.utc(),
-        endDate: moment.utc().add(1, 'month'),
+        startDate: this.today,
+        endDate,
         adminMembershipId: ''
       }
 
       this.isLoadingExemption = true
+      this.showExemptionDialog = false
       this.grantExemption(exemption)
         .then(() => {
           this.isLoadingExemption = false
@@ -104,7 +143,7 @@ export default {
       const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions.exemptions[this.membershipId].history))).asc(h => h.startDate)
       const currentExemption = memberHistory[memberHistory.length - 1]
 
-      currentExemption.endDate = moment.utc()
+      currentExemption.endDate = this.today
 
       this.isLoadingExemption = true
       this.editExemption(currentExemption)
@@ -137,8 +176,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .bold {
   font-weight: bold;
+}
+
+.exemption-range {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  align-items: baseline;
+}
+
+@media screen and (max-width: 675px) {
+  .exemption-range {
+    flex-direction: column;
+    width: 300px;
+
+    .exemption-start {
+      margin-bottom: 40px;
+    }
+  }
 }
 </style>
