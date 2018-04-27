@@ -25,13 +25,13 @@
           actionText="Retry"
           @action="fetchPendingMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers.length == 0"
+          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers && pendingMembers.length == 0"
           icon="group_add"
           actionText="Reload"
           :text="pendingMembersText"
           @action="fetchPendingMembers(true)"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers.length > 0"
+          v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers && pendingMembers.length > 0"
           icon="group_add"
           actionText="View"
           :text="pendingMembersText"
@@ -46,13 +46,13 @@
           actionText="Retry"
           @action="fetchInvitedMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers.length == 0"
+          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers && invitedMembers.length == 0"
           icon="group_add"
           actionText="Reload"
           :text="invitedMembersText"
           @action="fetchInvitedMembers(true)"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers.length > 0"
+          v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers && invitedMembers.length > 0"
           icon="group_add"
           actionText="View"
           :text="invitedMembersText"
@@ -67,13 +67,13 @@
           actionText="Retry"
           @action="fetchInactiveMembers"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers.length === 0"
+          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers && inactiveMembers.length === 0"
           icon="local_hotel"
           actionText="Reload"
           :text="inactiveMembersText"
           @action="fetchInactiveMembers(true)"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers.length > 0"
+          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers && inactiveMembers.length > 0"
           icon="local_hotel"
           actionText="View"
           :text="inactiveMembersText"
