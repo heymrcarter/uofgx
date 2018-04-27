@@ -41,5 +41,7 @@ export default {
 <style>
 main {
   padding-top: 50px;
+  display: flex;
+  flex-grow: 1;
 }
 </style>
