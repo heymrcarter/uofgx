@@ -5,6 +5,7 @@ import InactivePlayers from '@/components/InactivePlayers'
 import Login from '@/components/Login'
 import OAuthHandler from '@/components/OAuthHandler'
 import MemberProfile from '@/components/MemberProfile'
+import About from '@/components/About'
 import { configureRouter } from './config'
 
 Vue.use(Router)
@@ -15,6 +16,14 @@ const router = new Router({
       path: '/',
       name: 'Home',
       component: Login,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About,
       meta: {
         requiresAuth: false
       }

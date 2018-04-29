@@ -11,12 +11,14 @@ import Chart from 'chart.js' // eslint-disable-line
 import VueAnalytics from 'vue-analytics'
 import '../node_modules/vuetify/dist/vuetify.min.css'
 import './scss/vuetify-overrides.scss'
+import responsive from 'vue-responsive'
 
 Vue.use(VueChartkick, { Chartkick })
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
+Vue.use(responsive)
 
 if (process.env.NODE_ENV === 'production') {
   Vue.use(VueAnalytics, {

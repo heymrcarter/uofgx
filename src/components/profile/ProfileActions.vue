@@ -119,7 +119,6 @@ export default {
     makeExempt() {
       this.recordEvent('Member Profile', 'Grant', 'Exemption')
       const endDate = moment.utc(this.exemptionEndDatePickerValue).format()
-      console.log('-->', endDate)
       const exemption = {
         membershipId: this.membershipId,
         startDate: this.today,

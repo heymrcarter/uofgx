@@ -1,99 +1,29 @@
 <template>
-  <div>
-    <v-toolbar app dark fixed>
-      <v-btn to="/dashboard" icon v-if="shouldRenderBackButton">
-        <v-icon>arrow_back</v-icon>
-      </v-btn>
-      <v-toolbar-title class="clan-name">{{currentPageName}}</v-toolbar-title>
+  <v-toolbar app dark fixed v-if="shouldRenderToolbar">
+    <v-btn to="/dashboard" icon v-if="shouldRenderBackButton">
+      <v-icon>arrow_back</v-icon>
+    </v-btn>
+    <v-toolbar-title class="clan-name">{{currentPageName}}</v-toolbar-title>
 
-      <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
-      <v-toolbar-items v-if="this.roadmap">
-        <v-btn flat @click="showRoadmap">Roadmap</v-btn>
-      </v-toolbar-items>
-    </v-toolbar>
+    <v-menu bottom left offset-y v-responsive.xs.sm>
+      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
+      <v-list>
+        <v-list-tile @click="$router.push('/about')">
+          <v-list-tile-title>About</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
 
-    <v-dialog v-model="shouldRenderRoadmap"
-      fullscreen
-      transition="dialog-bottom-transition"
-      :overlay="false"
-      scrollable>
-      <div class="roadmap">
-        <v-toolbar>
-          <v-btn icon @click.native="shouldRenderRoadmap = false" dark>
-            <v-icon>close</v-icon>
-          </v-btn>
-          <v-toolbar-title>Roadmap</v-toolbar-title>
-        </v-toolbar>
-
-        <v-card-text class="mt-2">
-          <v-card class="mb-3" v-if="inProgress.length > 0">
-            <v-card-title class="headline">In progress</v-card-title>
-            <v-card-text>
-              <v-list two-line>
-                <template v-for="(item, i) in inProgress">
-                  <v-list-tile :key="i">
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                    </v-list-tile-content>
-
-                    <v-list-tile-action>
-                      <v-chip :color="getChipColor(item.type)">{{ item.type | initialCap }}</v-chip>
-                    </v-list-tile-action>
-                  </v-list-tile>
-                  <v-divider :key="(i + 1) * 10" v-if="i !== inProgress.length - 1"></v-divider>
-                </template>
-              </v-list>
-            </v-card-text>
-          </v-card>
-
-          <v-card class="mb-3" v-if="planned.length > 0">
-            <v-card-title class="headline">Planned</v-card-title>
-            <v-card-text>
-              <v-list two-line>
-                <template v-for="(item, i) in planned">
-                  <v-list-tile :key="i">
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                    </v-list-tile-content>
-
-                    <v-list-tile-action>
-                      <v-chip :color="getChipColor(item.type)">{{ item.type | initialCap }}</v-chip>
-                    </v-list-tile-action>
-                  </v-list-tile>
-                  <v-divider :key="(i + 1) * 100" v-if="i !== planned.length - 1"></v-divider>
-                </template>
-              </v-list>
-            </v-card-text>
-          </v-card>
-
-          <v-card v-if="downTheRoad.length > 0">
-            <v-card-title class="headline">Down the road</v-card-title>
-            <v-card-text>
-              <v-list two-line>
-                <template v-for="(item, i) in downTheRoad">
-                  <v-list-tile :key="i">
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                    </v-list-tile-content>
-
-                    <v-list-tile-action>
-                      <v-chip :color="getChipColor(item.type)">{{ item.type | initialCap }}</v-chip>
-                    </v-list-tile-action>
-                  </v-list-tile>
-                  <v-divider :key="(i + 1) * 1000" v-if="i !== downTheRoad.length - 1"></v-divider>
-                </template>
-              </v-list>
-            </v-card-text>
-          </v-card>
-        </v-card-text>
-      </div>
-    </v-dialog>
-  </div>
+    <v-toolbar-items v-responsive.md.lg.xl>
+      <v-btn flat to="/about">About</v-btn>
+    </v-toolbar-items>
+  </v-toolbar>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import analytics from '@/mixins/analytics'
 export default {
   name: 'app-header',
@@ -111,18 +41,17 @@ export default {
   },
   computed: {
     ...mapState(['clanName']),
-    ...mapState({
-      roadmap(state) {
-        return state.roadmap.roadmap
-      }
-    }),
     ...mapGetters('members/active', ['activeMember']),
     shouldRenderBackButton() {
       return this.$route.name === 'InactivePlayers' || this.$route.name === 'Profile'
     },
+    shouldRenderToolbar() {
+      return this.$route.name !== 'About'
+    },
     currentPageName() {
       switch (this.$route.name) {
         case 'Home':
+        case 'About':
           return 'Destiny Clan Manager'
         case 'OAuth':
           return 'Processing login...'
@@ -135,45 +64,7 @@ export default {
         default:
           return 'Not found!'
       }
-    },
-    inProgress() {
-      return this.roadmap ? this.roadmap['In Progress'] : []
-    },
-    planned() {
-      return this.roadmap ? this.roadmap['Planned'] : []
-    },
-    downTheRoad() {
-      return this.roadmap ? this.roadmap['Down the Road'] : []
-    }
-  },
-  methods: {
-    ...mapActions(['getRoadmap']),
-    showRoadmap() {
-      this.recordEvent(this.$route.name, 'View', 'Roadmap')
-      this.shouldRenderRoadmap = true
-    },
-    getChipColor(type) {
-      switch (type) {
-        case 'feature':
-          return 'yellow'
-        case 'bug':
-          return 'red'
-        case 'epic':
-          return 'blue'
-      }
-    }
-  },
-  mounted() {
-    if (!this.roadmap) {
-      this.getRoadmap()
     }
   }
 }
 </script>
-
-<style scoped>
-.roadmap {
-  width: 100%;
-  background-color: #2a2a2a;
-}
-</style>
