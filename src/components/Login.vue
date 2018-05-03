@@ -80,19 +80,12 @@ export default {
 .wrapper {
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 50px);
 
   .content {
     display: flex;
     flex-direction: column;
-
-    .beta-banner {
-      flex-grow: 0;
-    }
   }
-}
-
-.beta {
-  background-color: #e59775 !important;
 }
 
 .welcome {
