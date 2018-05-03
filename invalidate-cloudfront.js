@@ -21,7 +21,7 @@ var params = {
     CallerReference: `${caller}`,
     Paths: {
       Quantity: 1,
-      Items: ['/index.html']
+      Items: ['/*']
     }
   }
 }
