@@ -11,12 +11,24 @@ describe('session actions', () => {
   describe('getUserGroups', () => {
     describe('when the user is in one group', () => {
       beforeEach(done => {
-        td.when(memberService.getAdminGroups('membership-id')).thenResolve([{ groupId: 'clan-id', groupName: 'clan-name' }])
+        td.when(memberService.getAdminGroups('membership-id')).thenResolve([
+          {
+            groupId: 'clan-id',
+            groupName: 'clan-name',
+            platformUserInfo: {
+              membershipType: 'membership-type'
+            }
+          }
+        ])
         const session = {
           membership_id: 'membership-id',
           expires_in: 60
         }
         subject.getUserGroups({ dispatch, commit }, session).finally(done)
+      })
+
+      it('grants the user access to the application', () => {
+        td.verify(commit('GRANT_ACCESS', 'membership-id'))
       })
 
       it('commits the clan id the member is an admin of', () => {
@@ -27,8 +39,8 @@ describe('session actions', () => {
         td.verify(dispatch('setClanName', 'clan-name', { root: true }))
       })
 
-      it('grants the user access to the application', () => {
-        td.verify(commit('GRANT_ACCESS', 'membership-id'))
+      it('saves the membership type', () => {
+        td.verify(dispatch('setMembershipType', 'membership-type', { root: true }))
       })
 
       it('starts a timer for the session', () => {

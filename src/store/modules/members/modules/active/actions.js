@@ -19,7 +19,7 @@ export function getCharactersForMember({ commit, dispatch, rootState }, membersh
     }
 
     memberService
-      .getMemberCharacters(membershipId)
+      .getMemberCharacters(rootState.membershipType, membershipId)
       .then(characters => {
         dispatch('cacheMemberCharacters', { membershipId, characters }, { root: true })
         commit('SET_ACTIVE_MEMBER_CHARACTERS', characters)

@@ -30,4 +30,17 @@ describe('root mutations', () => {
       expect(state.clanName).toEqual('name')
     })
   })
+
+  describe('SET_MEMBERSHIP_TYPE', () => {
+    let state
+
+    beforeEach(() => {
+      state = { membershipType: undefined }
+      subject.SET_MEMBERSHIP_TYPE(state, 'membership-type')
+    })
+
+    it('updates membershipType', () => {
+      expect(state.membershipType).toEqual('membership-type')
+    })
+  })
 })

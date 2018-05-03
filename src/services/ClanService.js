@@ -88,13 +88,13 @@ export function denyMembershipRequest(clanId, membershipIds, authToken) {
   })
 }
 
-export function rescindMembershipInvitation(clanId, membershipId, authToken) {
+export function rescindMembershipInvitation(clanId, membershipType, membershipId, authToken) {
   return new Promise((resolve, reject) => {
     const headers = {
       Authorization: `Bearer ${authToken}`
     }
 
-    post(`/clan/${clanId}/members/invited/rescind/${membershipId}`, null, headers)
+    post(`/clan/${clanId}/members/invited/rescind/${membershipType}/${membershipId}`, null, headers)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

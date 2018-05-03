@@ -1,9 +1,9 @@
 import { get } from '@/utils/network-util'
 import { mapCharacters } from '@/mappers/character-mapper'
 
-export function getMemberCharacters(membershipId) {
+export function getMemberCharacters(membershipType, membershipId) {
   return new Promise((resolve, reject) => {
-    get(`/member/${membershipId}/characters`)
+    get(`/member/${membershipType}/${membershipId}/characters`)
       .then(response => {
         resolve(mapCharacters(response.data))
       })
@@ -11,9 +11,9 @@ export function getMemberCharacters(membershipId) {
   })
 }
 
-export function getActivityForMemberCharacter(membershipId, characterId) {
+export function getActivityForMemberCharacter(membershipType, membershipId, characterId) {
   return new Promise((resolve, reject) => {
-    get(`/member/${membershipId}/activity/${characterId}`)
+    get(`/member/${membershipType}/${membershipId}/activity/${characterId}`)
       .then(response => {
         resolve(response.data)
       })
@@ -21,17 +21,17 @@ export function getActivityForMemberCharacter(membershipId, characterId) {
   })
 }
 
-export function getRecentActivityBreakdownForMemberCharacter(membershipId, characterId) {
+export function getRecentActivityBreakdownForMemberCharacter(membershipType, membershipId, characterId) {
   return new Promise((resolve, reject) => {
-    get(`/member/${membershipId}/activity/recent/${characterId}/activity-breakdown`)
+    get(`/member/${membershipType}/${membershipId}/activity/recent/${characterId}/activity-breakdown`)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })
 }
 
-export function getRecentActivityByDateForMemberCharacter(membershipId, characterId) {
+export function getRecentActivityByDateForMemberCharacter(membershipType, membershipId, characterId) {
   return new Promise((resolve, reject) => {
-    get(`/member/${membershipId}/activity/recent/${characterId}/activity-by-date`)
+    get(`/member/${membershipType}/${membershipId}/activity/recent/${characterId}/activity-by-date`)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

@@ -13,28 +13,28 @@ export function getActivityDetails({ commit }, activityId) {
   })
 }
 
-export function getRecentActivityBreakdown({ commit }, { membershipId, characterId }) {
+export function getRecentActivityBreakdown({ commit, rootState }, { membershipId, characterId }) {
   return new Promise((resolve, reject) => {
     memberService
-      .getRecentActivityBreakdownForMemberCharacter(membershipId, characterId)
+      .getRecentActivityBreakdownForMemberCharacter(rootState.membershipType, membershipId, characterId)
       .then(recentActivityBreakdown => resolve(recentActivityBreakdown))
       .catch(error => reject(error))
   })
 }
 
-export function getRecentActivityByDate({ commit }, { membershipId, characterId }) {
+export function getRecentActivityByDate({ commit, rootState }, { membershipId, characterId }) {
   return new Promise((resolve, reject) => {
     memberService
-      .getRecentActivityByDateForMemberCharacter(membershipId, characterId)
+      .getRecentActivityByDateForMemberCharacter(rootState.membershipType, membershipId, characterId)
       .then(recentActivityByDate => resolve(recentActivityByDate))
       .catch(error => reject(error))
   })
 }
 
-export function getCharacterActivity({ commit }, { membershipId, characterId }) {
+export function getCharacterActivity({ commit, rootState }, { membershipId, characterId }) {
   return new Promise((resolve, reject) => {
     memberService
-      .getActivityForMemberCharacter(membershipId, characterId)
+      .getActivityForMemberCharacter(rootState.membershipType, membershipId, characterId)
       .then(activity => resolve(activity))
       .catch(error => reject(error))
   })

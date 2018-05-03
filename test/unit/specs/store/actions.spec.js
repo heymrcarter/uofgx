@@ -26,4 +26,14 @@ describe('root actions', () => {
       td.verify(commit('SET_CLAN_NAME', 'name'))
     })
   })
+
+  describe('setMembershipType', () => {
+    beforeEach(() => {
+      subject.setMembershipType({ commit }, 'membership-type')
+    })
+
+    it('saves the membership type', () => {
+      td.verify(commit('SET_MEMBERSHIP_TYPE', 'membership-type'))
+    })
+  })
 })

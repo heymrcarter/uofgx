@@ -39,6 +39,7 @@ export function getUserGroups({ commit, dispatch }, session) {
         commit('GRANT_ACCESS', session.membership_id)
         dispatch('setClanId', groups[0].groupId, { root: true })
         dispatch('setClanName', groups[0].groupName, { root: true })
+        dispatch('setMembershipType', groups[0].platformUserInfo.membershipType, { root: true })
 
         setTimeout(() => {
           commit('SESSION_EXPIRED')

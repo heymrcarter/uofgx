@@ -16,6 +16,7 @@ export function removeMember({ commit, rootState, dispatch }, payload) {
   return new Promise((resolve, reject) => {
     payload.adminMembershipId = rootState.session.membershipId
     payload.adminMembershipType = 'bungienet'
+    payload.removedMembershipType = rootState.membershipType
     removalService
       .removeMemberFromClan(rootState.clanId, payload, rootState.session.accessToken)
       .then(removal => {

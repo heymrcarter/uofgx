@@ -17,7 +17,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     clanId: undefined,
-    clanName: undefined
+    clanName: undefined,
+    membershipType: undefined
   },
   getters: {
     clanId: () => process.env.CLAN_ID

@@ -27,7 +27,7 @@ export function getInvitedMembers({ commit, rootState }) {
 export function rescindMembershipInvitation({ commit, rootState }, membershipId) {
   return new Promise((resolve, reject) => {
     clanService
-      .rescindMembershipInvitation(rootState.clanId, membershipId, rootState.session.accessToken)
+      .rescindMembershipInvitation(rootState.clanId, rootState.membershipType, membershipId, rootState.session.accessToken)
       .then(response => {
         commit('RESCIND_INVITATION', membershipId)
         resolve()
