@@ -5,8 +5,10 @@
 <script>
 import { mapActions } from 'vuex'
 import { checkOAuthState } from '@/utils/oauth-util'
+import analytics from '@/mixins/analytics'
 export default {
   name: 'oauth-handler',
+  mixins: [analytics],
   data() {
     return {
       error: undefined,
@@ -31,6 +33,20 @@ export default {
         this.getUserGroups(session)
           .then(groups => {
             if (groups && groups.length > 0) {
+              let platform
+              switch (groups[0].platformUserInfo.membershipType) {
+                case 1:
+                  platform = 'Xbox'
+                  break
+                case 2:
+                  platform = 'PlayStation'
+                  break
+                case 3:
+                  platform = 'PC'
+                  break
+              }
+
+              this.recordEvent('App', 'Login', undefined, platform)
               this.$router.replace('/dashboard')
             }
           })
