@@ -18,4 +18,15 @@ describe('RoadmapService', () => {
       expect(actual).toEqual('roadmap')
     })
   })
+
+  describe('submitFeatureRequest', () => {
+    beforeEach(async() => {
+      td.when(networkUtil.post('/roadmap/suggestion', td.matchers.anything())).thenResolve()
+      await subject.submitFeatureRequest('the-feature-request')
+    })
+
+    it('sends the feature request', () => {
+      td.verify(networkUtil.post('/roadmap/suggestion', 'the-feature-request'))
+    })
+  })
 })

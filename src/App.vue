@@ -1,7 +1,7 @@
 <template>
   <v-app dark>
     <app-header></app-header>
-    <main>
+    <main :class="$route.name.toLowerCase()">
       <router-view></router-view>
     </main>
 
@@ -38,10 +38,14 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 main {
   padding-top: 50px;
   display: flex;
   flex-grow: 1;
+
+  &.about {
+    padding-top: 0;
+  }
 }
 </style>

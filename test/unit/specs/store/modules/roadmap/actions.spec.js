@@ -19,4 +19,40 @@ describe('roadmap actions', () => {
       td.verify(commit('SET_ROADMAP', 'roadmap'))
     })
   })
+
+  describe('submitSuggestion', () => {
+    beforeEach(async() => {
+      const rootState = {
+        session: {
+          membershipId: 'membership-id'
+        },
+        members: {
+          list: [
+            {
+              bungieNetMembershipId: 'membership-id',
+              bungieNetUserName: 'member-name'
+            }
+          ]
+        }
+      }
+
+      const suggestion = {
+        idea: 'suggestion',
+        description: 'suggestion description'
+      }
+
+      td.when(roadmapService.submitFeatureRequest(td.matchers.anything())).thenResolve()
+
+      await subject.submitSuggestion({ rootState }, suggestion)
+    })
+
+    it('submits the suggestion', () => {
+      const featureRequest = {
+        name: 'suggestion',
+        desc: 'suggestion description\n\nSuggested by: member-name (membership-id)',
+        pos: 'bottom'
+      }
+      td.verify(roadmapService.submitFeatureRequest(featureRequest))
+    })
+  })
 })
