@@ -1,6 +1,11 @@
 <template>
   <v-card height="100%">
-    <v-card-title class="headline">Exemptions</v-card-title>
+    <v-card-title class="headline">
+      <v-badge color="grey darken-4" v-model="showNumberExemptionsBadge">
+        <span slot="badge">{{ exemptionHistory.length }}</span>
+        Exemptions
+      </v-badge>
+    </v-card-title>
     <v-card-text>
       <p v-if="exemptionHistory.length === 0">No exemptions</p>
       <v-list two-line v-else>
@@ -42,6 +47,9 @@ export default {
     exemptionHistory() {
       const currentMemberExemption = this.exemptions[this.$route.params.membershipId]
       return currentMemberExemption ? currentMemberExemption.history : []
+    },
+    showNumberExemptionsBadge() {
+      return this.exemptionHistory.length > 0
     }
   },
   methods: {
