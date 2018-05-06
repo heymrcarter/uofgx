@@ -141,8 +141,6 @@ export default {
       const index = memberHistory.length - 1
       const currentExemption = memberHistory[index]
 
-      console.log(currentExemption)
-
       currentExemption.endDate = moment.utc(this.today).format()
 
       this.isLoadingExemption = true
