@@ -94,10 +94,7 @@ export default {
       }
     }),
     today() {
-      return moment
-        .utc()
-        .tz('America/New_York')
-        .format('YYYY-MM-DD')
+      return moment.utc().format('YYYY-MM-DD')
     },
     membershipId() {
       return this.$route.params.membershipId
@@ -118,10 +115,11 @@ export default {
     ...mapActions(['grantExemption', 'editExemption', 'removeMember']),
     makeExempt() {
       this.recordEvent('Member Profile', 'Grant', 'Exemption')
+      const startDate = moment.utc(this.today).format()
       const endDate = moment.utc(this.exemptionEndDatePickerValue).format()
       const exemption = {
         membershipId: this.membershipId,
-        startDate: this.today,
+        startDate,
         endDate,
         adminMembershipId: ''
       }
@@ -140,9 +138,12 @@ export default {
       this.recordEvent('Member Profile', 'Lift', 'Exemption')
 
       const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions.exemptions[this.membershipId].history))).asc(h => h.startDate)
-      const currentExemption = memberHistory[memberHistory.length - 1]
+      const index = memberHistory.length - 1
+      const currentExemption = memberHistory[index]
 
-      currentExemption.endDate = this.today
+      console.log(currentExemption)
+
+      currentExemption.endDate = moment.utc(this.today).format()
 
       this.isLoadingExemption = true
       this.editExemption(currentExemption)

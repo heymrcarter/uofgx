@@ -9,7 +9,7 @@
     <v-card-text>
       <p v-if="exemptionHistory.length === 0">No exemptions</p>
       <v-list two-line v-else>
-        <template v-for="(exemption, i) in exemptionHistory">
+        <template v-for="(exemption, i) in recentExemptionHistory">
           <v-list-tile :key="i">
             <v-list-tile-content>
               <v-list-tile-title>{{ formatDate(exemption.startDate) }} - {{ formatDate(exemption.endDate) }}</v-list-tile-title>
@@ -17,10 +17,10 @@
             </v-list-tile-content>
 
             <v-list-tile-action v-if="isCurrentExemption(exemption)">
-              <v-icon>explicit</v-icon>
+              <v-icon large>explicit</v-icon>
             </v-list-tile-action>
           </v-list-tile>
-          <v-divider v-if="exemptionHistory.length - 1 !== i" :key="(i+1) * 100"></v-divider>
+          <v-divider v-if="recentExemptionHistory.length - 1 !== i" :key="(i+1) * 100"></v-divider>
         </template>
       </v-list>
     </v-card-text>
@@ -30,6 +30,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import moment from 'moment-timezone'
+import sort from 'fast-sort'
 export default {
   name: 'exemptions',
   data() {
@@ -45,11 +46,17 @@ export default {
       }
     }),
     exemptionHistory() {
-      const currentMemberExemption = this.exemptions[this.$route.params.membershipId]
-      return currentMemberExemption ? currentMemberExemption.history : []
+      if (!this.exemptions[this.$route.params.membershipId]) {
+        return []
+      }
+      const currentMemberExemption = JSON.parse(JSON.stringify(this.exemptions[this.$route.params.membershipId]))
+      return sort(currentMemberExemption.history).desc(e => e.endDate)
     },
     showNumberExemptionsBadge() {
       return this.exemptionHistory.length > 0
+    },
+    recentExemptionHistory() {
+      return this.exemptionHistory.filter((_, index) => index < 3)
     }
   },
   methods: {

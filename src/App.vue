@@ -47,5 +47,9 @@ main {
   &.about {
     padding-top: 0;
   }
+
+  &.profile .container {
+    margin-top: 0;
+  }
 }
 </style>
