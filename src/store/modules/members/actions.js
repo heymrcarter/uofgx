@@ -1,4 +1,5 @@
 import * as clanService from '@/services/ClanService'
+import * as memberService from '@/services/MemberService'
 
 export function getClanMembers({ commit, rootState }) {
   return new Promise((resolve, reject) => {
@@ -26,4 +27,21 @@ export function getClanMembers({ commit, rootState }) {
 
 export function removeClanMember({ commit }, membershipId) {
   commit('REMOVE_CLAN_MEMBER', membershipId)
+}
+
+export function getExpansions({ commit, rootState, state }, membershipId) {
+  return new Promise((resolve, reject) => {
+    if (state.expansions[membershipId]) {
+      resolve(state.expansions[membershipId])
+      return
+    }
+
+    memberService
+      .getMemberExpansions(rootState.membershipType, membershipId)
+      .then(expansions => {
+        commit('CACHE_MEMBER_EXPANSIONS', { membershipId, expansions })
+        resolve(expansions)
+      })
+      .catch(error => reject(error))
+  })
 }

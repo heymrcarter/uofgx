@@ -64,3 +64,11 @@ export function getAdminGroups(membershipId) {
     get(`/member/254/${membershipId}/admin-groups`).then(response => resolve(response.data))
   })
 }
+
+export function getMemberExpansions(membershipType, membershipId) {
+  return new Promise((resolve, reject) => {
+    get(`/member/${membershipType}/${membershipId}/expansions`)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}

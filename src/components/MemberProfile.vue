@@ -6,7 +6,7 @@
       </v-flex>
 
       <v-flex xs12 md4>
-        <exemptions></exemptions>
+        <expansions></expansions>
       </v-flex>
 
       <v-flex xs12 md3>
@@ -15,7 +15,11 @@
     </v-layout>
 
     <v-layout row wrap>
-      <v-flex xs12>
+      <v-flex xs12 md6>
+        <exemptions></exemptions>
+      </v-flex>
+
+      <v-flex xs12 md6>
         <notes :membership-id="currentMembershipId"></notes>
       </v-flex>
     </v-layout>
@@ -53,6 +57,7 @@ import ActivityByDateChart from './profile/ActivityByDateChart'
 import RecentActivityTable from './profile/RecentActivityTable'
 import ProfileActions from './profile/ProfileActions'
 import Notes from './profile/Notes'
+import Expansions from './profile/Expansions'
 
 export default {
   name: 'member-profile',
@@ -64,7 +69,8 @@ export default {
     ActivityByDateChart,
     RecentActivityTable,
     ProfileActions,
-    Notes
+    Notes,
+    Expansions
   },
   data() {
     return {

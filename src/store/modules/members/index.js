@@ -10,7 +10,8 @@ export default {
     list: undefined,
     isLoadingMembers: false,
     didLoadMembers: false,
-    loadMembersError: false
+    loadMembersError: false,
+    expansions: {}
   },
   getters: {
     clanMembers: state => state.list,

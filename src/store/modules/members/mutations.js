@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export function SET_CLAN_MEMBERS(state, members) {
   state.list = members
 }
@@ -27,4 +29,8 @@ export function SET_LOAD_ERROR(state) {
 export function REMOVE_CLAN_MEMBER(state, membershipId) {
   const index = state.list.findIndex(m => m.xboxMembershipId === membershipId)
   state.list.splice(index, 1)
+}
+
+export function CACHE_MEMBER_EXPANSIONS(state, { membershipId, expansions }) {
+  Vue.set(state.expansions, membershipId, expansions)
 }
