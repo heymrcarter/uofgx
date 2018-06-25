@@ -3,7 +3,9 @@
     <v-btn to="/dashboard" icon v-if="shouldRenderBackButton">
       <v-icon>arrow_back</v-icon>
     </v-btn>
-    <v-toolbar-title class="clan-name">{{currentPageName}}</v-toolbar-title>
+    <v-toolbar-title class="clan-name">
+      {{currentPageName}} <v-chip v-if="currentMemberLevel" color="grey darken-2" text-color="white">{{ currentMemberLevel }}</v-chip>
+    </v-toolbar-title>
 
     <v-spacer></v-spacer>
 
@@ -41,6 +43,17 @@ export default {
   },
   computed: {
     ...mapState(['clanName']),
+    ...mapState('members', {
+      currentMemberLevel(state) {
+        if (this.$route.name !== 'Profile') {
+          return undefined
+        }
+
+        const member = state.list.find(m => m.xboxMembershipId === this.activeMember.membershipId)
+
+        return this.memberTypeToMemberLevel(member.memberType)
+      }
+    }),
     ...mapGetters('members/active', ['activeMember']),
     shouldRenderBackButton() {
       return this.$route.name === 'InactivePlayers' || this.$route.name === 'Profile'
@@ -63,6 +76,24 @@ export default {
           return this.activeMember && this.activeMember.gamertag ? this.activeMember.gamertag : 'Loading...'
         default:
           return 'Not found!'
+      }
+    }
+  },
+  methods: {
+    memberTypeToMemberLevel(memberType) {
+      switch (memberType) {
+        case 0:
+          return 'None'
+        case 1:
+          return 'Beginner'
+        case 2:
+          return 'Member'
+        case 3:
+          return 'Admin'
+        case 4:
+          return 'ActingFounder'
+        case 5:
+          return 'Founder'
       }
     }
   }
