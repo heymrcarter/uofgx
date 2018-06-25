@@ -13,7 +13,7 @@
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
 
-      <v-btn block class="mb-3" @click="showMemberLevelDialog = true">Promote/Demote</v-btn>
+      <v-btn block class="mb-3" @click="openMemberLevelDialog">Promote/Demote</v-btn>
 
       <v-btn color="red" block @click="openConfirmationDialog" :disabled="isLoading">
         <span :class="{'mr-3': isLoading}">Remove member</span>
@@ -56,7 +56,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn flat @click="showMemberLevelDialog = false">Cancel</v-btn>
+          <v-btn flat @click="cancelMemberLevelDialog">Cancel</v-btn>
           <v-btn @click="changeMemberLevel">Update</v-btn>
         </v-card-actions>
       </v-card>
@@ -205,14 +205,23 @@ export default {
       this.recordEvent('Member Profile', 'Cancel', 'Remove Member')
       this.showConfirmationDialog = false
     },
+    openMemberLevelDialog() {
+      this.recordEvent('Member Profile', 'Start', 'EditMemberLevel')
+      this.showMemberLevelDialog = true
+    },
     changeMemberLevel() {
       const payload = {
         membershipId: this.membershipId,
         newLevel: this.memberLevel
       }
       this.editMemberLevel(payload).finally(() => {
+        this.recordEvent('Member Profile', 'Complete', 'EditMemberLevel')
         this.showMemberLevelDialog = false
       })
+    },
+    cancelMemberLevelDialog() {
+      this.recordEvent('Member Profile', 'Cancel', 'EditMemberLevel')
+      this.showMemberLevelDialog = false
     }
   }
 }
