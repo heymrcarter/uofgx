@@ -11,7 +11,8 @@ describe('pending members actions', () => {
       session: {
         accessToken: 'the-access-token'
       },
-      clanId: 'clan-id'
+      clanId: 'clan-id',
+      membershipType: 'membership-type'
     }
     commit = jest.fn()
   })
@@ -85,7 +86,7 @@ describe('pending members actions', () => {
 
       beforeEach(() => {
         membershipIds = [1, 2, 3, 4]
-        td.when(clanService.approveMembershipRequest('clan-id', membershipIds, 'the-access-token')).thenResolve()
+        td.when(clanService.approveMembershipRequest('clan-id', 'membership-type', membershipIds, 'the-access-token')).thenResolve()
       })
 
       it('approves the membership request for the given membership ids', done => {
@@ -101,7 +102,7 @@ describe('pending members actions', () => {
 
       beforeEach(() => {
         membershipIds = [1, 2, 3, 4]
-        td.when(clanService.denyMembershipRequest('clan-id', membershipIds, 'the-access-token')).thenReject(new Error('Oh no'))
+        td.when(clanService.denyMembershipRequest('clan-id', 'membership-type', membershipIds, 'the-access-token')).thenReject(new Error('Oh no'))
       })
 
       it('bubbles up the error', done => {
@@ -120,7 +121,7 @@ describe('pending members actions', () => {
 
       beforeEach(() => {
         membershipIds = [1, 2, 3, 4]
-        td.when(clanService.denyMembershipRequest('clan-id', membershipIds, 'the-access-token')).thenResolve()
+        td.when(clanService.denyMembershipRequest('clan-id', 'membership-type', membershipIds, 'the-access-token')).thenResolve()
       })
 
       it('approves the membership request for the given membership ids', done => {
@@ -136,7 +137,7 @@ describe('pending members actions', () => {
 
       beforeEach(() => {
         membershipIds = [1, 2, 3, 4]
-        td.when(clanService.denyMembershipRequest('clan-id', membershipIds, 'the-access-token')).thenReject(new Error('Oh no'))
+        td.when(clanService.denyMembershipRequest('clan-id', 'membership-type', membershipIds, 'the-access-token')).thenReject(new Error('Oh no'))
       })
 
       it('bubbles up the error', done => {

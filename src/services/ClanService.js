@@ -40,12 +40,12 @@ export function getInvitedMembers(clanId, authToken) {
   })
 }
 
-export function approveMembershipRequest(clanId, membershipIds, authToken) {
+export function approveMembershipRequest(clanId, membershipType, membershipIds, authToken) {
   return new Promise((resolve, reject) => {
     const memberships = membershipIds.map(id => {
       return {
         membershipId: id,
-        membershipType: 1
+        membershipType
       }
     })
 
@@ -64,12 +64,12 @@ export function approveMembershipRequest(clanId, membershipIds, authToken) {
   })
 }
 
-export function denyMembershipRequest(clanId, membershipIds, authToken) {
+export function denyMembershipRequest(clanId, membershipType, membershipIds, authToken) {
   return new Promise((resolve, reject) => {
     const memberships = membershipIds.map(id => {
       return {
         membershipId: id,
-        membershipType: 1
+        membershipType
       }
     })
 

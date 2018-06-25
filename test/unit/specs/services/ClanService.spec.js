@@ -69,7 +69,7 @@ describe('ClanService', () => {
         memberships: [
           {
             membershipId: 'membership-id',
-            membershipType: 1
+            membershipType: 'membership-type'
           }
         ],
         message: ''
@@ -78,7 +78,7 @@ describe('ClanService', () => {
         Authorization: 'Bearer auth-token'
       }
       td.when(networkUtil.post('/clan/clan-id/members/pending/approve', expectedBody, expectedHeaders)).thenResolve({ data: 'the-response' })
-      actual = await subject.approveMembershipRequest('clan-id', ['membership-id'], 'auth-token')
+      actual = await subject.approveMembershipRequest('clan-id', 'membership-type', ['membership-id'], 'auth-token')
     })
 
     it('returns the response', () => {
@@ -94,7 +94,7 @@ describe('ClanService', () => {
         memberships: [
           {
             membershipId: 'membership-id',
-            membershipType: 1
+            membershipType: 'membership-type'
           }
         ],
         message: ''
@@ -105,7 +105,7 @@ describe('ClanService', () => {
       }
 
       td.when(networkUtil.post('/clan/clan-id/members/pending/deny', expectedBody, expectedHeaders)).thenResolve({ data: 'the-response' })
-      actual = await subject.denyMembershipRequest('clan-id', ['membership-id'], 'auth-token')
+      actual = await subject.denyMembershipRequest('clan-id', 'membership-type', ['membership-id'], 'auth-token')
     })
 
     it('returns the response', () => {

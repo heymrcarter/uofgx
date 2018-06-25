@@ -27,7 +27,7 @@ export function getPendingMembers({ commit, rootState }) {
 export function approvePendingMemberships({ commit, rootState }, membershipIds) {
   return new Promise((resolve, reject) => {
     clanService
-      .approveMembershipRequest(rootState.clanId, membershipIds, rootState.session.accessToken)
+      .approveMembershipRequest(rootState.clanId, rootState.membershipType, membershipIds, rootState.session.accessToken)
       .then(response => {
         commit('APPROVE_MEMBERSHIPS', membershipIds)
         resolve()
@@ -39,7 +39,7 @@ export function approvePendingMemberships({ commit, rootState }, membershipIds) 
 export function denyPendingMemberships({ commit, rootState }, membershipIds) {
   return new Promise((resolve, reject) => {
     clanService
-      .denyMembershipRequest(rootState.clanId, membershipIds, rootState.session.accessToken)
+      .denyMembershipRequest(rootState.clanId, rootState.membershipType, membershipIds, rootState.session.accessToken)
       .then(response => {
         commit('DENY_MEMBERSHIPS', membershipIds)
         resolve()
