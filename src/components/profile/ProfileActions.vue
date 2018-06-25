@@ -13,26 +13,13 @@
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
 
+      <v-btn block class="mb-3" @click="showMemberLevelDialog = true">Promote/Demote</v-btn>
+
       <v-btn color="red" block @click="openConfirmationDialog" :disabled="isLoading">
         <span :class="{'mr-3': isLoading}">Remove member</span>
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
     </v-card-text>
-
-    <v-dialog v-model="showConfirmationDialog" max-width="500">
-      <v-card>
-        <v-card-title class="headline">Remove {{ gamertag }}?</v-card-title>
-        <v-card-text>
-          <p>Are you sure you want to remove <strong class="subheading bold">{{ gamertag }}</strong> from the clan?</p>
-          <p>This action cannot be undone!</p>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-btn color="red" @click="kick">Confirm</v-btn>
-          <v-btn flat @click="closeConfirmationDialog">Cancel</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
 
     <v-dialog v-model="showExemptionDialog" max-width="700">
       <v-card>
@@ -57,6 +44,38 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="showMemberLevelDialog" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Promote/Demote</v-card-title>
+
+        <v-card-text>
+          <div>
+            <v-select label="Select member level" :items="memberLevels" color="yellow" v-model="memberLevel" :placeholder="startingMemberLevelText"></v-select>
+          </div>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn flat @click="showMemberLevelDialog = false">Cancel</v-btn>
+          <v-btn @click="changeMemberLevel">Update</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="showConfirmationDialog" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Remove {{ gamertag }}?</v-card-title>
+        <v-card-text>
+          <p>Are you sure you want to remove <strong class="subheading bold">{{ gamertag }}</strong> from the clan?</p>
+          <p>This action cannot be undone!</p>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="red" @click="kick">Confirm</v-btn>
+          <v-btn flat @click="closeConfirmationDialog">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -67,6 +86,7 @@ import sort from 'fast-sort'
 import AddNoteAction from './AddNoteAction'
 import analytics from '@/mixins/analytics'
 import dateFormatter from '@/mixins/date-formatter'
+import { memberLevels } from '@/content/member-levels'
 export default {
   name: 'profile-actions',
   components: {
@@ -79,6 +99,8 @@ export default {
       isLoadingExemption: false,
       showConfirmationDialog: false,
       showExemptionDialog: false,
+      showMemberLevelDialog: false,
+      memberLevel: undefined,
       exemptionEndDatePickerValue: moment
         .utc()
         .add(1, 'month')
@@ -88,6 +110,12 @@ export default {
   },
   computed: {
     ...mapState(['exemptions']),
+    ...mapState('members', {
+      startingMemberLevel(state) {
+        const level = state.list.find(m => m.xboxMembershipId === this.membershipId).memberType
+        return memberLevels.find(l => l.value === level)
+      }
+    }),
     ...mapState('members/active', {
       gamertag(state) {
         return state.gamertag
@@ -109,10 +137,17 @@ export default {
       const today = moment.utc().format()
 
       return today <= endDate
+    },
+    memberLevels() {
+      return memberLevels
+    },
+    startingMemberLevelText() {
+      return this.startingMemberLevel.text
     }
   },
   methods: {
     ...mapActions(['grantExemption', 'editExemption', 'removeMember']),
+    ...mapActions('members', ['editMemberLevel']),
     makeExempt() {
       this.recordEvent('Member Profile', 'Grant', 'Exemption')
       const startDate = moment.utc(this.today).format()
@@ -169,6 +204,15 @@ export default {
     closeConfirmationDialog() {
       this.recordEvent('Member Profile', 'Cancel', 'Remove Member')
       this.showConfirmationDialog = false
+    },
+    changeMemberLevel() {
+      const payload = {
+        membershipId: this.membershipId,
+        newLevel: this.memberLevel
+      }
+      this.editMemberLevel(payload).finally(() => {
+        this.showMemberLevelDialog = false
+      })
     }
   }
 }

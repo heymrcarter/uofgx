@@ -49,8 +49,18 @@ describe('OAuthHandler', () => {
 
       describe('when the user has access', () => {
         beforeEach(() => {
-          td.when(getUserGroups(td.matchers.isA(Object), 'the-session', undefined)).thenResolve([{}])
+          jest.spyOn(subject, 'recordEvent')
+          const groups = [
+            {
+              platformUserInfo: { membershipType: 1 }
+            }
+          ]
+          td.when(getUserGroups(td.matchers.isA(Object), 'the-session', undefined)).thenResolve(groups)
           subject.$mount()
+        })
+
+        it('emits an analytics event', () => {
+          expect(subject.recordEvent).toBeCalledWith('App', 'Login', undefined, 'Xbox')
         })
 
         it('redirects the user to the dashboard', () => {

@@ -1,4 +1,4 @@
-import { get, post } from '@/utils/network-util'
+import { get, post, put } from '@/utils/network-util'
 import { mapResponseToView } from '@/mappers/clan-members-mapper'
 import moment from 'moment-timezone'
 
@@ -112,6 +112,24 @@ export function addNoteForMember(clanId, note) {
 export function getNotesForMember(clanId, membershipId) {
   return new Promise((resolve, reject) => {
     get(`/clan/${clanId}/members/${membershipId}/note`)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
+
+export function editMemberLevel(accessToken, clanId, membershipType, membershipId, memberLevel) {
+  return new Promise((resolve, reject) => {
+    const body = {
+      membershipType,
+      membershipId,
+      memberType: memberLevel
+    }
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}`
+    }
+
+    put(`/clan/${clanId}/members/member-type`, body, headers)
       .then(response => resolve(response.data))
       .catch(error => reject(error))
   })

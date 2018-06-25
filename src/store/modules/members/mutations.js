@@ -34,3 +34,8 @@ export function REMOVE_CLAN_MEMBER(state, membershipId) {
 export function CACHE_MEMBER_EXPANSIONS(state, { membershipId, expansions }) {
   Vue.set(state.expansions, membershipId, expansions)
 }
+
+export function UPDATE_MEMBER_LEVEL(state, { membershipId, memberLevel }) {
+  const member = state.list.find(m => m.xboxMembershipId === membershipId)
+  member.memberType = memberLevel
+}

@@ -11,7 +11,8 @@ describe('invited members actions', () => {
       session: {
         accessToken: 'the-access-token'
       },
-      clanId: 'clan-id'
+      clanId: 'clan-id',
+      membershipType: 'membership-type'
     }
     commit = jest.fn()
   })
@@ -79,12 +80,12 @@ describe('invited members actions', () => {
     })
   })
 
-  describe('rescindMemberInvitation', () => {
+  describe('rescindMembershipInvitation', () => {
     describe('when clanService resolves', () => {
-      beforeEach(done => {
-        td.when(clanService.rescindMembershipInvitation('clan-id', 'membershipId', 'the-access-token')).thenResolve()
+      beforeEach(async() => {
+        td.when(clanService.rescindMembershipInvitation('clan-id', 'membership-type', 'membershipId', 'the-access-token')).thenResolve()
 
-        subject.rescindMembershipInvitation({ commit, rootState }, 'membershipId').finally(done)
+        await subject.rescindMembershipInvitation({ commit, rootState }, 'membershipId')
       })
 
       it('rescnds the invitation', () => {
@@ -93,17 +94,16 @@ describe('invited members actions', () => {
     })
 
     describe('when clanService rejects', () => {
-      describe('when clanService resolves', () => {
-        beforeEach(() => {
-          td.when(clanService.rescindMembershipInvitation('clan-id', 'membershipId', 'the-access-token')).thenReject(new Error('Oh no'))
-        })
+      beforeEach(() => {
+        td.when(clanService.rescindMembershipInvitation('clan-id', 'membership-type', 'membershipId', 'the-access-token')).thenReject(new Error('Oh no'))
+      })
 
-        it('rescnds the invitation', done => {
-          subject.rescindMembershipInvitation({ commit, rootState }, 'membershipId').catch(error => {
-            expect(error.message).toEqual('Oh no')
-            done()
-          })
-        })
+      it('rescnds the invitation', async() => {
+        try {
+          await subject.rescindMembershipInvitation({ commit, rootState }, 'membershipId')
+        } catch (error) {
+          expect(error.message).toEqual('Oh no')
+        }
       })
     })
   })

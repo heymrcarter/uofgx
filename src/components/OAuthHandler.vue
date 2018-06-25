@@ -28,6 +28,7 @@ export default {
       this.$router.replace('/')
       return
     }
+
     this.getAccessToken(code)
       .then(session => {
         this.getUserGroups(session)

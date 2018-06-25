@@ -45,3 +45,15 @@ export function getExpansions({ commit, rootState, state }, membershipId) {
       .catch(error => reject(error))
   })
 }
+
+export function editMemberLevel({ commit, rootState }, { membershipId, newLevel }) {
+  return new Promise((resolve, reject) => {
+    clanService
+      .editMemberLevel(rootState.session.accessToken, rootState.clanId, rootState.membershipType, membershipId, newLevel)
+      .then(() => {
+        commit('UPDATE_MEMBER_LEVEL', { membershipId, memberLevel: newLevel })
+        resolve()
+      })
+      .catch(error => reject(error))
+  })
+}

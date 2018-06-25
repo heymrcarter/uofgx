@@ -21,15 +21,18 @@ describe('removal history actions', () => {
 
   describe('removeMember', () => {
     let payload, dispatch
-    beforeEach(done => {
+
+    beforeEach(async() => {
       payload = {}
       rootState.session = {}
       rootState.session.accessToken = 'access-token'
       rootState.session.membershipId = 'membership-id'
+      rootState.membershipType = 'membership-type'
 
       const expectedPayload = {
         adminMembershipId: 'membership-id',
-        adminMembershipType: 'bungienet'
+        adminMembershipType: 'bungienet',
+        removedMembershipType: 'membership-type'
       }
 
       const response = { removedMembershipId: 'removed-membership-id' }
@@ -37,7 +40,7 @@ describe('removal history actions', () => {
 
       dispatch = td.function()
 
-      subject.removeMember({ commit, rootState, dispatch }, payload).finally(done)
+      await subject.removeMember({ commit, rootState, dispatch }, payload)
     })
 
     it('adds the removal to the removal history', () => {
