@@ -136,4 +136,76 @@ describe('member actions', () => {
       td.verify(commit('UPDATE_MEMBER_LEVEL', { membershipId: 'membership-id', memberLevel: 3 }))
     })
   })
+
+  describe('getBannedMembers', () => {
+    describe('when successful', () => {
+      beforeEach(async() => {
+        let rootState = {
+          session: {
+            accessToken: 'access-token'
+          },
+          clanId: 'clan-id'
+        }
+
+        td.when(clanService.getBannedMembers('clan-id', 'access-token')).thenResolve('banned-members')
+
+        await subject.getBannedMembers({ commit, rootState })
+      })
+
+      it('starts the loading process', () => {
+        td.verify(commit('START_LOADING_BANNED_MEMBERS'))
+      })
+
+      it('clears any previous errors', () => {
+        td.verify(commit('CLEAR_BANNED_MEMBERS_LOAD_ERROR'))
+      })
+
+      it('saves the banned members', () => {
+        td.verify(commit('SET_BANNED_MEMBERS', 'banned-members'))
+      })
+
+      it('finishes the loading process', () => {
+        td.verify(commit('FINISH_LOADING_BANNED_MEMBERS'))
+      })
+
+      it('starts a timer to reload banned members', () => {
+        td.verify(commit('RELOAD_BANNED_MEMBERS'), { times: 0 })
+        jest.runAllTimers()
+        td.verify(commit('RELOAD_BANNED_MEMBERS'))
+      })
+    })
+
+    describe('when unsuccessful', () => {
+      let actual
+
+      beforeEach(async() => {
+        let rootState = {
+          session: {
+            accessToken: 'access-token'
+          },
+          clanId: 'clan-id'
+        }
+
+        td.when(clanService.getBannedMembers('clan-id', 'access-token')).thenReject(new Error('oh no!'))
+
+        try {
+          await subject.getBannedMembers({ commit, rootState })
+        } catch (error) {
+          actual = error
+        }
+      })
+
+      it('finishes the loading process', () => {
+        td.verify(commit('FINISH_LOADING_BANNED_MEMBERS'))
+      })
+
+      it('saves that an error occurred', () => {
+        td.verify(commit('SET_BANNED_MEMBERS_LOAD_ERROR'))
+      })
+
+      it('returns the error', () => {
+        expect(actual.message).toEqual('oh no!')
+      })
+    })
+  })
 })

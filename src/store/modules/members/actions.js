@@ -57,3 +57,27 @@ export function editMemberLevel({ commit, rootState }, { membershipId, newLevel 
       .catch(error => reject(error))
   })
 }
+
+export function getBannedMembers({ commit, rootState }) {
+  return new Promise((resolve, reject) => {
+    commit('START_LOADING_BANNED_MEMBERS')
+    commit('CLEAR_BANNED_MEMBERS_LOAD_ERROR')
+    clanService
+      .getBannedMembers(rootState.clanId, rootState.session.accessToken)
+      .then(bannedMembers => {
+        commit('SET_BANNED_MEMBERS', bannedMembers)
+        commit('FINISH_LOADING_BANNED_MEMBERS')
+
+        setTimeout(() => {
+          commit('RELOAD_BANNED_MEMBERS')
+        }, 1000 * 60 * 15)
+
+        resolve()
+      })
+      .catch(error => {
+        commit('FINISH_LOADING_BANNED_MEMBERS')
+        commit('SET_BANNED_MEMBERS_LOAD_ERROR')
+        reject(error)
+      })
+  })
+}

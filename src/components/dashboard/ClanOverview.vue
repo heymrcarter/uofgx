@@ -78,18 +78,41 @@
           actionText="View"
           :text="inactiveMembersText"
           @action="$router.push('/inactive-players')"></clan-overview-item>
+
+        <v-divider inset v-if="!isLoadingBannedMembers"></v-divider>
+
+        <clan-overview-item
+          v-if="bannedMembersLoadError"
+          icon="warning"
+          :text="`Couldn't load banned members`"
+          actionText="Retry"
+          @action="fetchBannedMembers"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingBannedMembers && !bannedMembersLoadError && bannedMembers && bannedMembers.length === 0"
+          icon="remove_circle"
+          actionText="Reload"
+          :text="bannedMembersText"
+          @action="fetchBannedMembers(true)"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers && inactiveMembers.length > 0"
+          icon="remove_circle_outline"
+          actionText="View"
+          :text="bannedMembersText"
+          @action="shouldRenderBannedMembers = true"></clan-overview-item>
       </v-list>
     </v-card-text>
 
     <pending-members :active="shouldRenderPendingMembers" @close="onDialogClose('shouldRenderPendingMembers')"></pending-members>
     <invited-members :active="shouldRenderInvitedMembers" @close="onDialogClose('shouldRenderInvitedMembers')"></invited-members>
+    <banned-members :active="shouldRenderBannedMembers" @close="onDialogClose('shouldRenderBannedMembers')"></banned-members>
   </v-card>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import PendingMembers from './PendingMembers'
 import InvitedMembers from './InvitedMembers'
+import BannedMembers from './BannedMembers'
 import LoadableIndicator from '@/components/LoadableIndicator'
 import ClanOverviewItem from './ClanOverviewItem'
 import analytics from '@/mixins/analytics'
@@ -99,13 +122,15 @@ export default {
     PendingMembers,
     InvitedMembers,
     LoadableIndicator,
-    ClanOverviewItem
+    ClanOverviewItem,
+    BannedMembers
   },
   mixins: [analytics],
   data() {
     return {
       shouldRenderPendingMembers: false,
-      shouldRenderInvitedMembers: false
+      shouldRenderInvitedMembers: false,
+      shouldRenderBannedMembers: false
     }
   },
   computed: {
@@ -113,8 +138,9 @@ export default {
     ...mapGetters('members/invited', ['invitedMembers', 'isLoadingInvitedMembers', 'didLoadInvitedMembers', 'invitedMembersLoadError']),
     ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
     ...mapGetters(['activityReport', 'activityReportLoadError', 'isLoadingActivityReport', 'didLoadActivityReport']),
+    ...mapState('members', ['bannedMembers', 'isLoadingBannedMembers', 'didLoadBannedMembers', 'bannedMembersLoadError']),
     isLoading() {
-      return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers || this.isLoadingInactiveMembers
+      return this.isLoadingMembers || this.isLoadingPendingMembers || this.isLoadingInvitedMembers || this.isLoadingInactiveMembers || this.isLoadingBannedMembers
     },
     inactiveMembers() {
       if (!this.activityReport) {
@@ -166,12 +192,23 @@ export default {
           return `${this.inactiveMembers.length} inactive members`
         }
       }
+    },
+    bannedMembersText() {
+      if (this.bannedMembers) {
+        if (this.bannedMembers.length === 0) {
+          return 'No banned members'
+        } else if (this.bannedMembers.length === 1) {
+          return '1 banned member'
+        } else {
+          return `${this.bannedMembers.length} banned members`
+        }
+      }
     }
   },
   methods: {
     ...mapActions('members/pending', ['getPendingMembers']),
     ...mapActions('members/invited', ['getInvitedMembers']),
-    ...mapActions('members', ['getClanMembers']),
+    ...mapActions('members', ['getClanMembers', 'getBannedMembers']),
     ...mapActions(['getActivityReport']),
     onDialogClose(dialog) {
       this.getClanMembers()
@@ -182,6 +219,7 @@ export default {
       this.fetchPendingMembers()
       this.fetchInvitedMembers()
       this.fetchInactiveMembers()
+      this.fetchBannedMembers()
     },
     fetchClanMembers() {
       if (!this.didLoadMembers && !this.isLoadingMembers) {
@@ -229,6 +267,16 @@ export default {
           this.getActivityReport().catch(error => {
             console.error(error)
           })
+        }
+      }
+    },
+    fetchBannedMembers(bypass = false) {
+      if (bypass) {
+        this.recordEvent('Dashboard', 'Reload', 'Banned Members')
+        this.getBannedMembers().catch(error => console.error(error))
+      } else {
+        if (!this.didLoadBannedMembers && !this.isLoadingBannedMembers) {
+          this.getBannedMembers().catch(error => console.error(error))
         }
       }
     },

@@ -134,3 +134,11 @@ export function editMemberLevel(accessToken, clanId, membershipType, membershipI
       .catch(error => reject(error))
   })
 }
+
+export function getBannedMembers(clanId, authToken) {
+  return new Promise((resolve, reject) => {
+    get(`/clan/${clanId}/members/banned`, { Authorization: `Bearer ${authToken}` })
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}

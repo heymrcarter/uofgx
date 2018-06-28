@@ -190,4 +190,19 @@ describe('ClanService', () => {
       expect(actual).toEqual('the-response')
     })
   })
+
+  describe('getBannedMembers', () => {
+    let actual
+
+    beforeEach(async() => {
+      const expectedHeaders = { Authorization: 'Bearer auth-token' }
+      td.when(networkUtil.get('/clan/clan-id/members/banned', expectedHeaders)).thenResolve({ data: 'the-banned-members' })
+
+      actual = await subject.getBannedMembers('clan-id', 'auth-token')
+    })
+
+    it('returns the banned members', () => {
+      expect(actual).toEqual('the-banned-members')
+    })
+  })
 })

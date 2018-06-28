@@ -11,7 +11,11 @@ export default {
     isLoadingMembers: false,
     didLoadMembers: false,
     loadMembersError: false,
-    expansions: {}
+    expansions: {},
+    bannedMembers: undefined,
+    isLoadingBannedMembers: false,
+    didLoadBannedMembers: false,
+    bannedMembersLoadError: false
   },
   getters: {
     clanMembers: state => state.list,

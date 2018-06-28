@@ -39,3 +39,29 @@ export function UPDATE_MEMBER_LEVEL(state, { membershipId, memberLevel }) {
   const member = state.list.find(m => m.xboxMembershipId === membershipId)
   member.memberType = memberLevel
 }
+
+export function START_LOADING_BANNED_MEMBERS(state) {
+  state.isLoadingBannedMembers = true
+  state.didLoadBannedMembers = false
+}
+
+export function FINISH_LOADING_BANNED_MEMBERS(state) {
+  state.isLoadingBannedMembers = false
+  state.didLoadBannedMembers = true
+}
+
+export function CLEAR_BANNED_MEMBERS_LOAD_ERROR(state) {
+  state.bannedMembersLoadError = false
+}
+
+export function SET_BANNED_MEMBERS_LOAD_ERROR(state) {
+  state.bannedMembersLoadError = true
+}
+
+export function RELOAD_BANNED_MEMBERS(state) {
+  state.didLoadBannedMembers = false
+}
+
+export function SET_BANNED_MEMBERS(state, bannedMembers) {
+  state.bannedMembers = bannedMembers
+}
