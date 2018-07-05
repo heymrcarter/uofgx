@@ -1,5 +1,5 @@
 <template>
-  <v-card class="characters-card">
+  <v-card height="100%" class="characters-card">
     <v-card-title class="headline">Characters</v-card-title>
     <v-card-text>
       <loadable-indicator v-if="isLoading"></loadable-indicator>

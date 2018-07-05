@@ -89,12 +89,12 @@
           @action="fetchBannedMembers"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingBannedMembers && !bannedMembersLoadError && bannedMembers && bannedMembers.length === 0"
-          icon="remove_circle"
+          icon="remove_circle_outline"
           actionText="Reload"
           :text="bannedMembersText"
           @action="fetchBannedMembers(true)"></clan-overview-item>
         <clan-overview-item
-          v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers && inactiveMembers.length > 0"
+          v-if="!isLoadingBannedMembers && !bannedMembersLoadError && bannedMembers && bannedMembers.length > 0"
           icon="remove_circle_outline"
           actionText="View"
           :text="bannedMembersText"
@@ -186,7 +186,7 @@ export default {
       if (this.inactiveMembers) {
         if (this.inactiveMembers.length === 0) {
           return 'No inactive members'
-        } else if (this.inactiveMembers === 1) {
+        } else if (this.inactiveMembers.length === 1) {
           return '1 inactive member'
         } else {
           return `${this.inactiveMembers.length} inactive members`

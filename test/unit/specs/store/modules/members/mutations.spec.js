@@ -132,4 +132,87 @@ describe('members mutations', () => {
       expect(state.bannedMembers).toEqual('banned-members')
     })
   })
+
+  describe('UNBAN_MEMBER', () => {
+    let state, bannedMember1, bannedMember2
+
+    beforeEach(() => {
+      bannedMember1 = {
+        destinyUserInfo: {
+          membershipType: 'destiny-membership-type',
+          membershipId: 'destiny-membership-id-1'
+        },
+        bungieNetUserInfo: {
+          membershipType: 'bungie-membership-type',
+          membershipId: 'bungie-membership-id-1'
+        }
+      }
+
+      const bannedMemberToUnban = {
+        destinyUserInfo: {
+          membershipType: 'destiny-membership-type',
+          membershipId: 'destiny-membership-id-2'
+        },
+        bungieNetUserInfo: {
+          membershipType: 'bungie-membership-type',
+          membershipId: 'bungie-membership-id-2'
+        }
+      }
+
+      bannedMember2 = {
+        destinyUserInfo: {
+          membershipType: 'destiny-membership-type',
+          membershipId: 'destiny-membership-id-3'
+        },
+        bungieNetUserInfo: {
+          membershipType: 'bungie-membership-type',
+          membershipId: 'bungie-membership-id-3'
+        }
+      }
+
+      state = {
+        bannedMembers: [bannedMember1, bannedMemberToUnban, bannedMember2]
+      }
+
+      const membership = {
+        membershipType: 'destiny-membership-type',
+        membershipId: 'destiny-membership-id-2'
+      }
+
+      subject.UNBAN_MEMBER(state, membership)
+    })
+
+    it('splices the member out of the bannedMembers array', () => {
+      expect(state.bannedMembers.length).toEqual(2)
+      expect(state.bannedMembers[0]).toEqual(bannedMember1)
+      expect(state.bannedMembers[1]).toEqual(bannedMember2)
+    })
+  })
+
+  describe('BAN_MEMBER', () => {
+    let state, memberToBan
+
+    beforeEach(() => {
+      state = {
+        bannedMembers: []
+      }
+
+      const membership = {
+        membershipType: 'destiny-membership-type',
+        membershipId: 'destiny-membership-id-2'
+      }
+
+      subject.BAN_MEMBER(state, membership)
+    })
+
+    it('splices the member out of the bannedMembers array', () => {
+      expect(state.bannedMembers.length).toEqual(1)
+      expect(state.bannedMembers[0]).toEqual({
+        destinyUserInfo: {
+          membershipType: 'destiny-membership-type',
+          membershipId: 'destiny-membership-id-2'
+        }
+      })
+    })
+  })
 })

@@ -208,4 +208,59 @@ describe('member actions', () => {
       })
     })
   })
+
+  describe('unbanMember', () => {
+    let expectedMembership
+
+    beforeEach(async() => {
+      expectedMembership = { membershipType: 'membership-type', membershipId: 'membership-id' }
+      td.when(clanService.unbanMember('clan-id', 'membership-type', 'membership-id', 'auth-token')).thenResolve(expectedMembership)
+
+      const rootState = {
+        session: {
+          accessToken: 'auth-token'
+        },
+        clanId: 'clan-id',
+        membershipType: 'membership-type'
+      }
+
+      await subject.unbanMember({ commit, rootState }, 'membership-id')
+    })
+
+    it('unbans the member and removes the membership from state', () => {
+      td.verify(commit('UNBAN_MEMBER', expectedMembership))
+    })
+  })
+
+  describe('banMember', () => {
+    let expectedMembership, dispatch
+
+    beforeEach(async() => {
+      dispatch = td.function()
+      expectedMembership = { membershipType: 'membership-type', membershipId: 'membership-id' }
+      td.when(clanService.banMember('clan-id', 'membership-type', 'membership-id', 'auth-token')).thenResolve(expectedMembership)
+
+      const rootState = {
+        session: {
+          accessToken: 'auth-token'
+        },
+        clanId: 'clan-id',
+        membershipType: 'membership-type'
+      }
+
+      await subject.banMember({ commit, rootState, dispatch }, 'membership-id')
+    })
+
+    it('bans the member and adds the membership from state', () => {
+      td.verify(commit('BAN_MEMBER', expectedMembership))
+    })
+
+    it('reloads the banned members', () => {
+      td.verify(dispatch('getBannedMembers'))
+    })
+
+    it('reloads the members', () => {
+      td.verify(dispatch('getClanMembers'))
+    })
+  })
 })

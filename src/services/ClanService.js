@@ -142,3 +142,25 @@ export function getBannedMembers(clanId, authToken) {
       .catch(error => reject(error))
   })
 }
+
+export function unbanMember(clanId, membershipType, membershipId, authToken) {
+  return new Promise((resolve, reject) => {
+    const body = { membershipType, membershipId }
+    const headers = { Authorization: `Bearer ${authToken}` }
+
+    post(`/clan/${clanId}/members/unban`, body, headers)
+      .then(() => resolve(body))
+      .catch(error => reject(error))
+  })
+}
+
+export function banMember(clanId, membershipType, membershipId, authToken) {
+  return new Promise((resolve, reject) => {
+    const body = { membershipType, membershipId }
+    const headers = { Authorization: `Bearer ${authToken}` }
+
+    post(`/clan/${clanId}/members/ban`, body, headers)
+      .then(() => resolve(body))
+      .catch(error => reject(error))
+  })
+}

@@ -15,10 +15,12 @@
 
       <v-btn block class="mb-3" @click="openMemberLevelDialog">Promote/Demote</v-btn>
 
-      <v-btn color="red" block @click="openConfirmationDialog" :disabled="isLoading">
+      <v-btn color="red" class="mb-3" block @click="openConfirmationDialog" :disabled="isLoading">
         <span :class="{'mr-3': isLoading}">Remove member</span>
         <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
       </v-btn>
+
+      <v-btn color="red" block class="mb-3" @click="openBanDialog">Ban Member</v-btn>
     </v-card-text>
 
     <v-dialog v-model="showExemptionDialog" max-width="700">
@@ -76,6 +78,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="showBanDialog" max-width="500">
+      <v-card>
+        <v-card-title class="headline">Ban {{ gamertag }}?</v-card-title>
+        <v-card-text>
+          <p>Are you sure you want to ban <strong class="subheading bold">{{ gamertag }}</strong> from the clan?</p>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-btn color="red" @click="ban">Confirm</v-btn>
+          <v-btn flat @click="closeBanDialog">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -100,6 +116,7 @@ export default {
       showConfirmationDialog: false,
       showExemptionDialog: false,
       showMemberLevelDialog: false,
+      showBanDialog: false,
       memberLevel: undefined,
       exemptionEndDatePickerValue: moment
         .utc()
@@ -147,7 +164,7 @@ export default {
   },
   methods: {
     ...mapActions(['grantExemption', 'editExemption', 'removeMember']),
-    ...mapActions('members', ['editMemberLevel']),
+    ...mapActions('members', ['editMemberLevel', 'banMember']),
     makeExempt() {
       this.recordEvent('Member Profile', 'Grant', 'Exemption')
       const startDate = moment.utc(this.today).format()
@@ -222,6 +239,20 @@ export default {
     cancelMemberLevelDialog() {
       this.recordEvent('Member Profile', 'Cancel', 'EditMemberLevel')
       this.showMemberLevelDialog = false
+    },
+    openBanDialog() {
+      this.recordEvent('Member Profile', 'Start', 'Ban Member')
+      this.showBanDialog = true
+    },
+    closeBanDialog() {
+      this.recordEvent('Member Profile', 'Cancel', 'Ban Member')
+      this.showBanDialog = false
+    },
+    ban() {
+      this.recordEvent('Member Profile', 'Ban', 'Member')
+      this.banMember(this.membershipId).then(() => {
+        this.$router.push('/dashboard')
+      })
     }
   }
 }

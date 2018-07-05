@@ -205,4 +205,50 @@ describe('ClanService', () => {
       expect(actual).toEqual('the-banned-members')
     })
   })
+
+  describe('unbanMember', () => {
+    let actual
+
+    beforeEach(async() => {
+      const expectedBody = {
+        membershipType: 'membership-type',
+        membershipId: 'membership-id'
+      }
+
+      const expectedHeaders = {
+        Authorization: 'Bearer auth-token'
+      }
+      td.when(networkUtil.post('/clan/clan-id/members/unban', expectedBody, expectedHeaders)).thenResolve()
+
+      actual = await subject.unbanMember('clan-id', 'membership-type', 'membership-id', 'auth-token')
+    })
+
+    it('returns the membership of the unbanned member', () => {
+      expect(actual.membershipId).toEqual('membership-id')
+      expect(actual.membershipType).toEqual('membership-type')
+    })
+  })
+
+  describe('banMember', () => {
+    let actual
+
+    beforeEach(async() => {
+      const expectedBody = {
+        membershipType: 'membership-type',
+        membershipId: 'membership-id'
+      }
+
+      const expectedHeaders = {
+        Authorization: 'Bearer auth-token'
+      }
+      td.when(networkUtil.post('/clan/clan-id/members/ban', expectedBody, expectedHeaders)).thenResolve()
+
+      actual = await subject.banMember('clan-id', 'membership-type', 'membership-id', 'auth-token')
+    })
+
+    it('returns the membership of the unbanned member', () => {
+      expect(actual.membershipId).toEqual('membership-id')
+      expect(actual.membershipType).toEqual('membership-type')
+    })
+  })
 })

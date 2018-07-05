@@ -81,3 +81,29 @@ export function getBannedMembers({ commit, rootState }) {
       })
   })
 }
+
+export function unbanMember({ commit, rootState }, membershipId) {
+  return new Promise((resolve, reject) => {
+    clanService
+      .unbanMember(rootState.clanId, rootState.membershipType, membershipId, rootState.session.accessToken)
+      .then(membership => {
+        commit('UNBAN_MEMBER', membership)
+        resolve()
+      })
+      .catch(error => reject(error))
+  })
+}
+
+export function banMember({ commit, rootState, dispatch }, membershipId) {
+  return new Promise((resolve, reject) => {
+    clanService
+      .banMember(rootState.clanId, rootState.membershipType, membershipId, rootState.session.accessToken)
+      .then(membership => {
+        commit('BAN_MEMBER', membership)
+        dispatch('getBannedMembers')
+        dispatch('getClanMembers')
+        resolve()
+      })
+      .catch(error => reject(error))
+  })
+}

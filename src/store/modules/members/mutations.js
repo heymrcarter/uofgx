@@ -65,3 +65,17 @@ export function RELOAD_BANNED_MEMBERS(state) {
 export function SET_BANNED_MEMBERS(state, bannedMembers) {
   state.bannedMembers = bannedMembers
 }
+
+export function UNBAN_MEMBER(state, { membershipType, membershipId }) {
+  function isUnbannedMember({ destinyUserInfo }) {
+    return destinyUserInfo.membershipType === membershipType && destinyUserInfo.membershipId === membershipId
+  }
+
+  const index = state.bannedMembers.findIndex(m => isUnbannedMember(m))
+
+  state.bannedMembers.splice(index, 1)
+}
+
+export function BAN_MEMBER(state, membership) {
+  state.bannedMembers.push({ destinyUserInfo: membership })
+}
