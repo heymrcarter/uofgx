@@ -14,7 +14,9 @@
         <clan-overview-item
           v-if="!isLoadingMembers && !loadMembersError && clanMembers"
           icon="group"
-          :text="numberOfMembersText"></clan-overview-item>
+          :text="numberOfMembersText"
+          actionText="View"
+          @action="viewMembers"></clan-overview-item>
 
         <v-divider inset v-if="!isLoadingMembers"></v-divider>
 
@@ -105,6 +107,18 @@
     <pending-members :active="shouldRenderPendingMembers" @close="onDialogClose('shouldRenderPendingMembers')"></pending-members>
     <invited-members :active="shouldRenderInvitedMembers" @close="onDialogClose('shouldRenderInvitedMembers')"></invited-members>
     <banned-members :active="shouldRenderBannedMembers" @close="onDialogClose('shouldRenderBannedMembers')"></banned-members>
+    <v-dialog v-model="shouldRenderMembers" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
+      <v-card>
+        <v-toolbar card>
+          <v-btn icon @click.native="shouldRenderMembers = false"><v-icon>close</v-icon></v-btn>
+          <v-toolbar-title>Members</v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-text>
+          <members></members>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -115,6 +129,7 @@ import InvitedMembers from './InvitedMembers'
 import BannedMembers from './BannedMembers'
 import LoadableIndicator from '@/components/LoadableIndicator'
 import ClanOverviewItem from './ClanOverviewItem'
+import Members from './Members'
 import analytics from '@/mixins/analytics'
 export default {
   name: 'clan-overview',
@@ -123,14 +138,16 @@ export default {
     InvitedMembers,
     LoadableIndicator,
     ClanOverviewItem,
-    BannedMembers
+    BannedMembers,
+    Members
   },
   mixins: [analytics],
   data() {
     return {
       shouldRenderPendingMembers: false,
       shouldRenderInvitedMembers: false,
-      shouldRenderBannedMembers: false
+      shouldRenderBannedMembers: false,
+      shouldRenderMembers: false
     }
   },
   computed: {
@@ -287,6 +304,10 @@ export default {
     viewInvitedMembers() {
       this.recordEvent('Dashboard', 'View', 'Invited Members')
       this.shouldRenderInvitedMembers = true
+    },
+    viewMembers() {
+      this.recordEvent('Dashboard', 'View', 'Members')
+      this.shouldRenderMembers = true
     }
   },
   mounted() {
