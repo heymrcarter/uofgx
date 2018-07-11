@@ -18,7 +18,11 @@ export default new Vuex.Store({
   state: {
     clanId: undefined,
     clanName: undefined,
-    membershipType: undefined
+    membershipType: undefined,
+    weeklyMilestones: undefined,
+    isLoadingWeeklyMilestones: false,
+    didLoadWeeklyMilestones: false,
+    weeklyMilestonesLoadError: false
   },
   getters: {
     clanId: () => process.env.CLAN_ID

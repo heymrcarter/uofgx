@@ -6,6 +6,12 @@
       </v-flex>
 
       <v-flex xs12 md6>
+        <weekly-rewards></weekly-rewards>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap>
+      <v-flex xs12>
         <removal-history></removal-history>
       </v-flex>
     </v-layout>
@@ -24,6 +30,7 @@ import MemberRow from './dashboard/MemberRow'
 import RemovalHistory from './dashboard/RemovalHistory'
 import ClanOverview from './dashboard/ClanOverview'
 import Members from './dashboard/Members'
+import WeeklyRewards from './dashboard/WeeklyRewards'
 
 export default {
   name: 'dashboard',
@@ -31,7 +38,8 @@ export default {
     MemberRow,
     RemovalHistory,
     ClanOverview,
-    Members
+    Members,
+    WeeklyRewards
   },
   computed: {
     ...mapGetters(['exemptions'])

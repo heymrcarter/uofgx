@@ -251,4 +251,17 @@ describe('ClanService', () => {
       expect(actual.membershipType).toEqual('membership-type')
     })
   })
+
+  describe('getWeeklyMilestones', () => {
+    let actual
+
+    beforeEach(async() => {
+      td.when(networkUtil.get('/clan/clan-id/weekly-milestones')).thenResolve({ data: 'the-milestones' })
+      actual = await subject.getWeeklyMilestones('clan-id')
+    })
+
+    it('returns the response', () => {
+      expect(actual).toEqual('the-milestones')
+    })
+  })
 })

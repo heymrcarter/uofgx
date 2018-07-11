@@ -190,7 +190,7 @@ describe('members mutations', () => {
   })
 
   describe('BAN_MEMBER', () => {
-    let state, memberToBan
+    let state
 
     beforeEach(() => {
       state = {

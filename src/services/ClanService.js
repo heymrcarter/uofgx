@@ -164,3 +164,11 @@ export function banMember(clanId, membershipType, membershipId, authToken) {
       .catch(error => reject(error))
   })
 }
+
+export function getWeeklyMilestones(clanId) {
+  return new Promise((resolve, reject) => {
+    get(`/clan/${clanId}/weekly-milestones`)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}
