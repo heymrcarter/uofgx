@@ -6,21 +6,6 @@
     <v-toolbar-title class="clan-name">
       {{currentPageName}} <v-chip v-if="currentMemberLevel" color="grey darken-2" text-color="white">{{ currentMemberLevel }}</v-chip>
     </v-toolbar-title>
-
-    <v-spacer></v-spacer>
-
-    <v-menu bottom left offset-y v-responsive.xs.sm>
-      <v-btn icon slot="activator"><v-icon>more_vert</v-icon></v-btn>
-      <v-list>
-        <v-list-tile @click="$router.push('/about')">
-          <v-list-tile-title>About</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-menu>
-
-    <v-toolbar-items v-responsive.md.lg.xl>
-      <v-btn flat to="/about">About</v-btn>
-    </v-toolbar-items>
   </v-toolbar>
 </template>
 
