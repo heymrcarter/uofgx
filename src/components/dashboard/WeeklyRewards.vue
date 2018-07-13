@@ -1,6 +1,6 @@
 <template>
   <v-card height="100%">
-    <v-card-title class="headline">Weekly Rewards</v-card-title>
+    <v-card-title class="headline">Weekly rewards</v-card-title>
     <v-card-text>
       <loadable-indicator v-if="isLoadingWeeklyMilestones"></loadable-indicator>
       <loadable-failure
@@ -50,14 +50,15 @@ export default {
     LoadableIndicator,
     LoadableFailure
   },
-  data() {
-    return {}
+  watch: {
+    isLoadingWeeklyMilestones(nextValue) {
+      if (nextValue) {
+        this.fetchWeeklyRewards()
+      }
+    }
   },
   mounted() {
     this.fetchWeeklyRewards()
   }
 }
 </script>
-
-<style scoped>
-</style>
