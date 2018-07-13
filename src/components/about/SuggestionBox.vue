@@ -7,7 +7,7 @@
       </div>
 
       <div>
-        <v-text-field v-model="description" textarea label="Explain" color="yellow"></v-text-field>
+        <v-text-field v-model="description" outline label="Explain" color="yellow"></v-text-field>
       </div>
 
       <div>
