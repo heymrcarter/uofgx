@@ -81,7 +81,7 @@ export default {
 .wrapper {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 50px);
+  justify-content: space-between;
 
   .content {
     display: flex;

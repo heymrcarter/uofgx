@@ -1,31 +1,36 @@
 $pickerTextColor: rgba(0, 0, 0, 0.87);
 
-.theme--dark .picker .picker__body {
+.theme--dark .v-picker .v-picker__body {
   background: white !important;
 }
 
-.theme--dark .picker {
+.theme--dark .v-picker {
   color: $pickerTextColor;
 }
 
-.theme--dark .date-picker-header .date-picker-header__value:not(.date-picker-header__value--disabled) strong:not(:hover) {
+.theme--dark .v-date-picker-header button,
+.theme--dark .v-date-picker-header .v-date-picker-header__value:not(.v-date-picker-header__value--disabled) strong:not(:hover) {
   color: $pickerTextColor !important;
 }
 
-.theme--dark .date-picker-header .date-picker-header__value .accent--text:hover {
+.theme--dark .v-date-picker-header .v-date-picker-header__value .accent--text:hover {
   color: $pickerTextColor !important;
   background-color: #e5e5e5;
 }
 
-.theme--dark .date-picker-header .btn,
-.theme--dark .date-picker-table th,
-.theme--dark .date-picker-table .btn {
+.theme--dark .v-date-picker-header .btn,
+.theme--dark .v-date-picker-table th,
+.theme--dark .v-date-picker-table button {
   color: $pickerTextColor;
 }
 
-.theme--dark .date-picker-table .btn--active.accent,
-.theme--dark .date-picker-table .btn--active.btn--disabled {
+.theme--dark .v-date-picker-table .v-btn--active.accent,
+.theme--dark .v-date-picker-table .v-btn--active.btn--disabled {
   background-color: #6f6f6f !important;
   border-color: #616161 !important;
   color: white !important;
+}
+
+.v-progress-linear {
+  margin: 0;
 }
