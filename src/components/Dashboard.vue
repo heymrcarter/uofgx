@@ -1,24 +1,22 @@
 <template>
-  <v-container grid-list-lg fluid class="mt-2">
+  <v-container grid-list-lg fluid class="mt-3">
     <v-layout row wrap>
-      <v-flex xs12 md6>
+      <v-flex xs12>
+        <member-search></member-search>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row wrap>
+      <v-flex xs12 md6 lg4>
         <clan-overview></clan-overview>
       </v-flex>
 
-      <v-flex xs12 md6>
+      <v-flex xs12 md6 lg4>
         <weekly-rewards></weekly-rewards>
       </v-flex>
-    </v-layout>
 
-    <v-layout row wrap>
-      <v-flex xs12>
+      <v-flex xs12 md6 lg4>
         <removal-history></removal-history>
-      </v-flex>
-    </v-layout>
-
-    <v-layout row wrap>
-      <v-flex xs12>
-        <members></members>
       </v-flex>
     </v-layout>
   </v-container>
@@ -31,6 +29,7 @@ import RemovalHistory from './dashboard/RemovalHistory'
 import ClanOverview from './dashboard/ClanOverview'
 import Members from './dashboard/Members'
 import WeeklyRewards from './dashboard/WeeklyRewards'
+import MemberSearch from './dashboard/MemberSearch'
 
 export default {
   name: 'dashboard',
@@ -39,7 +38,8 @@ export default {
     RemovalHistory,
     ClanOverview,
     Members,
-    WeeklyRewards
+    WeeklyRewards,
+    MemberSearch
   },
   computed: {
     ...mapGetters(['exemptions'])
