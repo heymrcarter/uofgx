@@ -1,6 +1,6 @@
 <template>
   <div :class="'wrapper ' + wrapperClass">
-    <v-container fluid class="pa-0 about">
+    <v-container fluid class="pa-0 about content">
       <v-toolbar tabs>
         <v-toolbar-title><router-link to="/">Destiny Clan Manager</router-link></v-toolbar-title>
 
@@ -53,17 +53,7 @@
       </v-tabs-items>
     </v-container>
 
-    <v-footer height="60px" class="pa-2">
-      <v-layout row align-center>
-        <v-flex flex="1">
-          &copy; {{ new Date().getFullYear() }} - Tom Carter
-        </v-flex>
-
-        <div>
-          <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>
-        </div>
-      </v-layout>
-    </v-footer>
+    <app-footer></app-footer>
   </div>
 </template>
 
@@ -71,6 +61,7 @@
 import analytics from '@/mixins/analytics'
 import Roadmap from '@/components/about/Roadmap'
 import SuggestionBox from '@/components/about/SuggestionBox'
+import AppFooter from '@/components/AppFooter'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: 'about',
@@ -117,7 +108,8 @@ export default {
   },
   components: {
     Roadmap,
-    SuggestionBox
+    SuggestionBox,
+    AppFooter
   },
   mounted() {
     if (!this.roadmap) {
@@ -131,16 +123,16 @@ main {
   padding-top: 0;
 }
 
-.toolbar__title a {
+.v-toolbar__title a {
   color: white;
   text-decoration: none;
 }
 
 .wrapper {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
   &.suggestion-tab {
     height: 100vh;
@@ -153,7 +145,6 @@ main {
 }
 
 .about {
-  height: 100%;
   margin: unset;
 }
 
