@@ -52,23 +52,17 @@
       </v-container>
     </div>
 
-    <v-footer height="60px" class="pa-2">
-      <v-layout row align-center>
-        <v-flex flex="1">
-          &copy; {{ new Date().getFullYear() }} - Tom Carter
-        </v-flex>
-
-        <div>
-          <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>
-        </div>
-      </v-layout>
-    </v-footer>
+    <app-footer></app-footer>
   </section>
 </template>
 
 <script>
+import AppFooter from './AppFooter'
 export default {
   name: 'login',
+  components: {
+    AppFooter
+  },
   computed: {
     bungieNetAuthorizeEndpoint() {
       return `${process.env.AUTH_ENDPOINT}?client_id=${[process.env.CLIENT_ID]}&response_type=code&state=${btoa(process.env.OAUTH_SECRET)}`

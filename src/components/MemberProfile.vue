@@ -1,51 +1,55 @@
 <template>
-  <v-container fluid grid-list-lg>
-    <v-layout row wrap class="mt-2">
-      <v-flex xs12 md5>
-        <characters :membershipId="currentMembershipId"></characters>
-      </v-flex>
+  <section class="wrapper">
+    <v-container fluid grid-list-lg>
+      <v-layout row wrap class="mt-2">
+        <v-flex xs12 md5>
+          <characters :membershipId="currentMembershipId"></characters>
+        </v-flex>
 
-      <v-flex xs12 md4>
-        <expansions></expansions>
-      </v-flex>
+        <v-flex xs12 md4>
+          <expansions></expansions>
+        </v-flex>
 
-      <v-flex xs12 md3>
-        <profile-actions></profile-actions>
-      </v-flex>
-    </v-layout>
+        <v-flex xs12 md3>
+          <profile-actions></profile-actions>
+        </v-flex>
+      </v-layout>
 
-    <v-layout row wrap>
-      <v-flex xs12 md6>
-        <exemptions></exemptions>
-      </v-flex>
+      <v-layout row wrap>
+        <v-flex xs12 md6>
+          <exemptions></exemptions>
+        </v-flex>
 
-      <v-flex xs12 md6>
-        <notes :membership-id="currentMembershipId"></notes>
-      </v-flex>
-    </v-layout>
+        <v-flex xs12 md6>
+          <notes :membership-id="currentMembershipId"></notes>
+        </v-flex>
+      </v-layout>
 
-    <v-layout row wrap>
-      <v-flex xs12>
-        <character-selector @characterChanged="characterChange"></character-selector>
-      </v-flex>
-    </v-layout>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <character-selector @characterChanged="characterChange"></character-selector>
+        </v-flex>
+      </v-layout>
 
-    <v-layout row wrap>
-      <v-flex xs12 md6 fill-height>
-        <activity-breakdown-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-breakdown-chart>
-      </v-flex>
+      <v-layout row wrap>
+        <v-flex xs12 md6 fill-height>
+          <activity-breakdown-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-breakdown-chart>
+        </v-flex>
 
-      <v-flex xs12 md6>
-        <activity-by-date-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-by-date-chart>
-      </v-flex>
-    </v-layout>
+        <v-flex xs12 md6>
+          <activity-by-date-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-by-date-chart>
+        </v-flex>
+      </v-layout>
 
-    <v-layout row wrap>
-      <v-flex xs12>
-        <recent-activity-table :characterId="selectedCharacter" :membershipId="currentMembershipId"></recent-activity-table>
-      </v-flex>
-    </v-layout>
-  </v-container>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <recent-activity-table :characterId="selectedCharacter" :membershipId="currentMembershipId"></recent-activity-table>
+        </v-flex>
+      </v-layout>
+    </v-container>
+
+    <app-footer></app-footer>
+  </section>
 </template>
 
 <script>
@@ -58,6 +62,7 @@ import RecentActivityTable from './profile/RecentActivityTable'
 import ProfileActions from './profile/ProfileActions'
 import Notes from './profile/Notes'
 import Expansions from './profile/Expansions'
+import AppFooter from './AppFooter'
 
 export default {
   name: 'member-profile',
@@ -70,7 +75,8 @@ export default {
     RecentActivityTable,
     ProfileActions,
     Notes,
-    Expansions
+    Expansions,
+    AppFooter
   },
   data() {
     return {
@@ -89,3 +95,12 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+}
+</style>
