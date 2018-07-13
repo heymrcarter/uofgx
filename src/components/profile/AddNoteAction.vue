@@ -7,7 +7,7 @@
         <v-card-title class="headline">Add note</v-card-title>
         <v-card-text>
           <div>
-            <v-text-field class="note" textarea v-model="note" placeholder="Note"></v-text-field>
+            <v-text-field class="note" outline v-model="note" placeholder="Note" color="yellow"></v-text-field>
           </div>
         </v-card-text>
 
@@ -43,6 +43,7 @@ export default {
       }
       this.addNote(payload).then(() => {
         this.shouldRenderNoteDialog = false
+        this.note = ''
       })
     }
   }
