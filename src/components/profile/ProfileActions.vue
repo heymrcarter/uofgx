@@ -156,7 +156,7 @@ export default {
       return today <= endDate
     },
     memberLevels() {
-      return memberLevels
+      return memberLevels.filter(l => l.value < 4)
     },
     startingMemberLevelText() {
       return this.startingMemberLevel.text
