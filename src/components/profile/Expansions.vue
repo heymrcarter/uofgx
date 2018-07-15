@@ -34,6 +34,10 @@ import LoadableIndicator from '@/components/LoadableIndicator'
 const d2 = require('../../assets/d2.png')
 const coo = require('../../assets/coo.png')
 const wm = require('../../assets/wm.png')
+const forsaken = require('../../assets/forsaken.png')
+const ba = require('../../assets/ba.png')
+const jw = require('../../assets/jw.png')
+const penumbra = require('../../assets/penumbra.png')
 
 export default {
   name: 'expansions',
@@ -54,13 +58,21 @@ export default {
           return coo
         case 'Warmind':
           return wm
+        case 'Forsaken':
+          return forsaken
+        case 'Black Armory':
+          return ba
+        case `Joker's Wild`:
+          return jw
+        case 'Penumbra':
+          return penumbra
       }
     }
   },
   computed: {
     hasAllExpansions() {
       if (this.loadResult) {
-        return this.loadResult.length === 3
+        return this.loadResult.length >= 4
       }
     }
   },
@@ -76,7 +88,7 @@ export default {
   position: relative;
 }
 
-.card__title {
+.v-card__title {
   display: flex;
   justify-content: space-between;
 }
