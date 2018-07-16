@@ -6,7 +6,10 @@
       </v-flex>
 
       <div>
-        <v-btn flat to="/about">About</v-btn>
+        <v-btn flat to="/about">Roadmap</v-btn>
+      </div>
+      <div v-if="hasAccess">
+        <v-btn flat to="/about">Suggest a feature</v-btn>
       </div>
       <div>
         <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>
@@ -16,7 +19,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  name: 'app-footer'
+  name: 'app-footer',
+  computed: {
+    ...mapState('session', ['hasAccess'])
+  }
 }
 </script>
