@@ -21,6 +21,21 @@
         <v-divider inset v-if="!isLoadingMembers"></v-divider>
 
         <clan-overview-item
+          v-if="loadMembersError"
+          icon="warning"
+          :text="`Couldn't load online members`"
+          actionText="Retry"
+          @action="fetchClanMembers"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingMembers && !loadMembersError && clanMembers"
+          icon="wifi"
+          :text="numberOfOnlineMembersText"
+          actionText="View"
+          @action="viewOnlineMembers"></clan-overview-item>
+
+        <v-divider inset v-if="!isLoadingMembers"></v-divider>
+
+        <clan-overview-item
           v-if="pendingMembersLoadError"
           icon="warning"
           :text="`Couldn't load pending members`"
@@ -107,18 +122,8 @@
     <pending-members :active="shouldRenderPendingMembers" @close="onDialogClose('shouldRenderPendingMembers')"></pending-members>
     <invited-members :active="shouldRenderInvitedMembers" @close="onDialogClose('shouldRenderInvitedMembers')"></invited-members>
     <banned-members :active="shouldRenderBannedMembers" @close="onDialogClose('shouldRenderBannedMembers')"></banned-members>
-    <v-dialog v-model="shouldRenderMembers" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
-      <v-card>
-        <v-toolbar card>
-          <v-btn icon @click.native="shouldRenderMembers = false"><v-icon>close</v-icon></v-btn>
-          <v-toolbar-title>Members</v-toolbar-title>
-        </v-toolbar>
-
-        <v-card-text>
-          <members></members>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <clan-members :active="shouldRenderMembers" @close="onDialogClose('shouldRenderMembers')"></clan-members>
+    <online-members :active="shouldRenderOnlineMembers" @close="onDialogClose('shouldRenderOnlineMembers')"></online-members>
   </v-card>
 </template>
 
@@ -129,7 +134,8 @@ import InvitedMembers from './InvitedMembers'
 import BannedMembers from './BannedMembers'
 import LoadableIndicator from '@/components/LoadableIndicator'
 import ClanOverviewItem from './ClanOverviewItem'
-import Members from './Members'
+import ClanMembers from './ClanMembers'
+import OnlineMembers from './OnlineMembers'
 import analytics from '@/mixins/analytics'
 export default {
   name: 'clan-overview',
@@ -139,7 +145,8 @@ export default {
     LoadableIndicator,
     ClanOverviewItem,
     BannedMembers,
-    Members
+    ClanMembers,
+    OnlineMembers
   },
   mixins: [analytics],
   data() {
@@ -147,13 +154,14 @@ export default {
       shouldRenderPendingMembers: false,
       shouldRenderInvitedMembers: false,
       shouldRenderBannedMembers: false,
-      shouldRenderMembers: false
+      shouldRenderMembers: false,
+      shouldRenderOnlineMembers: false
     }
   },
   computed: {
     ...mapGetters('members/pending', ['pendingMembers', 'isLoadingPendingMembers', 'didLoadPendingMembers', 'pendingMembersLoadError']),
     ...mapGetters('members/invited', ['invitedMembers', 'isLoadingInvitedMembers', 'didLoadInvitedMembers', 'invitedMembersLoadError']),
-    ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError']),
+    ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError', 'onlineMembers']),
     ...mapGetters(['activityReport', 'activityReportLoadError', 'isLoadingActivityReport', 'didLoadActivityReport']),
     ...mapState('members', ['bannedMembers', 'isLoadingBannedMembers', 'didLoadBannedMembers', 'bannedMembersLoadError']),
     isLoading() {
@@ -174,6 +182,17 @@ export default {
           return '1 member'
         } else {
           return `${this.clanMembers.length} members`
+        }
+      }
+    },
+    numberOfOnlineMembersText() {
+      if (this.onlineMembers) {
+        if (this.onlineMembers.length === 0) {
+          return 'No online members'
+        } else if (this.onlineMembers.length === 1) {
+          return '1 online member'
+        } else {
+          return `${this.onlineMembers.length} online members`
         }
       }
     },
@@ -228,7 +247,6 @@ export default {
     ...mapActions('members', ['getClanMembers', 'getBannedMembers']),
     ...mapActions(['getActivityReport']),
     onDialogClose(dialog) {
-      this.getClanMembers()
       this[dialog] = false
     },
     fetchAll() {
@@ -308,6 +326,10 @@ export default {
     viewMembers() {
       this.recordEvent('Dashboard', 'View', 'Members')
       this.shouldRenderMembers = true
+    },
+    viewOnlineMembers() {
+      this.recordEvent('Dashboard', 'View', 'Online Members')
+      this.shouldRenderOnlineMembers = true
     }
   },
   mounted() {

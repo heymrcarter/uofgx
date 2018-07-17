@@ -30,6 +30,9 @@ const { mapActions } = createNamespacedHelpers('members/active')
 export default {
   name: 'member-list',
   mixins: [analytics],
+  props: {
+    members: Array
+  },
   data() {
     return {
       filter: '',
@@ -39,7 +42,7 @@ export default {
   computed: {
     ...mapGetters(['clanMembers']),
     presentedList() {
-      if (!this.clanMembers) {
+      if (!this.members) {
         return []
       }
 
@@ -56,7 +59,7 @@ export default {
         return username.toLowerCase().includes(filter)
       }
 
-      return this.filter !== null ? this.clanMembers.filter(m => searchByUsername(m.bungieNetUserName) || searchByUsername(m.xboxUserName)) : this.clanMembers
+      return this.filter !== null ? this.members.filter(m => searchByUsername(m.bungieNetUserName) || searchByUsername(m.xboxUserName)) : this.members
     }
   },
   methods: {

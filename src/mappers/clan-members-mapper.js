@@ -18,12 +18,11 @@ function sortByMemberType(member) {
 }
 
 export function mapResponseToView(results) {
-  let members = []
-
-  results.forEach(result => {
-    const member = {
+  let members = results.map(result => {
+    return {
       memberType: result.memberType,
       joinDate: result.joinDate,
+      isOnline: result.isOnline,
       bungieNetAvatar: result.bungieNetUserInfo ? `https://bungie.net/${result.bungieNetUserInfo.iconPath}` : '',
       bungieNetUserName: result.bungieNetUserInfo ? result.bungieNetUserInfo.displayName : '',
       xboxUserName: result.destinyUserInfo.displayName,
@@ -31,8 +30,6 @@ export function mapResponseToView(results) {
       xboxMembershipId: result.destinyUserInfo.membershipId,
       xboxMembershipType: result.destinyUserInfo.membershipType
     }
-
-    members.push(member)
   })
 
   return sort(members).asc([m => sortByMemberType(m), m => new Date(m.joinDate), m => m.xboxUserName.toLowerCase()])

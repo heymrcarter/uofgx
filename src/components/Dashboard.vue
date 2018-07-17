@@ -30,7 +30,6 @@ import { mapGetters, mapActions } from 'vuex'
 import MemberRow from './dashboard/MemberRow'
 import RemovalHistory from './dashboard/RemovalHistory'
 import ClanOverview from './dashboard/ClanOverview'
-import Members from './dashboard/Members'
 import WeeklyRewards from './dashboard/WeeklyRewards'
 import MemberSearch from './dashboard/MemberSearch'
 import AppFooter from './AppFooter'
@@ -41,7 +40,6 @@ export default {
     MemberRow,
     RemovalHistory,
     ClanOverview,
-    Members,
     WeeklyRewards,
     MemberSearch,
     AppFooter

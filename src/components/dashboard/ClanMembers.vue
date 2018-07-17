@@ -1,16 +1,16 @@
 <template>
-  <v-card>
-    <v-card-title class="headline">Clan members</v-card-title>
-    <v-card-text>
-      <loadable-indicator v-if="isLoadingMembers"></loadable-indicator>
-      <loadable-failure
-        v-else-if="loadMembersError"
-        :message="`Couldn't load members.`"
-        :retryable="true"
-        @retry="fetchMembers"></loadable-failure>
-      <member-list v-else></member-list>
-    </v-card-text>
-  </v-card>
+  <v-dialog v-model="active" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
+    <v-card>
+      <v-toolbar card>
+        <v-btn icon @click.native="closeDialog"><v-icon>close</v-icon></v-btn>
+        <v-toolbar-title>Members</v-toolbar-title>
+      </v-toolbar>
+
+      <v-card-text>
+        <member-list :members="clanMembers"></member-list>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
@@ -20,7 +20,10 @@ import LoadableFailure from '@/components/LoadableFailure'
 import MemberList from '@/components/dashboard/MemberList'
 const { mapActions, mapGetters } = createNamespacedHelpers('members')
 export default {
-  name: 'members',
+  name: 'clan-members',
+  props: {
+    active: Boolean
+  },
   components: {
     LoadableIndicator,
     LoadableFailure,
@@ -35,6 +38,9 @@ export default {
       this.getClanMembers().catch(error => {
         console.error(error)
       })
+    },
+    closeDialog() {
+      this.$emit('close')
     }
   },
   mounted() {

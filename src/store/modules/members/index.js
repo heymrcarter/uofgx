@@ -19,6 +19,13 @@ export default {
   },
   getters: {
     clanMembers: state => state.list,
+    onlineMembers: state => {
+      if (state.list) {
+        return state.list.filter(m => m.isOnline)
+      }
+
+      return []
+    },
     isLoadingMembers: state => state.isLoadingMembers,
     didLoadMembers: state => state.didLoadMembers,
     loadMembersError: state => state.loadMembersError
