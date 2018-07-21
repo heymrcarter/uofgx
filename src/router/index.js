@@ -6,6 +6,8 @@ import Login from '@/components/Login'
 import OAuthHandler from '@/components/OAuthHandler'
 import MemberProfile from '@/components/MemberProfile'
 import About from '@/components/About'
+import RoadmapPage from '@/components/RoadmapPage'
+import SuggestFeature from '@/components/SuggestFeature'
 import { configureRouter } from './config'
 
 Vue.use(Router)
@@ -24,6 +26,22 @@ const router = new Router({
       path: '/about',
       name: 'About',
       component: About,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/roadmap',
+      name: 'Roadmap',
+      component: RoadmapPage,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/suggest-feature',
+      name: 'SuggestFeature',
+      component: SuggestFeature,
       meta: {
         requiresAuth: false
       }

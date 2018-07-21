@@ -1,13 +1,12 @@
 <template>
   <v-card>
-    <v-card-title class="headline">Suggest a feature</v-card-title>
     <v-card-text>
       <div>
         <v-text-field v-model="idea" label="Idea" color="yellow" required></v-text-field>
       </div>
 
       <div>
-        <v-text-field v-model="description" outline label="Explain" color="yellow"></v-text-field>
+        <v-textarea v-model="description" outline label="Explain" color="yellow"></v-textarea>
       </div>
 
       <div>

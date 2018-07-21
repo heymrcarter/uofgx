@@ -9,7 +9,6 @@
               <v-spacer class="my-3"></v-spacer>
               <div class="title mb-3">Sign in with your Bungie.net account</div>
               <v-btn large class="mx-0" :href="bungieNetAuthorizeEndpoint">Sign in</v-btn>
-              <v-btn color="grey" large to="/about">Learn more</v-btn>
             </v-flex>
           </v-layout>
         </v-container>

@@ -6,10 +6,10 @@
       </v-flex>
 
       <div>
-        <v-btn flat to="/about">Roadmap</v-btn>
+        <v-btn flat to="/roadmap">Roadmap</v-btn>
       </div>
       <div v-if="hasAccess">
-        <v-btn flat to="/about">Suggest a feature</v-btn>
+        <v-btn flat to="/suggest-feature">Suggest a feature</v-btn>
       </div>
       <div>
         <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>

@@ -4,8 +4,17 @@
       <v-icon>arrow_back</v-icon>
     </v-btn>
     <v-toolbar-title class="clan-name">
-      {{currentPageName}} <v-chip v-if="currentMemberLevel" color="grey darken-2" text-color="white">{{ currentMemberLevel }}</v-chip>
+      <router-link to="/" v-if="shouldRenderTitleAsLinkToHomepage">{{ currentPageName }}</router-link>
+      <span v-else>{{ currentPageName }}</span>
+      <v-chip v-if="currentMemberLevel" color="grey darken-2" text-color="white">{{ currentMemberLevel }}</v-chip>
     </v-toolbar-title>
+
+    <v-spacer></v-spacer>
+
+    <v-toolbar-items>
+      <v-btn v-if="shouldRenderLogin" flat :href="bungieNetAuthorizeEndpoint">Log in</v-btn>
+      <v-btn v-if="shouldRenderDashboadLink" flat to="/dashboard">{{ clanName }}</v-btn>
+    </v-toolbar-items>
   </v-toolbar>
 </template>
 
@@ -28,6 +37,11 @@ export default {
   },
   computed: {
     ...mapState(['clanName']),
+    ...mapState('session', {
+      isAuthenticated(state) {
+        return state.hasAccess
+      }
+    }),
     ...mapState('members', {
       currentMemberLevel(state) {
         if (this.$route.name !== 'Profile') {
@@ -40,16 +54,30 @@ export default {
       }
     }),
     ...mapGetters('members/active', ['activeMember']),
+    bungieNetAuthorizeEndpoint() {
+      return `${process.env.AUTH_ENDPOINT}?client_id=${[process.env.CLIENT_ID]}&response_type=code&state=${btoa(process.env.OAUTH_SECRET)}`
+    },
     shouldRenderBackButton() {
       return this.$route.name === 'InactivePlayers' || this.$route.name === 'Profile'
     },
     shouldRenderToolbar() {
       return this.$route.name !== 'About'
     },
+    shouldRenderLogin() {
+      return !this.isAuthenticated && (this.$route.name === 'Roadmap' || this.$route.name === 'SuggestFeature')
+    },
+    shouldRenderDashboadLink() {
+      return this.isAuthenticated && (this.$route.name === 'Roadmap' || this.$route.name === 'SuggestFeature' || this.$route.name === 'Home')
+    },
+    shouldRenderTitleAsLinkToHomepage() {
+      return this.$route.name === 'Roadmap' || this.$route.name === 'SuggestFeature' || this.$route.name === 'Home'
+    },
     currentPageName() {
       switch (this.$route.name) {
         case 'Home':
         case 'About':
+        case 'Roadmap':
+        case 'SuggestFeature':
           return 'Destiny Clan Manager'
         case 'OAuth':
           return 'Processing login...'
@@ -84,3 +112,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.clan-name a {
+  color: white;
+  text-decoration: none;
+}
+</style>
