@@ -3,10 +3,12 @@ import * as mutations from './mutations'
 
 export default {
   state: {
-    details: {}
+    details: {},
+    overview: undefined
   },
   getters: {
-    activityDetails: state => state.activityDetails
+    activityDetails: state => state.activityDetails,
+    activityOverview: state => state.overview
   },
   actions,
   mutations

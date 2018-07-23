@@ -27,23 +27,20 @@
 
       <v-layout row wrap>
         <v-flex xs12>
-          <character-selector @characterChanged="characterChange"></character-selector>
-        </v-flex>
-      </v-layout>
+          <v-tabs v-model="activeTab" slider-color="yellow">
+            <v-tab>Activity Overview</v-tab>
+            <v-tab>Character activity</v-tab>
+          </v-tabs>
 
-      <v-layout row wrap>
-        <v-flex xs12 md6 fill-height>
-          <activity-breakdown-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-breakdown-chart>
-        </v-flex>
+          <v-tabs-items v-model="activeTab">
+            <v-tab-item class="profile-tab mt-3">
+              <activity-overview></activity-overview>
+            </v-tab-item>
 
-        <v-flex xs12 md6>
-          <activity-by-date-chart :characterId="selectedCharacter" :membershipId="currentMembershipId"></activity-by-date-chart>
-        </v-flex>
-      </v-layout>
-
-      <v-layout row wrap>
-        <v-flex xs12>
-          <recent-activity-table :characterId="selectedCharacter" :membershipId="currentMembershipId"></recent-activity-table>
+            <v-tab-item class="profile-tab mt-3">
+              <character-activity></character-activity>
+            </v-tab-item>
+          </v-tabs-items>
         </v-flex>
       </v-layout>
     </v-container>
@@ -55,42 +52,33 @@
 <script>
 import Characters from './profile/Characters'
 import Exemptions from './profile/Exemptions'
-import CharacterSelector from './profile/CharacterSelector'
-import ActivityBreakdownChart from './profile/ActivityBreakdownChart'
-import ActivityByDateChart from './profile/ActivityByDateChart'
-import RecentActivityTable from './profile/RecentActivityTable'
 import ProfileActions from './profile/ProfileActions'
 import Notes from './profile/Notes'
 import Expansions from './profile/Expansions'
 import AppFooter from './AppFooter'
+import ActivityOverview from './profile/ActivityOverview'
+import CharacterActivity from './profile/CharacterActivity'
 
 export default {
   name: 'member-profile',
   components: {
     Characters,
     Exemptions,
-    CharacterSelector,
-    ActivityBreakdownChart,
-    ActivityByDateChart,
-    RecentActivityTable,
     ProfileActions,
     Notes,
     Expansions,
-    AppFooter
+    AppFooter,
+    ActivityOverview,
+    CharacterActivity
   },
   data() {
     return {
-      selectedCharacter: undefined
+      activeTab: null
     }
   },
   computed: {
     currentMembershipId() {
       return this.$route.params.membershipId
-    }
-  },
-  methods: {
-    characterChange(nextCharacterId) {
-      this.selectedCharacter = nextCharacterId
     }
   }
 }
@@ -102,5 +90,11 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   width: 100%;
+}
+
+.profile-tab {
+  .container {
+    padding: unset;
+  }
 }
 </style>

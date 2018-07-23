@@ -76,4 +76,18 @@ describe('MemberService', () => {
       })
     })
   })
+
+  describe('getActivityOverview', () => {
+    let actual
+
+    beforeEach(async() => {
+      td.when(get(`/member/membership-type/membership-id/activity/overview`)).thenResolve({ data: 'the-activity-overview' })
+
+      actual = await subject.getActivityOverview('membership-type', 'membership-id')
+    })
+
+    it('returns fetches the activity overview and returns it', () => {
+      expect(actual).toEqual('the-activity-overview')
+    })
+  })
 })

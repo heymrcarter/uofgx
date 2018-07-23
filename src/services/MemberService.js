@@ -72,3 +72,11 @@ export function getMemberExpansions(membershipType, membershipId) {
       .catch(error => reject(error))
   })
 }
+
+export function getActivityOverview(membershipType, membershipId) {
+  return new Promise((resolve, reject) => {
+    get(`/member/${membershipType}/${membershipId}/activity/overview`)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}

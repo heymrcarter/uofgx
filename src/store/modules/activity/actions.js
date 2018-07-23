@@ -39,3 +39,15 @@ export function getCharacterActivity({ commit, rootState }, { membershipId, char
       .catch(error => reject(error))
   })
 }
+
+export function getActivityOverview({ commit, rootState }, membershipId) {
+  return new Promise((resolve, reject) => {
+    memberService
+      .getActivityOverview(rootState.membershipType, membershipId)
+      .then(response => {
+        commit('SET_ACTIVITY_OVERVIEW', response)
+        resolve()
+      })
+      .catch(error => reject(error))
+  })
+}
