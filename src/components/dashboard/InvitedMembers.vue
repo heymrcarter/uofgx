@@ -7,7 +7,20 @@
         </v-btn>
 
         <v-toolbar-title>Invited members</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-tooltip left>
+          <v-btn slot="activator" icon @click="reload"><v-icon>refresh</v-icon></v-btn>
+          <span>Reload</span>
+        </v-tooltip>
       </v-toolbar>
+
+      <v-progress-linear
+        v-if="isLoading"
+        indeterminate
+        color="yellow"
+        height="5"></v-progress-linear>
 
       <v-card-text>
         <v-list three-line>
@@ -47,14 +60,15 @@ export default {
     return {
       disableButton: false,
       snackbarText: '',
-      showSnackbar: false
+      showSnackbar: false,
+      isLoading: false
     }
   },
   computed: {
     ...mapGetters(['invitedMembers'])
   },
   methods: {
-    ...mapActions(['rescindMembershipInvitation']),
+    ...mapActions(['rescindMembershipInvitation', 'getInvitedMembers']),
     closeDialog() {
       this.$emit('close')
     },
@@ -81,6 +95,12 @@ export default {
       this.disableButton = false
       this.snackbarText = message
       this.showSnackbar = true
+    },
+    reload() {
+      this.isLoading = true
+      this.getInvitedMembers().finally(() => {
+        this.isLoading = false
+      })
     }
   }
 }
