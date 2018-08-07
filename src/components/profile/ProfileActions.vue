@@ -1,27 +1,24 @@
 <template>
-  <v-card height="100%">
-    <v-card-title class="headline">Actions</v-card-title>
-    <v-card-text>
-      <add-note-action :membershipId="membershipId"></add-note-action>
+  <div class="profile-actions">
+    <add-note-action :membershipId="membershipId"></add-note-action>
 
-      <v-btn block v-if="!isCurrentlyExempt" @click="showExemptionDialog = true" :disabled="isLoadingExemption" class="mb-3">
-        <span :class="{'mr-3': isLoading}">Grant exemption</span>
-        <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
-      </v-btn>
-      <v-btn block v-else @click="liftExemption" :disabled="isLoadingExemption" class="mb-3">
-        <span :class="{'mr-3': isLoading}">Lift exemption</span>
-        <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
-      </v-btn>
+    <v-btn block  v-if="!isCurrentlyExempt" @click="showExemptionDialog = true" :disabled="isLoadingExemption" class="mb-3">
+      <span :class="{'mr-3': isLoading}">Grant exemption</span>
+      <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+    </v-btn>
+    <v-btn block  v-else @click="liftExemption" :disabled="isLoadingExemption" class="mb-3">
+      <span :class="{'mr-3': isLoading}">Lift exemption</span>
+      <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+    </v-btn>
 
-      <v-btn block class="mb-3" @click="openMemberLevelDialog">Promote/Demote</v-btn>
+    <v-btn block  class="mb-3" @click="openMemberLevelDialog">Promote/Demote</v-btn>
 
-      <v-btn color="red" class="mb-3" block @click="openConfirmationDialog" :disabled="isLoading">
-        <span :class="{'mr-3': isLoading}">Remove member</span>
-        <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
-      </v-btn>
+    <v-btn block  color="red" class="mb-3" @click="openConfirmationDialog" :disabled="isLoading">
+      <span :class="{'mr-3': isLoading}">Remove member</span>
+      <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+    </v-btn>
 
-      <v-btn color="red" block class="mb-3" @click="openBanDialog">Ban Member</v-btn>
-    </v-card-text>
+    <v-btn block  color="red" class="mb-3" @click="openBanDialog">Ban Member</v-btn>
 
     <v-dialog v-model="showExemptionDialog" max-width="700">
       <v-card>
@@ -41,7 +38,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn flat @click="showExemptionDialog = false">Cancel</v-btn>
+          <v-btn   @click="showExemptionDialog = false">Cancel</v-btn>
           <v-btn @click="makeExempt">Grant</v-btn>
         </v-card-actions>
       </v-card>
@@ -58,8 +55,8 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn flat @click="cancelMemberLevelDialog">Cancel</v-btn>
-          <v-btn @click="changeMemberLevel">Update</v-btn>
+          <v-btn   @click="cancelMemberLevelDialog">Cancel</v-btn >
+          <v-btn  @click="changeMemberLevel">Update</v-btn >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -73,8 +70,8 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="red" @click="kick">Confirm</v-btn>
-          <v-btn flat @click="closeConfirmationDialog">Cancel</v-btn>
+          <v-btn  color="red" @click="kick">Confirm</v-btn >
+          <v-btn   @click="closeConfirmationDialog">Cancel</v-btn >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -87,12 +84,12 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="red" @click="ban">Confirm</v-btn>
-          <v-btn flat @click="closeBanDialog">Cancel</v-btn>
+          <v-btn  color="red" @click="ban">Confirm</v-btn >
+          <v-btn   @click="closeBanDialog">Cancel</v-btn >
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -259,6 +256,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.profile-actions {
+  text-align: right;
+}
+
 .bold {
   font-weight: bold;
 }

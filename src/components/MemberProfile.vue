@@ -2,26 +2,8 @@
   <section class="wrapper">
     <v-container fluid grid-list-lg>
       <v-layout row wrap class="mt-2">
-        <v-flex xs12 md5>
-          <characters :membershipId="currentMembershipId"></characters>
-        </v-flex>
-
-        <v-flex xs12 md4>
-          <expansions></expansions>
-        </v-flex>
-
-        <v-flex xs12 md3>
-          <profile-actions></profile-actions>
-        </v-flex>
-      </v-layout>
-
-      <v-layout row wrap>
-        <v-flex xs12 md6>
-          <exemptions></exemptions>
-        </v-flex>
-
-        <v-flex xs12 md6>
-          <notes :membership-id="currentMembershipId"></notes>
+        <v-flex xs12>
+          <member-overview></member-overview>
         </v-flex>
       </v-layout>
 
@@ -58,6 +40,7 @@ import Expansions from './profile/Expansions'
 import AppFooter from './AppFooter'
 import ActivityOverview from './profile/ActivityOverview'
 import CharacterActivity from './profile/CharacterActivity'
+import MemberOverview from './profile/MemberOverview'
 
 export default {
   name: 'member-profile',
@@ -69,7 +52,8 @@ export default {
     Expansions,
     AppFooter,
     ActivityOverview,
-    CharacterActivity
+    CharacterActivity,
+    MemberOverview
   },
   data() {
     return {

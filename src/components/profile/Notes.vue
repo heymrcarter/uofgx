@@ -1,70 +1,64 @@
 <template>
-  <v-card>
-    <v-card-title class="headline">Notes</v-card-title>
+  <v-dialog v-model="active" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
+    <v-card>
+      <v-toolbar card>
+        <v-btn icon @click.native="closeDialog">
+          <v-icon>close</v-icon>
+        </v-btn>
 
-    <v-card-text>
-      <loadable-indicator v-if="isLoading"></loadable-indicator>
-      <loadable-failure
-        v-else-if="loadError"
-        :message="`Couldn't load notes.`"
-        :retryable="true"
-        @retry="reload"></loadable-failure>
+        <v-toolbar-title>Notes</v-toolbar-title>
+      </v-toolbar>
 
-      <v-list two-line v-else-if="memberNotes && memberNotes.length > 0">
-        <template v-for="(note, i) in memberNotes">
-          <v-list-tile :key="note.id">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ note.note }}</v-list-tile-title>
-              <v-list-tile-sub-title>- {{ adminUserName(note.adminMembershipId) }} on {{ formatDate(note.date) }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider v-if="i !== memberNotes.length - 1" :key="i"></v-divider>
-        </template>
-      </v-list>
+      <v-card-text>
+        <v-list two-line v-if="memberNotes && memberNotes.length > 0">
+          <template v-for="(note, i) in memberNotes">
+            <v-list-tile :key="note.id">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ note.note }}</v-list-tile-title>
+                <v-list-tile-sub-title>- {{ adminUserName(note.adminMembershipId) }} on {{ note.date | formatDate }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider :key="i"></v-divider>
+          </template>
+        </v-list>
 
-      <p v-else>
-        No notes
-      </p>
-    </v-card-text>
-  </v-card>
+        <p v-else>
+          No notes
+        </p>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import loadable from '@/mixins/loadable'
-import LoadableIndicator from '@/components/LoadableIndicator'
-import LoadableFailure from '@/components/LoadableFailure'
 import dateFormatter from '@/mixins/date-formatter'
 export default {
   name: 'notes',
-  mixins: [loadable, dateFormatter],
+  mixins: [dateFormatter],
   props: {
-    membershipId: String
-  },
-  data() {
-    return {
-      loadAction: 'notes/getNotes',
-      loadParams: this.membershipId
-    }
+    active: Boolean
   },
   computed: {
     ...mapGetters('members', ['clanMembers']),
-    ...mapState({
+    ...mapState('notes', {
       memberNotes(state) {
-        return state.notes.notes[this.membershipId]
+        return state.notes[this.membershipId]
       }
-    })
+    }),
+    membershipId() {
+      return this.$route.params.membershipId
+    }
   },
   methods: {
     adminUserName(adminMembershipId) {
       if (this.clanMembers) {
         return this.clanMembers.find(m => m.bungieNetMembershipId === adminMembershipId).bungieNetUserName
       }
+    },
+    closeDialog() {
+      this.$emit('close')
     }
-  },
-  components: {
-    LoadableIndicator,
-    LoadableFailure
   }
 }
 </script>

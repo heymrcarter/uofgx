@@ -11,6 +11,7 @@ import * as actions from './actions'
 import * as mutations from './mutations'
 import notes from './modules/notes'
 import roadmap from './modules/roadmap'
+import characters from './modules/characters'
 
 Vue.use(Vuex)
 
@@ -24,9 +25,6 @@ export default new Vuex.Store({
     didLoadWeeklyMilestones: false,
     weeklyMilestonesLoadError: false
   },
-  getters: {
-    clanId: () => process.env.CLAN_ID
-  },
   actions,
   mutations,
   modules: {
@@ -38,6 +36,7 @@ export default new Vuex.Store({
     activity,
     session,
     notes,
-    roadmap
+    roadmap,
+    characters
   }
 })

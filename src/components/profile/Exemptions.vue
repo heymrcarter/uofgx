@@ -1,18 +1,20 @@
 <template>
+  <v-dialog v-model="active" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
   <v-card height="100%">
-    <v-card-title class="headline">
-      <v-badge color="grey darken-4" v-model="showNumberExemptionsBadge">
-        <span slot="badge">{{ exemptionHistory.length }}</span>
-        Exemptions
-      </v-badge>
-    </v-card-title>
+    <v-toolbar card>
+        <v-btn icon @click.native="closeDialog">
+          <v-icon>close</v-icon>
+        </v-btn>
+
+        <v-toolbar-title>Exemptions</v-toolbar-title>
+      </v-toolbar>
     <v-card-text>
       <p v-if="exemptionHistory.length === 0">No exemptions</p>
       <v-list two-line v-else>
-        <template v-for="(exemption, i) in recentExemptionHistory">
+        <template v-for="(exemption, i) in exemptionHistory">
           <v-list-tile :key="i">
             <v-list-tile-content>
-              <v-list-tile-title>{{ formatDate(exemption.startDate) }} - {{ formatDate(exemption.endDate) }}</v-list-tile-title>
+              <v-list-tile-title>{{ exemption.startDate | formatDate }} - {{ exemption.endDate | formatDate }}</v-list-tile-title>
               <v-list-tile-sub-title>Granted by: {{ adminUserName(exemption.adminMembershipId) }}</v-list-tile-sub-title>
             </v-list-tile-content>
 
@@ -20,19 +22,25 @@
               <v-icon large>explicit</v-icon>
             </v-list-tile-action>
           </v-list-tile>
-          <v-divider v-if="recentExemptionHistory.length - 1 !== i" :key="(i+1) * 100"></v-divider>
+          <v-divider :key="(i+1) * 100"></v-divider>
         </template>
       </v-list>
     </v-card-text>
   </v-card>
+  </v-dialog>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import moment from 'moment-timezone'
+import dateFormatter from '@/mixins/date-formatter'
 import sort from 'fast-sort'
+import moment from 'moment-timezone'
 export default {
   name: 'exemptions',
+  mixins: [dateFormatter],
+  props: {
+    active: Boolean
+  },
   data() {
     return {
       loadError: false
@@ -51,18 +59,9 @@ export default {
       }
       const currentMemberExemption = JSON.parse(JSON.stringify(this.exemptions[this.$route.params.membershipId]))
       return sort(currentMemberExemption.history).desc(e => e.endDate)
-    },
-    showNumberExemptionsBadge() {
-      return this.exemptionHistory.length > 0
-    },
-    recentExemptionHistory() {
-      return this.exemptionHistory.filter((_, index) => index < 3)
     }
   },
   methods: {
-    formatDate(date) {
-      return moment.utc(date).format('MM/DD/YYYY')
-    },
     adminUserName(adminMembershipId) {
       return this.clanMembers.find(m => m.bungieNetMembershipId === adminMembershipId).bungieNetUserName
     },
@@ -71,6 +70,9 @@ export default {
       const today = moment.utc().format()
 
       return today <= endDate
+    },
+    closeDialog() {
+      this.$emit('close')
     }
   }
 }

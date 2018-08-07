@@ -6,7 +6,6 @@
     <v-toolbar-title class="clan-name">
       <router-link to="/" v-if="shouldRenderTitleAsLinkToHomepage">{{ currentPageName }}</router-link>
       <span v-else>{{ currentPageName }}</span>
-      <v-chip v-if="currentMemberLevel" color="grey darken-2" text-color="white">{{ currentMemberLevel }}</v-chip>
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
@@ -82,11 +81,10 @@ export default {
         case 'OAuth':
           return 'Processing login...'
         case 'Dashboard':
+        case 'Profile':
           return this.clanName
         case 'InactivePlayers':
           return 'Inactive players'
-        case 'Profile':
-          return this.activeMember && this.activeMember.gamertag ? this.activeMember.gamertag : 'Loading...'
         default:
           return 'Not found!'
       }

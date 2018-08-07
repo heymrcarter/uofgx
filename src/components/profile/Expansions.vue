@@ -1,36 +1,34 @@
 <template>
-  <v-card height="100%" class="expansions">
-    <v-card-title>
-      <h3 class="headline">Expansions</h3>
-      <v-icon v-if="hasAllExpansions === false">warning</v-icon>
-    </v-card-title>
-    <v-card-text>
-      <loadable-indicator v-if="isLoading"></loadable-indicator>
-      <loadable-failure
-        v-else-if="loadError"
-        message="Failed to load expansions"
-        :retryable="true"
-        @retry="reload"></loadable-failure>
-      <v-list v-else>
-        <template v-for="(expansion, i) in loadResult">
-          <v-list-tile avatar :key="i">
-            <v-list-tile-avatar><img :src="getExpansionIcon(expansion)"></v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ expansion }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider inset :key="expansion"></v-divider>
-        </template>
-      </v-list>
-    </v-card-text>
-  </v-card>
+  <v-dialog v-model="active" fullscreen transition="dialog-bottom-transition" :overlay="false" scrollable>
+    <v-card tile class="expansions">
+      <v-toolbar card>
+        <v-btn icon @click.native="closeDialog">
+          <v-icon>close</v-icon>
+        </v-btn>
+
+        <v-toolbar-title>Expansions</v-toolbar-title>
+      </v-toolbar>
+
+      <v-card-text>
+        <v-list two-line>
+          <template v-for="(expansion, i) in expansions">
+            <v-list-tile avatar :key="i">
+              <v-list-tile-avatar><img :src="getExpansionIcon(expansion)"></v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>{{ expansion }}</v-list-tile-title>
+                <v-list-tile-sub-title>Release: {{ getExpansionReleaseDate(expansion) }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+            <v-divider inset :key="expansion"></v-divider>
+          </template>
+        </v-list>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>
-import loadable from '@/mixins/loadable'
-import LoadableFailure from '@/components/LoadableFailure'
-import LoadableIndicator from '@/components/LoadableIndicator'
-
+import { mapState } from 'vuex'
 const d2 = require('../../assets/d2.png')
 const coo = require('../../assets/coo.png')
 const wm = require('../../assets/wm.png')
@@ -39,17 +37,29 @@ const ba = require('../../assets/ba.png')
 const jw = require('../../assets/jw.png')
 const penumbra = require('../../assets/penumbra.png')
 
+const expansionsReleaseDates = {
+  'Destiny 2': '09/06/2017',
+  'Curse of Osiris': '12/05/2017',
+  Warmind: '05/08/2018',
+  Forsaken: '09/04/2018',
+  'Black Armory': 'Winter 2018',
+  Penumbra: 'Summer 2019'
+}
+
+expansionsReleaseDates[`Joker's Wild`] = 'Spring 2019'
+
 export default {
   name: 'expansions',
-  mixins: [loadable],
+  props: {
+    active: Boolean
+  },
   data() {
-    return {
-      loadAction: 'members/getExpansions',
-      loadParams: this.$route.params.membershipId,
-      actionOptions: { root: true }
-    }
+    return {}
   },
   methods: {
+    closeDialog() {
+      this.$emit('close')
+    },
     getExpansionIcon(expansion) {
       switch (expansion) {
         case 'Destiny 2':
@@ -67,18 +77,22 @@ export default {
         case 'Penumbra':
           return penumbra
       }
+    },
+    getExpansionReleaseDate(expansion) {
+      return expansionsReleaseDates[expansion]
     }
   },
   computed: {
-    hasAllExpansions() {
-      if (this.loadResult) {
-        return this.loadResult.length >= 4
+    ...mapState('members', {
+      expansions(state) {
+        if (state.expansions[this.membershipid]) {
+          return state.expansions[this.membershipid]
+        }
       }
+    }),
+    membershipid() {
+      return this.$route.params.membershipId
     }
-  },
-  components: {
-    LoadableFailure,
-    LoadableIndicator
   }
 }
 </script>

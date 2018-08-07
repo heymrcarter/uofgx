@@ -9,7 +9,6 @@
         <v-select
           color="yellow"
           label="Select character"
-          :loading="isLoadingCharacters ? 'yellow' : false"
           :items="characterDropdownOptions"
           :value="selectedCharacter"
           @change="selectedCharacterChanged"></v-select>
@@ -19,36 +18,40 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import analytics from '@/mixins/analytics'
 export default {
   name: 'character-selector',
   mixins: [analytics],
   data() {
     return {
-      selectedCharacter: undefined,
-      isLoadingCharacters: false
+      selectedCharacter: undefined
     }
   },
   computed: {
-    ...mapGetters('members/active', ['activeMember']),
+    ...mapState('characters', {
+      characters(state) {
+        return state.memberCharacters[this.membershipId]
+      }
+    }),
+    membershipId() {
+      return this.$route.params.membershipId
+    },
     selectedCharacterClass() {
-      return this.activeMember.characters.find(c => c.characterId === this.selectedCharacter).class
+      return this.characters.find(c => c.characterId === this.selectedCharacter).class
     },
     selectedCharacterLight() {
-      return this.activeMember.characters.find(c => c.characterId === this.selectedCharacter).light
+      return this.characters.find(c => c.characterId === this.selectedCharacter).light
     },
     characterDropdownOptions() {
-      if (this.activeMember.characters) {
-        this.isLoadingCharacters = false // eslint-disable-line
-        return this.activeMember.characters.map((character, i) => {
+      if (this.characters) {
+        return this.characters.map((character, i) => {
           return {
             text: `${character.class} (${character.light})`,
             value: character.characterId
           }
         })
       } else {
-        this.isLoadingCharacters = true // eslint-disable-line
         return []
       }
     }
