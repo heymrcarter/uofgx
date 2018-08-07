@@ -7,7 +7,19 @@
         </v-btn>
 
         <v-toolbar-title>Pending members</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-tooltip left>
+          <v-btn icon @click="reload">refresh</v-btn>
+        </v-tooltip>
       </v-toolbar>
+
+      <v-progress-linear
+        v-if="isLoading"
+        indeterminate
+        color="yellow"
+        height="5"></v-progress-linear>
 
       <v-card-text>
         <v-list two-line>
@@ -39,6 +51,11 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('members/pending')
 export default {
   name: 'pending-members',
+  data() {
+    return {
+      isLoading: false
+    }
+  },
   components: {
     PendingMemberActions
   },
@@ -46,7 +63,7 @@ export default {
     active: Boolean
   },
   computed: {
-    ...mapGetters(['pendingMembers'])
+    ...mapGetters(['pendingMembers', 'getPendingMembers'])
   },
   methods: {
     closeDialog() {
@@ -63,6 +80,12 @@ export default {
         case 3:
           return 'Rescinded'
       }
+    },
+    reload() {
+      this.isLoading = true
+      this.getPendingMembers().finally(() => {
+        this.isLoading = false
+      })
     }
   }
 }
