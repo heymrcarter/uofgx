@@ -10,7 +10,7 @@
           icon="warning"
           :text="`Couldn't load clan members`"
           actionText="Retry"
-          @action="fetchClanMembers"></clan-overview-item>
+          @action="fetchClanMembers(true)"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingMembers && !loadMembersError && clanMembers"
           icon="group"
@@ -25,7 +25,7 @@
           icon="warning"
           :text="`Couldn't load online members`"
           actionText="Retry"
-          @action="fetchClanMembers"></clan-overview-item>
+          @action="fetchClanMembers(true)"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingMembers && !loadMembersError && clanMembers"
           icon="wifi"
@@ -40,7 +40,7 @@
           icon="warning"
           :text="`Couldn't load pending members`"
           actionText="Retry"
-          @action="fetchPendingMembers"></clan-overview-item>
+          @action="fetchPendingMembers(true)"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingPendingMembers && !pendingMembersLoadError && pendingMembers && pendingMembers.length == 0"
           icon="group_add"
@@ -61,7 +61,7 @@
           icon="warning"
           :text="`Couldn't load invited members`"
           actionText="Retry"
-          @action="fetchInvitedMembers"></clan-overview-item>
+          @action="fetchInvitedMembers(true)"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingInvitedMembers && !invitedMembersLoadError && invitedMembers && invitedMembers.length == 0"
           icon="group_add"
@@ -82,7 +82,7 @@
           icon="warning"
           :text="`Couldn't load inactive members`"
           actionText="Retry"
-          @action="fetchInactiveMembers"></clan-overview-item>
+          @action="fetchInactiveMembers(true)"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingActivityReport && !activityReportLoadError && inactiveMembers && inactiveMembers.length === 0"
           icon="local_hotel"
@@ -103,7 +103,7 @@
           icon="warning"
           :text="`Couldn't load banned members`"
           actionText="Retry"
-          @action="fetchBannedMembers"></clan-overview-item>
+          @action="fetchBannedMembers(true)"></clan-overview-item>
         <clan-overview-item
           v-if="!isLoadingBannedMembers && !bannedMembersLoadError && bannedMembers && bannedMembers.length === 0"
           icon="remove_circle_outline"
