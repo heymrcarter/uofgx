@@ -1,6 +1,6 @@
 <template>
   <v-toolbar app dark fixed v-if="shouldRenderToolbar">
-    <v-btn to="/dashboard" icon v-if="shouldRenderBackButton">
+    <v-btn @click="$router.go(-1)" icon v-if="shouldRenderBackButton">
       <v-icon>arrow_back</v-icon>
     </v-btn>
     <v-toolbar-title class="clan-name">
