@@ -11,7 +11,8 @@
         <v-spacer></v-spacer>
 
         <v-tooltip left>
-          <v-btn icon @click="reload">refresh</v-btn>
+          <v-btn slot="activator" icon @click="reload"><v-icon>refresh</v-icon></v-btn>
+          <span>Reload</span>
         </v-tooltip>
       </v-toolbar>
 

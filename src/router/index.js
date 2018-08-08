@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-import InactivePlayers from '@/components/InactivePlayers'
 import Login from '@/components/Login'
 import OAuthHandler from '@/components/OAuthHandler'
 import MemberProfile from '@/components/MemberProfile'
@@ -58,14 +57,6 @@ const router = new Router({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/inactive-players',
-      name: 'InactivePlayers',
-      component: InactivePlayers,
       meta: {
         requiresAuth: true
       }

@@ -94,7 +94,7 @@
           icon="local_hotel"
           actionText="View"
           :text="inactiveMembersText"
-          @action="$router.push('/inactive-players')"></clan-overview-item>
+          @action="viewInactiveMembers"></clan-overview-item>
 
         <v-divider inset v-if="!isLoadingBannedMembers"></v-divider>
 
@@ -124,6 +124,7 @@
     <banned-members :active="shouldRenderBannedMembers" @close="onDialogClose('shouldRenderBannedMembers')"></banned-members>
     <clan-members :active="shouldRenderMembers" @close="onDialogClose('shouldRenderMembers')"></clan-members>
     <online-members :active="shouldRenderOnlineMembers" @close="onDialogClose('shouldRenderOnlineMembers')"></online-members>
+    <inactive-players :active="shouldRenderInactiveMembers" @close="onDialogClose('shouldRenderInactiveMembers')"></inactive-players>
   </v-card>
 </template>
 
@@ -136,6 +137,7 @@ import LoadableIndicator from '@/components/LoadableIndicator'
 import ClanOverviewItem from './ClanOverviewItem'
 import ClanMembers from './ClanMembers'
 import OnlineMembers from './OnlineMembers'
+import InactivePlayers from './InactivePlayers'
 import analytics from '@/mixins/analytics'
 export default {
   name: 'clan-overview',
@@ -146,7 +148,8 @@ export default {
     ClanOverviewItem,
     BannedMembers,
     ClanMembers,
-    OnlineMembers
+    OnlineMembers,
+    InactivePlayers
   },
   mixins: [analytics],
   data() {
@@ -155,7 +158,8 @@ export default {
       shouldRenderInvitedMembers: false,
       shouldRenderBannedMembers: false,
       shouldRenderMembers: false,
-      shouldRenderOnlineMembers: false
+      shouldRenderOnlineMembers: false,
+      shouldRenderInactiveMembers: false
     }
   },
   computed: {
@@ -330,6 +334,10 @@ export default {
     viewOnlineMembers() {
       this.recordEvent('Dashboard', 'View', 'Online Members')
       this.shouldRenderOnlineMembers = true
+    },
+    viewInactiveMembers() {
+      this.recordEvent('Dashboard', 'View', 'Inactive Members')
+      this.shouldRenderInactiveMembers = true
     }
   },
   mounted() {

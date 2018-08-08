@@ -1,19 +1,17 @@
 <template>
-  <v-card>
-    <v-list three-line subheader>
-      <v-subheader>{{ title }} ({{ items.length }})</v-subheader>
-      <template v-for="(profile, i) in items">
-        <div :key="i">
-          <inactivity-report-row
-            :profile="profile"
-            :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
-            :numberExemptions="getNumberOfExemptions(profile.membershipId)"
-            @click="showMemberDetail(profile)"></inactivity-report-row>
-          <v-divider v-if="i !== items.length - 1"></v-divider>
-        </div>
-      </template>
-    </v-list>
-  </v-card>
+  <v-list three-line subheader>
+    <v-subheader>{{ title }} ({{ items.length }})</v-subheader>
+    <template v-for="(profile, i) in items">
+      <div :key="i">
+        <inactivity-report-row
+          :profile="profile"
+          :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
+          :numberExemptions="getNumberOfExemptions(profile.membershipId)"
+          @click="showMemberDetail(profile)"></inactivity-report-row>
+        <v-divider v-if="i !== items.length - 1"></v-divider>
+      </div>
+    </template>
+  </v-list>
 </template>
 
 <script>
