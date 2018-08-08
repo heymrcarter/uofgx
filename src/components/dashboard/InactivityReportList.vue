@@ -35,7 +35,7 @@ export default {
   methods: {
     ...mapActions({ setActiveMember: 'set' }),
     isCurrentlyExempt(membershipId) {
-      if (!this.exemptions[membershipId]) {
+      if (!this.exemptions || !this.exemptions[membershipId]) {
         return false
       }
 
@@ -46,7 +46,7 @@ export default {
       return today <= endDate
     },
     getNumberOfExemptions(membershipId) {
-      if (!this.exemptions[membershipId]) {
+      if (!this.exemptions || !this.exemptions[membershipId]) {
         return 0
       }
 

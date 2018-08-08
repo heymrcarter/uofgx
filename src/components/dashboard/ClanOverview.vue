@@ -96,6 +96,27 @@
           :text="inactiveMembersText"
           @action="viewInactiveMembers"></clan-overview-item>
 
+        <v-divider inset v-if="!isLoadingExemptMembers"></v-divider>
+
+        <clan-overview-item
+          v-if="exemptMembersLoadError"
+          icon="warning"
+          :text="`Couldn't load exempt members`"
+          actionText="Retry"
+          @action="fetchExemptMembers(true)"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingExemptMembers && !exemptMembersLoadError && numberOfCurrentExemptions === 0"
+          icon="explicit"
+          actionText="Reload"
+          :text="exemptMembersText"
+          @action="fetchExemptMembers(true)"></clan-overview-item>
+        <clan-overview-item
+          v-if="!isLoadingExemptMembers && !exemptMembersLoadError && numberOfCurrentExemptions > 0"
+          icon="explicit"
+          :text="exemptMembersText"
+          actionText="View"
+          @action="viewExemptMembers"></clan-overview-item>
+
         <v-divider inset v-if="!isLoadingBannedMembers"></v-divider>
 
         <clan-overview-item
@@ -115,7 +136,7 @@
           icon="remove_circle_outline"
           actionText="View"
           :text="bannedMembersText"
-          @action="shouldRenderBannedMembers = true"></clan-overview-item>
+          @action="viewBannedMembers"></clan-overview-item>
       </v-list>
     </v-card-text>
 
@@ -125,6 +146,7 @@
     <clan-members :active="shouldRenderMembers" @close="onDialogClose('shouldRenderMembers')"></clan-members>
     <online-members :active="shouldRenderOnlineMembers" @close="onDialogClose('shouldRenderOnlineMembers')"></online-members>
     <inactive-players :active="shouldRenderInactiveMembers" @close="onDialogClose('shouldRenderInactiveMembers')"></inactive-players>
+    <exempt-members :active="shouldRenderExemptMembers" @close="onDialogClose('shouldRenderExemptMembers')"></exempt-members>
   </v-card>
 </template>
 
@@ -139,6 +161,7 @@ import ClanMembers from './ClanMembers'
 import OnlineMembers from './OnlineMembers'
 import InactivePlayers from './InactivePlayers'
 import analytics from '@/mixins/analytics'
+import ExemptMembers from './ExemptMembers'
 export default {
   name: 'clan-overview',
   components: {
@@ -149,7 +172,8 @@ export default {
     BannedMembers,
     ClanMembers,
     OnlineMembers,
-    InactivePlayers
+    InactivePlayers,
+    ExemptMembers
   },
   mixins: [analytics],
   data() {
@@ -159,10 +183,13 @@ export default {
       shouldRenderBannedMembers: false,
       shouldRenderMembers: false,
       shouldRenderOnlineMembers: false,
-      shouldRenderInactiveMembers: false
+      shouldRenderInactiveMembers: false,
+      shouldRenderExemptMembers: false,
+      exemptMembersLoadError: false
     }
   },
   computed: {
+    ...mapGetters(['numberOfCurrentExemptions', 'exemptions']),
     ...mapGetters('members/pending', ['pendingMembers', 'isLoadingPendingMembers', 'didLoadPendingMembers', 'pendingMembersLoadError']),
     ...mapGetters('members/invited', ['invitedMembers', 'isLoadingInvitedMembers', 'didLoadInvitedMembers', 'invitedMembersLoadError']),
     ...mapGetters('members', ['clanMembers', 'isLoadingMembers', 'didLoadMembers', 'loadMembersError', 'onlineMembers']),
@@ -243,9 +270,25 @@ export default {
           return `${this.bannedMembers.length} banned members`
         }
       }
+    },
+    exemptMembersText() {
+      if (this.numberOfCurrentExemptions === 0) {
+        return 'No exempt members'
+      } else if (this.numberOfCurrentExemptions === 1) {
+        return '1 exempt member'
+      } else {
+        return `${this.numberOfCurrentExemptions} exempt members`
+      }
+    },
+    isLoadingExemptMembers() {
+      return this.exemptions === undefined
+    },
+    didLoadExemptMembers() {
+      return this.exemptions !== undefined
     }
   },
   methods: {
+    ...mapActions(['getExemptions']),
     ...mapActions('members/pending', ['getPendingMembers']),
     ...mapActions('members/invited', ['getInvitedMembers']),
     ...mapActions('members', ['getClanMembers', 'getBannedMembers']),
@@ -259,6 +302,7 @@ export default {
       this.fetchInvitedMembers()
       this.fetchInactiveMembers()
       this.fetchBannedMembers()
+      this.fetchExemptMembers()
     },
     fetchClanMembers() {
       if (!this.didLoadMembers && !this.isLoadingMembers) {
@@ -319,6 +363,20 @@ export default {
         }
       }
     },
+    fetchExemptMembers(bypass = false) {
+      this.exemptMembersLoadError = false
+      if (bypass) {
+        this.recordEvent('Dashboard', 'Reload', 'Exempt Members')
+        this.getExemptions().catch(error => console.error(error))
+      } else {
+        if (!this.didLoadBannedMembers && !this.isLoadingBannedMembers) {
+          this.getExemptions().catch(error => {
+            console.error(error)
+            this.exemptMembersLoadError = true
+          })
+        }
+      }
+    },
     viewPendingMembers() {
       this.recordEvent('Dashboard', 'View', 'Pending Members')
       this.shouldRenderPendingMembers = true
@@ -338,6 +396,14 @@ export default {
     viewInactiveMembers() {
       this.recordEvent('Dashboard', 'View', 'Inactive Members')
       this.shouldRenderInactiveMembers = true
+    },
+    viewExemptMembers() {
+      this.recordEvent('Dashboard', 'View', 'Exempt Members')
+      this.shouldRenderExemptMembers = true
+    },
+    viewBannedMembers() {
+      this.recordEvent('Dashboard', 'View', 'Banned Members')
+      this.shouldRenderBannedMembers = true
     }
   },
   mounted() {
