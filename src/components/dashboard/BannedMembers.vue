@@ -7,7 +7,20 @@
         </v-btn>
 
         <v-toolbar-title>Banned members</v-toolbar-title>
+
+        <v-spacer></v-spacer>
+
+        <v-tooltip left>
+          <v-btn slot="activator" icon @click="reload"><v-icon>refresh</v-icon></v-btn>
+          <span>Reload</span>
+        </v-tooltip>
       </v-toolbar>
+
+      <v-progress-linear
+        v-if="isLoading"
+        indeterminate
+        color="yellow"
+        height="5"></v-progress-linear>
 
       <v-card-text>
         <v-list two-line>
@@ -42,7 +55,8 @@ export default {
   data() {
     return {
       showSnackbar: false,
-      snackbarText: undefined
+      snackbarText: undefined,
+      isLoading: false
     }
   },
   mixins: [analytics],
@@ -53,7 +67,7 @@ export default {
     ...mapState(['bannedMembers'])
   },
   methods: {
-    ...mapActions(['unbanMember']),
+    ...mapActions(['unbanMember', 'getBannedMembers']),
     closeDialog() {
       this.$emit('close')
     },
@@ -69,6 +83,12 @@ export default {
           this.snackbarText = `Unable to unban ${member.destinyUserInfo.displayName}`
           this.showSnackbar = true
         })
+    },
+    reload() {
+      this.isLoading = true
+      this.getBannedMembers().finally(() => {
+        this.isLoading = false
+      })
     }
   }
 }
