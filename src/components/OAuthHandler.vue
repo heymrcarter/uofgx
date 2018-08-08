@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div class="content"></div>
 </template>
 
 <script>
@@ -23,12 +23,10 @@ export default {
     const self = this
     const state = this.$route.query.state
     const code = decodeURIComponent(this.$route.query.code)
-
     if (!checkOAuthState(state)) {
       this.$router.replace('/')
       return
     }
-
     this.getAccessToken(code)
       .then(session => {
         this.getUserGroups(session)
@@ -46,7 +44,6 @@ export default {
                   platform = 'PC'
                   break
               }
-
               this.recordEvent('App', 'Login', undefined, platform)
               this.$router.replace('/dashboard')
             }
@@ -63,3 +60,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+</style>
