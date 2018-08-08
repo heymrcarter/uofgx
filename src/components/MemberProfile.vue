@@ -1,34 +1,30 @@
 <template>
-  <section class="wrapper">
-    <v-container fluid grid-list-lg>
-      <v-layout row wrap class="mt-2">
-        <v-flex xs12>
-          <member-overview></member-overview>
-        </v-flex>
-      </v-layout>
+  <v-container fluid grid-list-lg>
+    <v-layout row wrap class="mt-2">
+      <v-flex xs12>
+        <member-overview></member-overview>
+      </v-flex>
+    </v-layout>
 
-      <v-layout row wrap>
-        <v-flex xs12>
-          <v-tabs v-model="activeTab" slider-color="yellow">
-            <v-tab>Activity Overview</v-tab>
-            <v-tab>Character activity</v-tab>
-          </v-tabs>
+    <v-layout row wrap>
+      <v-flex xs12>
+        <v-tabs v-model="activeTab" slider-color="yellow">
+          <v-tab>Activity Overview</v-tab>
+          <v-tab>Character activity</v-tab>
+        </v-tabs>
 
-          <v-tabs-items v-model="activeTab">
-            <v-tab-item class="profile-tab mt-3">
-              <activity-overview></activity-overview>
-            </v-tab-item>
+        <v-tabs-items v-model="activeTab">
+          <v-tab-item class="profile-tab mt-3">
+            <activity-overview></activity-overview>
+          </v-tab-item>
 
-            <v-tab-item class="profile-tab mt-3">
-              <character-activity></character-activity>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-flex>
-      </v-layout>
-    </v-container>
-
-    <app-footer></app-footer>
-  </section>
+          <v-tab-item class="profile-tab mt-3">
+            <character-activity></character-activity>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -37,7 +33,6 @@ import Exemptions from './profile/Exemptions'
 import ProfileActions from './profile/ProfileActions'
 import Notes from './profile/Notes'
 import Expansions from './profile/Expansions'
-import AppFooter from './AppFooter'
 import ActivityOverview from './profile/ActivityOverview'
 import CharacterActivity from './profile/CharacterActivity'
 import MemberOverview from './profile/MemberOverview'
@@ -50,7 +45,6 @@ export default {
     ProfileActions,
     Notes,
     Expansions,
-    AppFooter,
     ActivityOverview,
     CharacterActivity,
     MemberOverview

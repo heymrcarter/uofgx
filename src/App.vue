@@ -2,7 +2,10 @@
   <v-app dark>
     <app-header></app-header>
     <main :class="$route.name.toLowerCase()">
-      <router-view></router-view>
+      <section class="wrapper">
+        <router-view></router-view>
+        <app-footer></app-footer>
+      </section>
     </main>
 
     <v-dialog v-model="showSessionExpirationDialog" persistent max-width="500">
@@ -24,10 +27,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import AppHeader from '@/components/AppHeader'
+import AppFooter from '@/components/AppFooter'
 export default {
   name: 'App',
   components: {
-    AppHeader
+    AppHeader,
+    AppFooter
   },
   computed: {
     ...mapGetters('session', ['showSessionExpirationDialog']),
@@ -39,6 +44,14 @@ export default {
 </script>
 
 <style lang="scss">
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+}
+
 main {
   padding-top: 50px;
   display: flex;

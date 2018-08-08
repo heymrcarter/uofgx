@@ -1,5 +1,4 @@
 <template>
-  <section class="wrapper">
     <v-container grid-list-lg fluid class="content">
       <v-layout row>
         <v-flex xs12>
@@ -24,28 +23,14 @@
         </v-flex>
       </v-layout>
     </v-container>
-
-    <app-footer></app-footer>
-  </section>
 </template>
 
 <script>
 import SuggestionBox from './about/SuggestionBox'
-import AppFooter from './AppFooter'
 export default {
   name: 'suggest-feature',
   components: {
-    AppFooter,
     SuggestionBox
   }
 }
 </script>
-
-<style scoped lang="scss">
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-}
-</style>
