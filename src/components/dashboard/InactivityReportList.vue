@@ -7,8 +7,32 @@
       </v-tooltip>
       <div :class="{ 'ml-4': allowRemove }">{{ title }} ({{ items.length }})</div>
       <v-spacer></v-spacer>
-      <v-btn v-if="allowRemove" flat :disabled="selectedMembers.length === 0" @click="startRemoveMembers('selected')">Remove selected</v-btn>
-      <v-btn v-if="allowRemove" flat @click="startRemoveMembers('all')">Remove all</v-btn>
+      <v-btn
+        v-responsive.sm.md.lg.xl
+        v-if="allowRemove"
+        flat
+        :disabled="selectedMembers.length === 0"
+        @click="startRemoveMembers('selected')">Remove selected</v-btn>
+      <v-btn
+        v-responsive.sm.md.lg.xl
+        v-if="allowRemove"
+        flat
+        @click="startRemoveMembers('all')">Remove all</v-btn>
+
+      <v-menu bottom left v-responsive.xs v-if="allowRemove">
+        <v-btn slot="activator" dark icon>
+          <v-icon>delete</v-icon>
+        </v-btn>
+
+        <v-list>
+          <v-list-tile @click="startRemoveMembers('selected')" :disabled="selectedMembers.length === 0">
+            <v-list-tile-title>Remove selected</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="startRemoveMembers('all')">
+            <v-list-tile-title>Remove all</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-subheader>
     <v-divider></v-divider>
     <template v-for="(profile, i) in items">
