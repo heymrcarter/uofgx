@@ -7,8 +7,10 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn @click="getClanMembers" flat icon><v-icon>refresh</v-icon></v-btn>
+        <v-btn @click="reload" flat icon><v-icon>refresh</v-icon></v-btn>
       </v-toolbar>
+
+      <v-progress-linear indeterminate v-if="isLoading" color="yellow" height="5"></v-progress-linear>
 
       <v-card-text>
         <member-list :members="onlineMembers"></member-list>
@@ -25,6 +27,11 @@ export default {
   props: {
     active: Boolean
   },
+  data() {
+    return {
+      isLoading: false
+    }
+  },
   computed: {
     ...mapGetters('members', ['onlineMembers'])
   },
@@ -35,6 +42,12 @@ export default {
     ...mapActions('members', ['getClanMembers']),
     closeDialog() {
       this.$emit('close')
+    },
+    reload() {
+      this.isLoading = true
+      this.getClanMembers().finally(() => {
+        this.isLoading = false
+      })
     }
   }
 }
