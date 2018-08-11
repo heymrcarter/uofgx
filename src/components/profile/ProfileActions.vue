@@ -13,7 +13,7 @@
 
     <v-btn block  class="mb-3" @click="openMemberLevelDialog">Promote/Demote</v-btn>
 
-    <v-btn block  color="red" class="mb-3" @click="openConfirmationDialog" :disabled="isLoading">
+    <v-btn block  color="red" class="mb-3" @click="openConfirmationDialog" :disabled="isLoading || isCurrentlyExempt">
       <span :class="{'mr-3': isLoading}">Remove member</span>
       <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
     </v-btn>
