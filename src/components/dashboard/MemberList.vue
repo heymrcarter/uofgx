@@ -2,17 +2,16 @@
   <div>
     <v-form>
       <div>
-        <v-text-field color="yellow" solo placeholder="Search by Gamertag or Bungie.net username" v-model="filter" append-icon="close" @click:append="clearFilter"></v-text-field>
+        <v-text-field color="yellow" placeholder="Search by Gamertag or Bungie.net username" v-model="filter" append-icon="close" @click:append="clearFilter"></v-text-field>
       </div>
     </v-form>
 
-    <v-list three-line class="elevation-1">
-      <v-list-tile v-if="presentedList.length === 0">
-        <v-list-tile-content>
-          No members
-        </v-list-tile-content>
-      </v-list-tile>
+    <div class="no-members" v-if="presentedList.length === 0">
+      <v-icon>group</v-icon>
+      <p>No members</p>
+    </div>
 
+    <v-list three-line v-else>
       <template v-for="(member, i) in presentedList" v-if="presentedList.length > 0">
         <member-row :key="member.xboxMembershipId" :member="member" @click="showMemberDetail(member)"></member-row>
         <v-divider inset :key="i" v-if="i !== presentedList.length"></v-divider>
@@ -81,3 +80,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.no-members {
+  display: block;
+
+  i {
+    display: block;
+    text-align: center;
+    font-size: 72px;
+  }
+
+  p {
+    text-align: center;
+  }
+}
+</style>

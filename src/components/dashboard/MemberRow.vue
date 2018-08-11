@@ -5,7 +5,7 @@
     </v-list-tile-avatar>
 
     <v-list-tile-content @click="click" class="clickable">
-      <v-list-tile-title>{{member.xboxUserName}}</v-list-tile-title>
+      <v-list-tile-title>{{member.xboxUserName}} <v-icon color="yellow" v-if="member.isOnline">rss_feed</v-icon></v-list-tile-title>
       <v-list-tile-sub-title>BNet: {{member.bungieNetUserName}}</v-list-tile-sub-title>
       <v-list-tile-sub-title>Joined {{formatDate(member.joinDate)}}</v-list-tile-sub-title>
     </v-list-tile-content>

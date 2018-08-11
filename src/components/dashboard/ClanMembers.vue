@@ -4,7 +4,11 @@
       <v-toolbar card>
         <v-btn icon @click.native="closeDialog"><v-icon>close</v-icon></v-btn>
         <v-toolbar-title>Members</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="fetchMembers"><v-icon>refresh</v-icon></v-btn>
       </v-toolbar>
+
+      <v-progress-linear v-if="isLoadingMembers" color="yellow" height="25" indeterminate></v-progress-linear>
 
       <v-card-text>
         <member-list :members="clanMembers"></member-list>
