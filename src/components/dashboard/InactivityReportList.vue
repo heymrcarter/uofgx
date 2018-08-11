@@ -1,32 +1,41 @@
 <template>
   <v-list three-line subheader>
     <v-subheader>
-      <div>{{ title }} ({{ items.length }})</div>
+      <v-tooltip v-if="allowRemove" right>
+        <v-checkbox slot="activator" v-model="hasSelectedAll" @change="selectAll" color="yellow"></v-checkbox>
+        <span>Select all</span>
+      </v-tooltip>
+      <div :class="{ 'ml-4': allowRemove }">{{ title }} ({{ items.length }})</div>
       <v-spacer></v-spacer>
-      <v-btn v-if="allowRemove" flat @click="removeAllMembers">Remove all</v-btn>
+      <v-btn v-if="allowRemove" flat :disabled="selectedMembers.length === 0" @click="startRemoveMembers('selected')">Remove selected</v-btn>
+      <v-btn v-if="allowRemove" flat @click="startRemoveMembers('all')">Remove all</v-btn>
     </v-subheader>
+    <v-divider></v-divider>
     <template v-for="(profile, i) in items">
       <div :key="i">
         <inactivity-report-row
           :profile="profile"
           :isCurrentlyExempt="isCurrentlyExempt(profile.membershipId)"
           :numberExemptions="getNumberOfExemptions(profile.membershipId)"
-          @click="showMemberDetail(profile)"></inactivity-report-row>
+          :selectable="allowRemove"
+          :selected="selectedMembers.includes(profile)"
+          @click="showMemberDetail(profile)"
+          @select="memberSelected(profile, $event)"></inactivity-report-row>
         <v-divider v-if="i !== items.length - 1"></v-divider>
       </div>
     </template>
 
-    <v-dialog v-model="shouldRenderRemoveAllConfirmation" width="500">
+    <v-dialog v-model="shouldRenderRemoveConfirmation" width="500">
       <v-card>
-        <v-card-title class="title">Remove all {{ nonExemptMembers.length }} members?</v-card-title>
+        <v-card-title class="title">{{ confirmationDialogTitle }}</v-card-title>
         <v-card-text>
           <p><strong>Warning!</strong> This action cannot be undone!</p>
-          <p>All members excluding any members on exemption will be removed from the clan.</p>
+          <p>{{ confirmationDialogText }}</p>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn color="red" @click="confirmRemoveAllMembers">Confirm</v-btn>
-          <v-btn flat @click="cancelRemoveAllMembers">Cancel</v-btn>
+          <v-btn color="red" @click="confirmRemoveMembers">Confirm</v-btn>
+          <v-btn flat @click="cancelRemoveMembers">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -53,7 +62,12 @@ export default {
   },
   data() {
     return {
-      shouldRenderRemoveAllConfirmation: false
+      shouldRenderRemoveConfirmation: false,
+      selectedMembers: [],
+      hasSelectedAll: false,
+      confirmationDialogTitle: '',
+      confirmationDialogText: '',
+      removalType: undefined
     }
   },
   computed: {
@@ -90,21 +104,52 @@ export default {
       this.setActiveMember({ membershipId: profile.membershipId })
       this.$router.push({ name: 'Profile', params: { membershipId: profile.membershipId } })
     },
-    removeAllMembers() {
-      this.recordEvent('Dashboard', 'Start', 'Remove All Inactive Members')
-      this.shouldRenderRemoveAllConfirmation = true
+    startRemoveMembers(removalType) {
+      this.removalType = removalType
+      if (removalType === 'all') {
+        this.recordEvent('Dashboard', 'Start', 'Remove All Inactive Members')
+        this.confirmationDialogTitle = `Remove all ${this.nonExemptMembers.length} members?`
+        this.confirmationDialogText = 'All members excluding any members on exemption will be removed from the clan.'
+      } else {
+        this.recordEvent('Dashboard', 'Start', 'Remove Selected Inactive Members')
+        this.confirmationDialogTitle = `Remove ${this.selectedMembers.length} selected members?`
+        this.confirmationDialogText = 'All selected members excluding any members on exemption will be removed from the clan.'
+      }
+      this.shouldRenderRemoveConfirmation = true
     },
-    confirmRemoveAllMembers() {
-      this.recordEvent('Dashboard', 'Confirm', 'Remove All Inactive Members')
-      this.shouldRenderRemoveAllConfirmation = false
-      this.$emit('loading', true)
-      this.removeMembers(this.nonExemptMembers).finally(() => {
-        this.$emit('loading', false)
-      })
+    confirmRemoveMembers() {
+      if (this.removalType === 'all') {
+        this.recordEvent('Dashboard', 'Confirm', 'Remove All Inactive Members')
+        this.shouldRenderRemoveConfirmation = false
+        this.$emit('loading', true)
+        this.removeMembers(this.nonExemptMembers).finally(() => {
+          this.$emit('loading', false)
+        })
+      } else {
+        this.recordEvent('Dashboard', 'Confirm', 'Remove Selected Inactive Members')
+        this.shouldRenderRemoveConfirmation = false
+        this.$emit('loading', true)
+        this.removeMembers(this.selectedMembers).finally(() => {
+          this.$emit('loading', false)
+        })
+      }
     },
-    cancelRemoveAllMembers() {
-      this.recordEvent('Dashboard', 'Cancel', 'Remove All Inactive Members')
-      this.shouldRenderRemoveAllConfirmation = false
+    cancelRemoveMembers() {
+      this.recordEvent('Dashboard', 'Cancel', 'Remove Inactive Members')
+      this.shouldRenderRemoveConfirmation = false
+    },
+    selectAll(nextValue) {
+      this.selectedMembers = nextValue ? this.nonExemptMembers : []
+    },
+    memberSelected(profile, nextValue) {
+      if (nextValue) {
+        this.selectedMembers.push(profile)
+        this.hasSelectedAll = this.selectedMembers.length === this.nonExemptMembers.length
+      } else {
+        const index = this.selectedMembers.findIndex(p => p.membershipId === profile.membershipId)
+        this.selectedMembers.splice(index, 1)
+        this.hasSelectedAll = false
+      }
     }
   }
 }

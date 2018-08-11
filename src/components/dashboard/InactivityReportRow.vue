@@ -1,6 +1,10 @@
 <template>
-  <v-list-tile @click="click">
-    <v-list-tile-content>
+  <v-list-tile>
+    <v-list-tile-avatar v-if="selectable">
+      <v-checkbox color="yellow" :input-value="selected" @change="select" :disabled="isCurrentlyExempt"></v-checkbox>
+    </v-list-tile-avatar>
+
+    <v-list-tile-content @click="click">
       <v-list-tile-title>{{ profile.gamertag }}</v-list-tile-title>
       <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
       <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
@@ -20,13 +24,22 @@ import dateFormatter from '@/mixins/date-formatter'
 export default {
   name: 'inactivity-report-row',
   mixins: [dateFormatter],
-  props: ['profile', 'isCurrentlyExempt', 'numberExemptions'],
+  props: {
+    profile: Object,
+    isCurrentlyExempt: Boolean,
+    numberExemptions: Number,
+    selectable: Boolean,
+    selected: Boolean
+  },
   methods: {
     click(e) {
       this.$emit('click', e)
     },
     latestExpansion(expansions) {
       return expansions[expansions.length - 1]
+    },
+    select(e) {
+      this.$emit('select', e)
     }
   }
 }
