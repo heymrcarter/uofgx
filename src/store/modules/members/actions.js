@@ -29,6 +29,10 @@ export function removeClanMember({ commit }, membershipId) {
   commit('REMOVE_CLAN_MEMBER', membershipId)
 }
 
+export function removeClanMembers({ commit }, members) {
+  commit('REMOVE_CLAN_MEMBERS', members)
+}
+
 export function getExpansions({ commit, rootState, state }, membershipId) {
   return new Promise((resolve, reject) => {
     if (state.expansions[membershipId]) {

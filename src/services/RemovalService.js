@@ -16,3 +16,12 @@ export function removeMemberFromClan(clanId, removalPayload, bearerToken) {
       .catch(error => reject(error))
   })
 }
+
+export function removeMembersFromClan(clanId, members, bearerToken) {
+  return new Promise((resolve, reject) => {
+    const config = { Authorization: `Bearer ${bearerToken}` }
+    post(`/removal/${clanId}/batch`, members, config)
+      .then(response => resolve(response.data))
+      .catch(error => reject(error))
+  })
+}

@@ -31,6 +31,13 @@ export function REMOVE_CLAN_MEMBER(state, membershipId) {
   state.list.splice(index, 1)
 }
 
+export function REMOVE_CLAN_MEMBERS(state, members) {
+  members.forEach(member => {
+    let index = state.list.findIndex(m => m.xboxMembershipId === member.removedMembershipId)
+    state.list.splice(index, 1)
+  })
+}
+
 export function CACHE_MEMBER_EXPANSIONS(state, { membershipId, expansions }) {
   Vue.set(state.expansions, membershipId, expansions)
 }

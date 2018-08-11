@@ -5,7 +5,7 @@ export function SET_ACTIVITY_REPORT(state, report) {
 export function REMOVE_MEMBER(state, membershipId) {
   const index = state.activityReport.findIndex(p => p.membershipId === membershipId)
 
-  if (index > 0) {
+  if (index >= 0) {
     state.activityReport.splice(index, 1)
   }
 }

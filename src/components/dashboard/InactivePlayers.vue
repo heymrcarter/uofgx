@@ -23,7 +23,11 @@
         height="5"></v-progress-linear>
 
       <v-card-text>
-        <inactivity-report-list title="A month or more" :items="greaterThan30Days"></inactivity-report-list>
+        <inactivity-report-list
+          title="A month or more"
+          :items="greaterThan30Days"
+          :allowRemove="true"
+          @loading="onLoad"></inactivity-report-list>
         <inactivity-report-list title="A week or more" :items="weekOrMore"></inactivity-report-list>
       </v-card-text>
     </v-card>
@@ -74,6 +78,9 @@ export default {
     },
     close() {
       this.$emit('close')
+    },
+    onLoad(isCurrentlyLoading) {
+      this.isLoading = isCurrentlyLoading
     }
   }
 }

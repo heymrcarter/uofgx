@@ -27,3 +27,9 @@ export function getActivityReport({ commit, rootState }) {
 export function removeMemberFromReport({ commit }, membershipId) {
   commit('REMOVE_MEMBER', membershipId)
 }
+
+export function removeMembersFromReport({ commit }, members) {
+  members.forEach(({ removedMembershipId }) => {
+    commit('REMOVE_MEMBER', removedMembershipId)
+  })
+}
