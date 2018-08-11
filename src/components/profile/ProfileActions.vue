@@ -38,8 +38,8 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn   @click="showExemptionDialog = false">Cancel</v-btn>
           <v-btn @click="makeExempt">Grant</v-btn>
+          <v-btn flat @click="showExemptionDialog = false">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -55,8 +55,8 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn   @click="cancelMemberLevelDialog">Cancel</v-btn >
-          <v-btn  @click="changeMemberLevel">Update</v-btn >
+          <v-btn @click="changeMemberLevel">Update</v-btn>
+          <v-btn flat @click="cancelMemberLevelDialog">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -70,8 +70,8 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn  color="red" @click="kick">Confirm</v-btn >
-          <v-btn   @click="closeConfirmationDialog">Cancel</v-btn >
+          <v-btn color="red" @click="kick">Confirm</v-btn>
+          <v-btn flat @click="closeConfirmationDialog">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -85,7 +85,7 @@
 
         <v-card-actions>
           <v-btn  color="red" @click="ban">Confirm</v-btn >
-          <v-btn   @click="closeBanDialog">Cancel</v-btn >
+          <v-btn flat @click="closeBanDialog">Cancel</v-btn >
         </v-card-actions>
       </v-card>
     </v-dialog>
