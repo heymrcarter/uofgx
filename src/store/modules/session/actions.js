@@ -1,11 +1,16 @@
 import * as accessService from '@/services/AccessService'
 import * as memberService from '@/services/MemberService'
+import moment from 'moment-timezone'
 
 export function getAccessToken({ commit }, authorizationCode) {
   return new Promise((resolve, reject) => {
     accessService
       .getAccessToken(authorizationCode)
       .then(accessResponse => {
+        accessResponse.expires_at = moment
+          .tz('America/New_York')
+          .add(accessResponse.expires_in, 's')
+          .format()
         commit('SET_SESSION', accessResponse)
         resolve(accessResponse)
       })
@@ -49,4 +54,8 @@ export function getUserGroups({ commit, dispatch }, session) {
       }
     })
   })
+}
+
+export function clearSession({ commit }, { showDialog }) {
+  commit('SESSION_EXPIRED', showDialog)
 }

@@ -25,9 +25,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import AppHeader from '@/components/AppHeader'
 import AppFooter from '@/components/AppFooter'
+import moment from 'moment-timezone'
 export default {
   name: 'App',
   components: {
@@ -35,9 +36,26 @@ export default {
     AppFooter
   },
   computed: {
+    ...mapState('session', ['expiresAt', 'hasAccess']),
     ...mapGetters('session', ['showSessionExpirationDialog']),
     bungieNetAuthorizeEndpoint() {
       return `${process.env.AUTH_ENDPOINT}?client_id=${[process.env.CLIENT_ID]}&response_type=code&state=${btoa(process.env.OAUTH_SECRET)}`
+    }
+  },
+  methods: {
+    ...mapActions('session', ['clearSession'])
+  },
+  mounted() {
+    if (this.hasAccess) {
+      const now = moment
+        .utc()
+        .tz('America/New_York')
+        .format()
+      if (now < this.expiresAt) {
+        this.$router.replace('/dashboard')
+      } else {
+        this.clearSession({ showDialog: false })
+      }
     }
   }
 }

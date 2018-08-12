@@ -6,6 +6,7 @@ export default {
   state: {
     accessToken: undefined,
     expiresIn: undefined,
+    expiresAt: undefined,
     hasAccess: false,
     membershipId: undefined,
     tokenType: undefined,
@@ -16,6 +17,7 @@ export default {
       return {
         access_token: state.accessToken,
         expires_in: state.expiresIn,
+        expires_at: state.expires_at,
         hasAccess: state.hasAccess,
         membership_id: state.membershipId,
         token_type: state.tokenType

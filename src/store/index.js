@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersist from 'vuex-persist'
 import exemptions from './modules/exemptions'
 import removalHistory from './modules/removal-history'
 import activityReport from './modules/activity-report'
@@ -15,7 +16,18 @@ import characters from './modules/characters'
 
 Vue.use(Vuex)
 
+const vuexLocalStorage = new VuexPersist({
+  key: `dcm-${process.env.NODE_ENV}`,
+  storage: window.localStorage,
+  reducer: state => ({
+    session: state.session,
+    clanId: state.clanId,
+    clanName: state.clanName
+  })
+})
+
 export default new Vuex.Store({
+  plugins: [vuexLocalStorage.plugin],
   state: {
     clanId: undefined,
     clanName: undefined,
