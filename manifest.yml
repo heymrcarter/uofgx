@@ -1,9 +1,0 @@
----
-applications:
-- name: uofgx
-  memory: 64M
-  buildpack: staticfile_buildpack
-  env:
-    FORCE_HTTPS: true
-  routes:
-    - route: destinyclanmanager.cfapps.io
