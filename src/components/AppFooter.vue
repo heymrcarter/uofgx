@@ -8,7 +8,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-flex>
+        <v-flex class="shrink">
           <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>
         </v-flex>
       </v-layout>
@@ -24,7 +24,7 @@
       </v-layout>
     </v-container>
 
-    <v-container v-responsive.sm.md.lg.xl class="pa-0">
+    <v-container v-responsive.sm.md.lg.xl class="pa-0 ma-0 full-width">
       <v-layout row>
         <v-flex class="legal">
           &copy; {{ new Date().getFullYear() }} - Tom Carter
@@ -32,15 +32,15 @@
 
         <v-spacer></v-spacer>
 
-        <v-flex>
+        <v-flex class="shrink">
           <v-btn flat to="/roadmap">Roadmap</v-btn>
         </v-flex>
 
-        <v-flex v-if="hasAccess">
+        <v-flex v-if="hasAccess" class="shrink">
           <v-btn flat to="/suggest-feature">Suggest a feature</v-btn>
         </v-flex>
 
-        <v-flex>
+        <v-flex class="shrink">
           <v-btn flat icon href="https://twitter.com/destinyclanmgr"><v-icon size="24px">fab fa-twitter</v-icon></v-btn>
         </v-flex>
       </v-layout>
@@ -67,9 +67,18 @@ export default {
 <style scoped lang="scss">
 .legal {
   display: flex;
-  align-items: center;
+  // align-items: center;
   justify-content: center;
   vertical-align: middle;
   flex-direction: column;
+}
+
+.full-width {
+  width: 100% !important;
+  max-width: unset;
+}
+
+.shrink {
+  flex-grow: 0;
 }
 </style>
