@@ -62,17 +62,20 @@ export default {
 </script>
 
 <style lang="scss">
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 100%;
-}
-
 main {
   padding-top: 50px;
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+    flex: 1;
+    min-height: calc(100vh - 50px);
+  }
 
   &.about {
     padding-top: 0;
