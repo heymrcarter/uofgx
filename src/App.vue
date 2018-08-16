@@ -71,7 +71,6 @@ main {
   .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
     width: 100%;
     flex: 1;
     min-height: calc(100vh - 50px);
