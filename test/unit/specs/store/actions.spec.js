@@ -39,31 +39,67 @@ describe('root actions', () => {
   })
 
   describe('getWeeklyMilestones', () => {
-    beforeEach(async() => {
-      td.when(clanService.getWeeklyMilestones('clan-id')).thenResolve('the-milestones')
+    describe('when everything goes right', () => {
+      beforeEach(async() => {
+        td.when(clanService.getWeeklyMilestones('clan-id')).thenResolve('the-milestones')
 
-      const rootState = {
-        clanId: 'clan-id'
-      }
-      await subject.getWeeklyMilestones({ commit, rootState })
+        const rootState = {
+          clanId: 'clan-id'
+        }
+        await subject.getWeeklyMilestones({ commit, rootState })
+      })
+
+      it('starts loading the milestones', () => {
+        td.verify(commit('START_LOADING_MILESTONES'))
+      })
+
+      it('finishes loading the milestones', () => {
+        td.verify(commit('FINISH_LOADING_MILESTONES'))
+      })
+
+      it('commits the milestones', () => {
+        td.verify(commit('SET_CLAN_MILESTONES', 'the-milestones'))
+      })
+
+      it('reloads the milestones after 15 minutes', () => {
+        td.verify(commit('RELOAD_WEEKLY_MILESTONES'), { times: 0 })
+        jest.runAllTimers()
+        td.verify(commit('RELOAD_WEEKLY_MILESTONES'))
+      })
     })
 
-    it('starts loading the milestones', () => {
-      td.verify(commit('START_LOADING_MILESTONES'))
-    })
+    describe('when an error occurs', () => {
+      let actual
 
-    it('finishes loading the milestones', () => {
-      td.verify(commit('FINISH_LOADING_MILESTONES'))
-    })
+      beforeEach(async() => {
+        td.when(clanService.getWeeklyMilestones('clan-id')).thenReject(new Error('the error'))
 
-    it('commits the milestones', () => {
-      td.verify(commit('SET_CLAN_MILESTONES', 'the-milestones'))
-    })
+        const rootState = {
+          clanId: 'clan-id'
+        }
 
-    it('reloads the milestones after 15 minutes', () => {
-      td.verify(commit('RELOAD_WEEKLY_MILESTONES'), { times: 0 })
-      jest.runAllTimers()
-      td.verify(commit('RELOAD_WEEKLY_MILESTONES'))
+        try {
+          await subject.getWeeklyMilestones({ commit, rootState })
+        } catch (error) {
+          actual = error
+        }
+      })
+
+      it('starts loading milestones', () => {
+        td.verify(commit('START_LOADING_MILESTONES'))
+      })
+
+      it('finishes loading the milestones', () => {
+        td.verify(commit('FINISH_LOADING_MILESTONES'))
+      })
+
+      it('reports the error', () => {
+        td.verify(commit('MILESTONE_LOAD_ERROR'))
+      })
+
+      it('returns the error', () => {
+        expect(actual.message).toEqual('the error')
+      })
     })
   })
 })

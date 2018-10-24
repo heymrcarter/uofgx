@@ -18,7 +18,6 @@ export function getWeeklyMilestones({ commit, rootState }) {
     clanService
       .getWeeklyMilestones(rootState.clanId)
       .then(milestones => {
-        commit('FINISH_LOADING_MILESTONES')
         commit('SET_CLAN_MILESTONES', milestones)
 
         setTimeout(() => {
@@ -27,6 +26,12 @@ export function getWeeklyMilestones({ commit, rootState }) {
 
         resolve()
       })
-      .catch(error => reject(error))
+      .catch(error => {
+        commit('MILESTONE_LOAD_ERROR')
+        reject(error)
+      })
+      .finally(() => {
+        commit('FINISH_LOADING_MILESTONES')
+      })
   })
 }
