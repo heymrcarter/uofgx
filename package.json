@@ -9,6 +9,7 @@
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
+    "posttest": "node test/unit/fix-coverage-styles.js",
     "lint": "eslint --ext .js,.vue src test/unit",
     "build": "node build/build.js",
     "postbuild": "cp ./invalidate-cloudfront.js ./dist/invalidate-cloudfront.js"
@@ -84,7 +85,8 @@
     "testdouble-jest": "^1.0.1",
     "uglify-es": "^3.3.9",
     "uglifyjs-webpack-plugin": "^1.1.1",
-    "url-loader": "^0.5.8",
+    "url-loader": "^1.1.2",
+    "vsts-coverage-styles": "^1.0.7",
     "vue-jest": "^1.0.2",
     "vue-loader": "^13.3.0",
     "vue-server-renderer": "^2.5.16",
