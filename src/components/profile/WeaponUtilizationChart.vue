@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import colors from 'vuetify/es5/util/colors'
 export default {
   name: 'weapon-utilization-chart',
   props: {
@@ -16,7 +15,7 @@ export default {
   },
   data() {
     return {
-      chartColors: [colors.yellow.base],
+      chartColors: ['#4772cc'],
       chartOptions: {
         scales: {
           xAxes: [

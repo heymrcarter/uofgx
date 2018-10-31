@@ -2,7 +2,7 @@
   <div>
     <v-form>
       <div>
-        <v-text-field color="yellow" placeholder="Search by Gamertag or Bungie.net username" v-model="filter" append-icon="close" @click:append="clearFilter"></v-text-field>
+        <v-text-field color="accent" placeholder="Search by Gamertag or Bungie.net username" v-model="filter" append-icon="close" @click:append="clearFilter"></v-text-field>
       </div>
     </v-form>
 

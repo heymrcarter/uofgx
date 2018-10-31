@@ -20,7 +20,6 @@
 import LoadableIndicator from '@/components/LoadableIndicator'
 import LoadableFailure from '@/components/LoadableFailure'
 import { mapActions } from 'vuex'
-import colors from 'vuetify/es5/util/colors'
 export default {
   name: 'activity-by-date-chart',
   components: {
@@ -29,7 +28,7 @@ export default {
   },
   data() {
     return {
-      chartColor: [colors.yellow.base],
+      chartColor: ['#4772cc'],
       chartOptions: {
         animation: {
           duration: 1000,

@@ -23,7 +23,7 @@
           <v-btn flat v-else :href="bungieNetAuthorizeEndpoint">Log in</v-btn>
         </v-toolbar-items>
 
-        <v-tabs slot="extension" v-model="tab" align-with-title color="grey darken-4" slider-color="yellow">
+        <v-tabs slot="extension" v-model="tab" align-with-title color="grey darken-4" slider-color="accent">
           <v-tabs-slider></v-tabs-slider>
           <v-tab @click="changeTab('roadmap')">Roadmap</v-tab>
           <v-tab v-if="sessionIsActive" @click="changeTab('suggestion')">Suggest a feature</v-tab>

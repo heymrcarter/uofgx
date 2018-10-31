@@ -14,7 +14,7 @@
       <v-btn v-if="currentSubView === 'grant-exemption'" @click="currentSubView = 'exemption-list'">Cancel</v-btn>
     </v-toolbar>
 
-    <v-progress-linear v-if="isLoading" indeterminate height="5" color="yellow"></v-progress-linear>
+    <v-progress-linear v-if="isLoading" indeterminate height="5" color="accent"></v-progress-linear>
 
     <v-card-text>
       <v-flex v-if="currentSubView === 'exemption-list'">

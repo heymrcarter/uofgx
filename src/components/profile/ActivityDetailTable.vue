@@ -5,10 +5,10 @@
     <v-card-text>
       <v-data-table
         hide-actions
-        color="yellow"
+        color="accent"
         :headers="tableHeaders"
         :items="data"
-        :loading="loading ? 'yellow' : false">
+        :loading="loading ? 'accent' : false">
 
         <template slot="items" slot-scope="props">
           <tr>

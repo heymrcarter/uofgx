@@ -2,11 +2,11 @@
   <v-card>
     <v-card-text>
       <div>
-        <v-text-field v-model="idea" label="Idea" color="yellow" required></v-text-field>
+        <v-text-field v-model="idea" label="Idea" color="accent" required></v-text-field>
       </div>
 
       <div>
-        <v-textarea v-model="description" outline label="Explain" color="yellow"></v-textarea>
+        <v-textarea v-model="description" outline label="Explain" color="accent"></v-textarea>
       </div>
 
       <div>

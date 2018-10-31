@@ -7,7 +7,7 @@
 
       <v-flex xs12 md3>
         <v-select
-          color="yellow"
+          color="accent"
           label="Select character"
           :items="characterDropdownOptions"
           :value="selectedCharacter"

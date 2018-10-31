@@ -19,7 +19,7 @@
       <v-progress-linear
         v-if="isLoading"
         indeterminate
-        color="yellow"
+        color="accent"
         height="5"></v-progress-linear>
 
       <v-card-text>

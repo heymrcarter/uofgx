@@ -2,7 +2,7 @@
   <div class="member-search">
     <v-autocomplete
       label="Search for members"
-      color="yellow"
+      color="accent"
       :items="members"
       v-model="searchTerm"
       clearable

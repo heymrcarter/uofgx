@@ -1,7 +1,7 @@
 <template>
   <div class="loader">
     <p class="sr-only">Loading</p>
-    <v-progress-linear color="yellow" height="5" indeterminate></v-progress-linear>
+    <v-progress-linear color="accent" height="5" indeterminate></v-progress-linear>
   </div>
 </template>
 

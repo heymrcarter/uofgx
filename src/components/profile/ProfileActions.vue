@@ -4,18 +4,18 @@
 
     <v-btn block  v-if="!isCurrentlyExempt" @click="showExemptionDialog = true" :disabled="isLoadingExemption" class="mb-3">
       <span :class="{'mr-3': isLoading}">Grant exemption</span>
-      <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+      <v-progress-circular v-if="isLoading" indeterminate color="accent" :size="20"></v-progress-circular>
     </v-btn>
     <v-btn block  v-else @click="liftExemption" :disabled="isLoadingExemption" class="mb-3">
       <span :class="{'mr-3': isLoading}">Lift exemption</span>
-      <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+      <v-progress-circular v-if="isLoading" indeterminate color="accent" :size="20"></v-progress-circular>
     </v-btn>
 
     <v-btn block  class="mb-3" @click="openMemberLevelDialog">Promote/Demote</v-btn>
 
     <v-btn block  color="red" class="mb-3" @click="openConfirmationDialog" :disabled="isLoading || isCurrentlyExempt">
       <span :class="{'mr-3': isLoading}">Remove member</span>
-      <v-progress-circular v-if="isLoading" indeterminate color="yellow" :size="20"></v-progress-circular>
+      <v-progress-circular v-if="isLoading" indeterminate color="accent" :size="20"></v-progress-circular>
     </v-btn>
 
     <v-btn block  color="red" class="mb-3" @click="openBanDialog">Ban Member</v-btn>
@@ -50,7 +50,7 @@
 
         <v-card-text>
           <div>
-            <v-select label="Select member level" :items="memberLevels" color="yellow" v-model="memberLevel" :placeholder="startingMemberLevelText"></v-select>
+            <v-select label="Select member level" :items="memberLevels" color="accent" v-model="memberLevel" :placeholder="startingMemberLevelText"></v-select>
           </div>
         </v-card-text>
 

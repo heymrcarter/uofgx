@@ -10,7 +10,7 @@
         <v-btn @click="reload" flat icon><v-icon>refresh</v-icon></v-btn>
       </v-toolbar>
 
-      <v-progress-linear indeterminate v-if="isLoading" color="yellow" height="5"></v-progress-linear>
+      <v-progress-linear indeterminate v-if="isLoading" color="accent" height="5"></v-progress-linear>
 
       <v-card-text>
         <member-list :members="onlineMembers"></member-list>

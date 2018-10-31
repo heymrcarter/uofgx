@@ -18,7 +18,7 @@
         <v-btn v-else @click="currentSubView = 'note-list'">Cancel</v-btn>
       </v-toolbar>
 
-      <v-progress-linear indeterminate v-if="isLoading" color="yellow" height="5"></v-progress-linear>
+      <v-progress-linear indeterminate v-if="isLoading" color="accent" height="5"></v-progress-linear>
 
       <v-card-text>
         <v-flex transition="v-slide-x-reverse-transition" v-if="currentSubView === 'note-list'">
@@ -42,7 +42,7 @@
 
         <v-flex transition="v-slide-x-transition" v-if="currentSubView === 'add-note'">
           <h3 class="title mb-3">Add note</h3>
-          <v-textarea autofocus outline color="yellow" v-model="newNoteText"></v-textarea>
+          <v-textarea autofocus outline color="accent" v-model="newNoteText"></v-textarea>
           <v-btn @click="submitNote">Save</v-btn>
         </v-flex>
       </v-card-text>

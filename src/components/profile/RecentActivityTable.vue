@@ -15,7 +15,7 @@
       <v-data-table
         v-else
         hide-actions
-        color="yellow"
+        color="accent"
         class="elevation-1"
         item-key="date"
         disable-initial-sort

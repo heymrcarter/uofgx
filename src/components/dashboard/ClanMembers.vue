@@ -8,7 +8,7 @@
         <v-btn icon @click="fetchMembers"><v-icon>refresh</v-icon></v-btn>
       </v-toolbar>
 
-      <v-progress-linear v-if="isLoadingMembers" color="yellow" height="25" indeterminate></v-progress-linear>
+      <v-progress-linear v-if="isLoadingMembers" color="accent" height="25" indeterminate></v-progress-linear>
 
       <v-card-text>
         <member-list :members="clanMembers"></member-list>

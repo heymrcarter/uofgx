@@ -2,7 +2,7 @@
   <v-list three-line subheader>
     <v-subheader>
       <v-tooltip v-if="allowRemove" right>
-        <v-checkbox slot="activator" v-model="hasSelectedAll" @change="selectAll" color="yellow"></v-checkbox>
+        <v-checkbox slot="activator" v-model="hasSelectedAll" @change="selectAll" color="accent"></v-checkbox>
         <span>Select all</span>
       </v-tooltip>
       <div :class="{ 'ml-4': allowRemove }">{{ title }} ({{ items.length }})</div>

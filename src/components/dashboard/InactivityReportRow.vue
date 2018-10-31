@@ -1,7 +1,7 @@
 <template>
   <v-list-tile>
     <v-list-tile-avatar v-if="selectable">
-      <v-checkbox color="yellow" :input-value="selected" @change="select" :disabled="isCurrentlyExempt"></v-checkbox>
+      <v-checkbox color="accent" :input-value="selected" @change="select" :disabled="isCurrentlyExempt"></v-checkbox>
     </v-list-tile-avatar>
 
     <v-list-tile-content @click="click">

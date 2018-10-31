@@ -8,7 +8,7 @@
 
     <v-layout row wrap>
       <v-flex xs12>
-        <v-tabs v-model="activeTab" slider-color="yellow">
+        <v-tabs v-model="activeTab" slider-color="accent">
           <v-tab>Activity Overview</v-tab>
           <v-tab>Character activity</v-tab>
         </v-tabs>

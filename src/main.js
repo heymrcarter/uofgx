@@ -17,7 +17,13 @@ Vue.use(VueChartkick, { Chartkick })
 
 Vue.config.productionTip = false
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#2b4f9c',
+    secondary: '#4772cc',
+    accent: '#e9edf5'
+  }
+})
 Vue.use(responsive)
 
 if (process.env.NODE_ENV === 'production') {

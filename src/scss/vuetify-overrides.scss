@@ -1,5 +1,41 @@
 $pickerTextColor: rgba(0, 0, 0, 0.87);
 
+@import './colors';
+
+.application.theme--dark {
+  background: $darker;
+
+  &.home {
+    background: $brand;
+  }
+}
+
+.application.theme--dark .v-toolbar,
+.application.theme--dark .v-footer {
+  background: $darkest;
+}
+
+.theme--dark {
+  .v-card,
+  .v-list,
+  .v-tabs__bar,
+  .v-table {
+    background: $dark;
+  }
+
+  .v-table tbody tr:hover:not(.v-datatable__expand-row) {
+    background: #1e376d;
+  }
+
+  .v-btn:not(.v-btn--icon):not(.v-btn--flat) {
+    background: $darkest;
+
+    &:hover {
+      background: $darker;
+    }
+  }
+}
+
 .theme--dark .v-picker .v-picker__body {
   background: white !important;
 }

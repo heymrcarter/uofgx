@@ -7,7 +7,7 @@
         <v-card-title class="headline">Add note</v-card-title>
         <v-card-text>
           <div>
-            <v-text-field class="note" outline v-model="note" placeholder="Note" color="yellow"></v-text-field>
+            <v-text-field class="note" outline v-model="note" placeholder="Note" color="accent"></v-text-field>
           </div>
         </v-card-text>
 
