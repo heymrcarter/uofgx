@@ -32,6 +32,9 @@ if (process.env.NODE_ENV === 'production') {
     router,
     ignoreRoutes: ['OAuth']
   })
+
+  // temp fix for localstorage bug
+  window.localStorage.removeItem(`dcm-${process.env.NODE_ENV}`)
 }
 
 /* eslint-disable no-new */
