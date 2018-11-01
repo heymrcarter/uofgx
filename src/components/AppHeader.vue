@@ -13,6 +13,18 @@
     <v-toolbar-items>
       <v-btn v-if="shouldRenderLogin" flat :href="bungieNetAuthorizeEndpoint">Log in</v-btn>
       <v-btn v-if="shouldRenderDashboadLink" flat to="/dashboard">{{ clanName }}</v-btn>
+      <v-menu offset-y>
+        <v-btn flat slot="activator"><img src="../../static/DCM.svg" alt="Destiny Clan Manager logo" height="36px"></v-btn>
+        <v-list>
+          <v-list-tile>
+            <v-list-tile-title class="subheading">Destiny Clan Manager</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-title>Version</v-list-tile-title>
+            <v-list-tile-action>{{ version }}</v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar-items>
   </v-toolbar>
 </template>
@@ -20,11 +32,13 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import analytics from '@/mixins/analytics'
+import dcm from '../../package'
 export default {
   name: 'app-header',
   data() {
     return {
-      shouldRenderRoadmap: false
+      shouldRenderRoadmap: false,
+      excludedPages: ['About', 'Home']
     }
   },
   mixins: [analytics],
@@ -60,7 +74,7 @@ export default {
       return this.$route.name === 'InactivePlayers' || this.$route.name === 'Profile'
     },
     shouldRenderToolbar() {
-      return this.$route.name !== 'About'
+      return !this.excludedPages.includes(this.$route.name)
     },
     shouldRenderLogin() {
       return !this.isAuthenticated && (this.$route.name === 'Roadmap' || this.$route.name === 'SuggestFeature')
@@ -88,6 +102,9 @@ export default {
         default:
           return 'Not found!'
       }
+    },
+    version() {
+      return dcm.version
     }
   },
   methods: {

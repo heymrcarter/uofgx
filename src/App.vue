@@ -1,7 +1,7 @@
 <template>
-  <v-app dark>
+  <v-app dark :class="$route.name.toLowerCase()">
     <app-header></app-header>
-    <main :class="$route.name.toLowerCase()">
+    <main>
       <section class="wrapper">
         <router-view></router-view>
         <app-footer></app-footer>
@@ -62,6 +62,13 @@ export default {
 </script>
 
 <style lang="scss">
+.about,
+.home {
+  main {
+    padding-top: 0;
+  }
+}
+
 main {
   padding-top: 50px;
   display: flex;
@@ -74,10 +81,6 @@ main {
     width: 100%;
     flex: 1;
     min-height: calc(100vh - 50px);
-  }
-
-  &.about {
-    padding-top: 0;
   }
 
   &.profile .container {
