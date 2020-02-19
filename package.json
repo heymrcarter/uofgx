@@ -94,7 +94,7 @@
     "vue-template-compiler": "^2.5.2",
     "vuex-test-helpers": "^0.2.0",
     "webpack": "^3.6.0",
-    "webpack-bundle-analyzer": "^2.9.0",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-dashboard": "^2.0.0",
     "webpack-dev-server": "^2.11.5",
     "webpack-merge": "^4.1.0"
