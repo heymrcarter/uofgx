@@ -28,23 +28,13 @@
 </template>
 
 <script>
-import Characters from './profile/Characters'
-import Exemptions from './profile/Exemptions'
-import ProfileActions from './profile/ProfileActions'
-import Notes from './profile/Notes'
-import Expansions from './profile/Expansions'
-import ActivityOverview from './profile/ActivityOverview'
-import CharacterActivity from './profile/CharacterActivity'
-import MemberOverview from './profile/MemberOverview'
+import ActivityOverview from "./profile/ActivityOverview";
+import CharacterActivity from "./profile/CharacterActivity";
+import MemberOverview from "./profile/MemberOverview";
 
 export default {
-  name: 'member-profile',
+  name: "member-profile",
   components: {
-    Characters,
-    Exemptions,
-    ProfileActions,
-    Notes,
-    Expansions,
     ActivityOverview,
     CharacterActivity,
     MemberOverview
@@ -52,14 +42,14 @@ export default {
   data() {
     return {
       activeTab: null
-    }
+    };
   },
   computed: {
     currentMembershipId() {
-      return this.$route.params.membershipId
+      return this.$route.params.membershipId;
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

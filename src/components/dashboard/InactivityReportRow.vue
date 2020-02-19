@@ -7,7 +7,6 @@
     <v-list-tile-content @click="click">
       <v-list-tile-title>{{ profile.gamertag }}</v-list-tile-title>
       <v-list-tile-sub-title>{{ formatDate(profile.dateLastPlayed) }} ({{ profile.daysSinceLastPlayed }} days ago)</v-list-tile-sub-title>
-      <v-list-tile-sub-title>Lastest expansion: {{ latestExpansion(profile.expansions) }}</v-list-tile-sub-title>
     </v-list-tile-content>
 
     <v-list-tile-action>
@@ -20,9 +19,9 @@
 </template>
 
 <script>
-import dateFormatter from '@/mixins/date-formatter'
+import dateFormatter from "@/mixins/date-formatter";
 export default {
-  name: 'inactivity-report-row',
+  name: "inactivity-report-row",
   mixins: [dateFormatter],
   props: {
     profile: Object,
@@ -33,14 +32,11 @@ export default {
   },
   methods: {
     click(e) {
-      this.$emit('click', e)
-    },
-    latestExpansion(expansions) {
-      return expansions[expansions.length - 1]
+      this.$emit("click", e);
     },
     select(e) {
-      this.$emit('select', e)
+      this.$emit("select", e);
     }
   }
-}
+};
 </script>

@@ -48,23 +48,6 @@
                     <v-layout row wrap>
                       <v-flex xs12 sm7>
                         <dl>
-                          <dt>Latest expansion</dt>
-                          <dd class="title">{{ latestExpansion }}</dd>
-                        </dl>
-                      </v-flex>
-
-                      <v-flex xs12 sm5>
-                        <button flat @click="openExpansionsDialog">View expansions</button>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </li>
-
-                <li class="member-overview-item">
-                  <v-container class="pa-0">
-                    <v-layout row wrap>
-                      <v-flex xs12 sm7>
-                        <dl>
                           <dt>Times exempt</dt>
                           <dd class="title">{{ totalNumberExemptions }}</dd>
                         </dl>
@@ -106,208 +89,187 @@
       </section>
     </v-card-text>
 
-    <expansions :active="shouldRenderExpansionsDialog" @close="shouldRenderExpansionsDialog = false"></expansions>
     <exemptions :active="shouldRenderExemptionsDialog" @close="shouldRenderExemptionsDialog = false"></exemptions>
     <notes :active="shouldRenderNotesDialog" @close="shouldRenderNotesDialog = false"></notes>
   </v-card>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
-import dateFormatter from '@/mixins/date-formatter'
-import analytics from '@/mixins/analytics'
-import CharacterList from './CharacterList'
-import LoadableIndicator from '../LoadableIndicator'
-import LoadableFailure from '../LoadableFailure'
-import Expansions from './Expansions'
-import Exemptions from './Exemptions'
-import ProfileActions from './ProfileActions'
-import Notes from './Notes'
-import moment from 'moment-timezone'
-import sort from 'fast-sort'
+import { mapState, mapActions, mapGetters } from "vuex";
+import dateFormatter from "@/mixins/date-formatter";
+import analytics from "@/mixins/analytics";
+import CharacterList from "./CharacterList";
+import LoadableIndicator from "../LoadableIndicator";
+import LoadableFailure from "../LoadableFailure";
+import Exemptions from "./Exemptions";
+import ProfileActions from "./ProfileActions";
+import Notes from "./Notes";
+import moment from "moment-timezone";
+import sort from "fast-sort";
 export default {
-  name: 'member-overview',
+  name: "member-overview",
   mixins: [dateFormatter, analytics],
   data() {
     return {
       isLoadingCharacters: false,
       charactersLoadError: false,
-      isLoadingExpansions: false,
-      expansionsLoadError: false,
       notesLoadError: false,
       isLoadingNotes: false,
-      shouldRenderExpansionsDialog: false,
       shouldRenderExemptionsDialog: false,
       shouldRenderNotesDialog: false,
       isInactive: false
-    }
+    };
   },
   computed: {
-    ...mapGetters(['activityReport']),
-    ...mapState('members', {
+    ...mapGetters(["activityReport"]),
+    ...mapState("members", {
       membershipData(state) {
-        const member = state.list.find(m => m.xboxMembershipId === this.membershipId)
-        return member || {}
-      },
-      latestExpansion(state) {
-        if (state.expansions && state.expansions[this.membershipId]) {
-          const expansions = state.expansions[this.membershipId]
-          return expansions[expansions.length - 1]
-        }
+        const member = state.list.find(
+          m => m.xboxMembershipId === this.membershipId
+        );
+        return member || {};
       }
     }),
-    ...mapState('members/active', ['gamertag']),
-    ...mapState('characters', {
+    ...mapState("members/active", ["gamertag"]),
+    ...mapState("characters", {
       memberCharacters(state) {
-        return state.memberCharacters[this.membershipId] || []
+        return state.memberCharacters[this.membershipId] || [];
       }
     }),
-    ...mapState('notes', {
+    ...mapState("notes", {
       numberNotes(state) {
         if (state.notes[this.membershipId]) {
-          return state.notes[this.membershipId].length
+          return state.notes[this.membershipId].length;
         } else {
-          return 0
+          return 0;
         }
       }
     }),
     ...mapState({
       exemptions(state) {
-        return state.exemptions.exemptions
+        return state.exemptions.exemptions;
       },
       totalNumberExemptions(state) {
         if (state.exemptions.exemptions[this.membershipId]) {
-          return state.exemptions.exemptions[this.membershipId].numberExemptions
+          return state.exemptions.exemptions[this.membershipId]
+            .numberExemptions;
         } else {
-          return 0
+          return 0;
         }
       }
     }),
     membershipId() {
-      return this.$route.params.membershipId
+      return this.$route.params.membershipId;
     },
     isLoading() {
-      return this.isLoadingCharacters || this.isLoadingExpansions || this.isLoadingNotes
+      return this.isLoadingCharacters || this.isLoadingNotes;
     },
     isCurrentlyExempt() {
       if (this.exemptions) {
         if (!this.exemptions[this.membershipId]) {
-          return false
+          return false;
         }
 
-        const memberHistory = sort(JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))).asc(h => h.startDate)
-        const endDate = memberHistory[memberHistory.length - 1].endDate
-        const today = moment.utc().format()
+        const memberHistory = sort(
+          JSON.parse(JSON.stringify(this.exemptions[this.membershipId].history))
+        ).asc(h => h.startDate);
+        const endDate = memberHistory[memberHistory.length - 1].endDate;
+        const today = moment.utc().format();
 
-        return today <= endDate
+        return today <= endDate;
       }
     }
   },
   methods: {
-    ...mapActions('characters', ['getCharactersForMember']),
-    ...mapActions('members', ['getExpansions']),
-    ...mapActions('notes', ['getNotes']),
+    ...mapActions("characters", ["getCharactersForMember"]),
+    ...mapActions("members", ["getExpansions"]),
+    ...mapActions("notes", ["getNotes"]),
     memberTypeToMemberLevel(memberType) {
       switch (memberType) {
         case 0:
-          return 'None'
+          return "None";
         case 1:
-          return 'Beginner'
+          return "Beginner";
         case 2:
-          return 'Member'
+          return "Member";
         case 3:
-          return 'Admin'
+          return "Admin";
         case 4:
-          return 'ActingFounder'
+          return "ActingFounder";
         case 5:
-          return 'Founder'
+          return "Founder";
       }
     },
     getChipColor(memberType) {
       switch (memberType) {
         case 0:
-          return 'None'
+          return "None";
         case 1:
-          return 'grey'
+          return "grey";
         case 2:
-          return 'grey'
+          return "grey";
         case 3:
-          return 'blue'
+          return "blue";
         case 4:
-          return 'yellow'
+          return "yellow";
         case 5:
-          return 'yellow'
+          return "yellow";
       }
     },
     fetchAll() {
-      this.fetchCharacters()
-      this.fetchExpansions()
-      this.fetchNotes()
+      this.fetchCharacters();
+      this.fetchNotes();
     },
     fetchCharacters() {
-      this.charactersLoadError = false
-      this.isLoadingCharacters = true
+      this.charactersLoadError = false;
+      this.isLoadingCharacters = true;
       this.getCharactersForMember(this.membershipId)
         .catch(() => {
-          this.charactersLoadError = true
+          this.charactersLoadError = true;
         })
         .finally(() => {
-          this.isLoadingCharacters = false
-        })
-    },
-    fetchExpansions() {
-      this.expansionsLoadError = false
-      this.isLoadingExpansions = true
-      this.getExpansions(this.membershipId)
-        .catch(() => {
-          this.expansionsLoadError = true
-        })
-        .finally(() => {
-          this.isLoadingExpansions = false
-        })
+          this.isLoadingCharacters = false;
+        });
     },
     fetchNotes() {
-      this.notesLoadError = false
-      this.isLoadingNotes = true
+      this.notesLoadError = false;
+      this.isLoadingNotes = true;
       this.getNotes(this.membershipId)
         .catch(() => {
-          this.notesLoadError = true
+          this.notesLoadError = true;
         })
         .finally(() => {
-          this.isLoadingNotes = false
-        })
-    },
-    openExpansionsDialog() {
-      this.recordEvent('Member Profile', 'View', 'Expansions')
-      this.shouldRenderExpansionsDialog = true
+          this.isLoadingNotes = false;
+        });
     },
     openExemptionsDialog() {
-      this.recordEvent('Member Profile', 'View', 'Exemptions')
-      this.shouldRenderExemptionsDialog = true
+      this.recordEvent("Member Profile", "View", "Exemptions");
+      this.shouldRenderExemptionsDialog = true;
     },
     openNotesDialog() {
-      this.recordEvent('Member Profile', 'View', 'Notes')
-      this.shouldRenderNotesDialog = true
+      this.recordEvent("Member Profile", "View", "Notes");
+      this.shouldRenderNotesDialog = true;
     }
   },
   mounted() {
-    this.fetchAll()
+    this.fetchAll();
 
-    const member = this.activityReport.find(m => m.membershipId === this.$route.params.membershipId)
+    const member = this.activityReport.find(
+      m => m.membershipId === this.$route.params.membershipId
+    );
     if (member && member.isInactive) {
-      this.isInactive = true
+      this.isInactive = true;
     }
   },
   components: {
     CharacterList,
     LoadableIndicator,
     LoadableFailure,
-    Expansions,
     Exemptions,
     Notes,
     ProfileActions
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
