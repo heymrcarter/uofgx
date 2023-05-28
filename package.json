@@ -11,7 +11,8 @@
     "test": "npm run unit",
     "posttest": "node test/unit/fix-coverage-styles.js",
     "lint": "eslint --ext .js,.vue src test/unit",
-    "build": "node build/build.js",
+    "prebuild": "rm -rf ./dist && mkdir -p ./dist/static",
+    "build": "cp shutdown.html dist/index.html && cp -r static/* dist/static/",
     "postbuild": "cp ./invalidate-cloudfront.js ./dist/invalidate-cloudfront.js"
   },
   "dependencies": {
